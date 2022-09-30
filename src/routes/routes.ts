@@ -48,8 +48,20 @@ export const privateRoutes = [
     element: lazy(() => import("../pages/orders/view-order")),
   },
   {
-    path: "/orders/orders-history",
-    element: lazy(() => import("../pages/orders/orders-history")),
+    path: "/orders/pending-orders/fuel",
+    element: lazy(() => import("../pages/orders/pending-orders/pending-order-fuel"))
+  },
+  {
+    path: "/orders/pending-orders/gas",
+    element: lazy(() => import("../pages/orders/pending-orders/pending-order-gas"))
+  },
+  {
+    path: "/orders/orders-history/fuel",
+    element: lazy(() => import("../pages/orders/orders-history/order-history-fuel")),
+  },
+  {
+    path: "/orders/orders-history/gas",
+    element: lazy(() => import("../pages/orders/orders-history/order-history-gas")),
   },
   {
     path: "/vehicle/list",
@@ -125,7 +137,7 @@ export const privateRoutes = [
   },
   {
     path: "/referalcode",
-    element: lazy(() => import("../pages/referalcode/list")),
+    element: lazy(() => import("../pages/referalcode/referal-code")),
   },
   {
     path: "/timeslot",

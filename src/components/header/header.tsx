@@ -10,8 +10,6 @@ import { useState } from "react";
 const Header: React.FC = () => {
 
 
-  const [openProfileActionMenu, setOpenProfileActionMenu] = useState<boolean | object>(false);
-  const [openNotificationMenu, setOpenNotificationMenu] = useState<boolean | object>(false);
   const [sidebarToggle, setSidebarToggle] = useState<boolean>(false);
   const [mobileToggle, setMobileToggle] = useState<boolean>(false);
   const location = useLocation();
@@ -36,8 +34,9 @@ const Header: React.FC = () => {
     }
   };
 
-  const isActive = (item: typeof navItems[0]) =>  (item.routes).some((route) => item?.activeRoute ? location.pathname.startsWith(route) : location.pathname === route)
-  
+  const isActive = (item: typeof navItems[0]) =>
+    (item.routes || []).some((route) => item?.activeRoute ? location.pathname.startsWith(route) : location.pathname === route)
+
   const navItems = [
     {
       to: "/dashboard",
@@ -46,17 +45,22 @@ const Header: React.FC = () => {
     },
     {
       title: "Orders",
-      routes: ["/orders/pending-orders", "/orders/orders-history"],
+      routes: [
+        "/orders/pending-orders/fuel",
+        "/orders/pending-orders/gas",
+        "/orders/orders-history/fuel",
+        "/orders/orders-history/gas",
+      ],
       items: [
         {
-          to: "/orders/pending-orders",
+          to: "/orders/pending-orders/fuel",
           title: "Pending Orders",
-          routes: ["/orders/pending-orders"],
+          routes: ["/orders/pending-orders/fuel", "/orders/pending-orders/gas"],
         },
         {
-          to: "/orders/orders-history",
+          to: "/orders/orders-history/fuel",
           title: "Orders History",
-          routes: ["/orders/orders-history"],
+          routes: ["/orders/orders-history/fuel", "/orders/orders-history/gas"],
         },
       ],
     },
@@ -148,7 +152,7 @@ const Header: React.FC = () => {
         </ul>
         <ul className="navbar-nav m-lg-auto">
           {navItems.map((item, index) => (
-            <li className="nav-item nav-text order-dropdown">
+            <li className="nav-item nav-text order-dropdown" key={index}>
               {item.items ? (
                 <NavDropdown
                   id="nav-dropdown-dark-example"

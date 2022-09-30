@@ -5,10 +5,12 @@ import { Reducer } from "react";
 
 import reportsReducer from "./reports/reports.reducer";
 import authReducer from "./auth/auth.reducer";
+import refferalCodeReducer from "./refferalCodes/refferalCodes.reducer";
 
 
 const reducers: Reducer<CombinedState<any>, any> = combineReducers({
   auth: authReducer,
   reports: reportsReducer,
+  refferalCodes: refferalCodeReducer,
 });
 export default reducers;

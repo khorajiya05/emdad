@@ -7,13 +7,6 @@ import Header from "../../components/header/header";
 import Sidebar from "../../components/sidebar/sidebar";
 
 const ViewOrder: React.FC = () => {
-  //   constructor() {
-  //     super();
-  //    state = {
-  //         tabValue: 1,
-  //         show: false,
-  //     };
-  //   }
 
   const [tabValue, setTabValue] = useState<number>(1);
   const [show, setShow] = useState<boolean>(false);

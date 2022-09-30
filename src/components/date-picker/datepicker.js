@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
 import 'react-dates/initialize';
 import { DateRangePicker } from 'react-dates';
@@ -17,16 +16,20 @@ export class DatePicker extends Component {
             endDate,
         };
     }
-    
+
     render() {
         return (
             <React.Fragment>
                 <DateRangePicker
                     startDateId={'start-date'}
                     endDateId={'end-date'}
-                    startDate={this.state.startDate}
-                    endDate={this.state.endDate}
-                    onDatesChange={({ startDate, endDate }) => { this.setState({ startDate, endDate })}}
+                    startDate={this.props?.startDate ? moment(this.props?.startDate) : ""}
+                    endDate={this.props?.endDate ? moment(this.props?.endDate) : ""}
+                    onDatesChange={({ startDate, endDate }) => {
+                        this.setState({ startDate, endDate });
+                        this.props.setStartDate(startDate?._d);
+                        this.props.setEndDate(endDate?._d);
+                    }}
                     focusedInput={this.state.focusedInput}
                     onFocusChange={focusedInput => this.setState({ focusedInput })}
                     hideKeyboardShortcutsPanel
@@ -40,4 +43,3 @@ export class DatePicker extends Component {
 export default DatePicker;
 
 
-        

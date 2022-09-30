@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 // import { RouteComponentProps } from "react-router-dom";
 
 
-interface Props extends React.FC {
-  ItemsComponent: React.FC;
+interface Props {
+  ItemsComponent?: React.FC
   //   pageCount: number;
-  //   dispatchAction: Function;
+    dispatchAction?: Function;
   //   filter?: string | Record<string, string>;
   //   setFilter?: Function;
   //   page?: number;
@@ -18,11 +18,16 @@ interface Props extends React.FC {
   //   todayOrders?: string | undefined;
   }
 
-  const Pagination: React.FC<Props> = ({ ItemsComponent }) => {
+  const Pagination: React.FC<Props> = ({ItemsComponent,dispatchAction}) => {
+
+    useEffect(()=>{
+      dispatchAction && dispatchAction()
+    },[dispatchAction])
+
     return (
       <div>
         <div className="pagination-container">
-          <ItemsComponent />
+          {ItemsComponent? <ItemsComponent /> : ""}
           <div className="p-3">
             <div className="row">
               <div className="col-sm-12 col-md-5">

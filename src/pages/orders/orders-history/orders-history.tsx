@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { ReactNode } from "react";
 
 // import { Sidebar } from '../../components/sidebar/sidebar';
 import Dropdown from "react-bootstrap/Dropdown";
@@ -6,6 +6,13 @@ import { Modal } from "react-bootstrap";
 import Select from "react-select";
 import { useState } from "react";
 import { DatePicker, Header } from "../../../components";
+import { Link, NavLink } from "react-router-dom";
+import Sidebar from "../../../components/sidebar/sidebar";
+import moment from "moment";
+
+interface Prop {
+    children: any;
+}
 
 const SelectZipcode = [
     { value: "All", label: "All" },
@@ -25,13 +32,15 @@ const SelectOrdertype = [
     { value: "Gas", label: "Gas" },
 ];
 
-const OrdersHistory: React.FC = ({ children }: any) => {
+const OrdersHistory: React.FC<Prop> = ({ children }: any) => {
 
-    const [show, setShow] = useState<boolean>(false);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const [showChangeStatusModal, setShowChangeStatusModal] = useState<boolean>(false);
-    const [selectedValue2, setSelectedValue2] = useState("All");
-    const [tabValue, setTabValue] = useState<number>(1);
+
+    const [orderStatus, setorderStatus] = useState("All");
+    const [searchOrder, setSearchOrder] = useState<string>("");
+    const [startDate, setStartDate] = useState<moment.Moment | null | undefined>();
+    const [endDate, setEndDate] = useState<moment.Moment | null | undefined>();
 
     const handleCloseDelete = () => {
         setShowDeleteModal(false);
@@ -54,10 +63,16 @@ const OrdersHistory: React.FC = ({ children }: any) => {
     //     this.props.history.push("/vendors/add");
     //   };
 
+    const fetchOrdersByFilter = () => {
+        alert(JSON.stringify({ startDate, endDate, orderStatus, searchOrder }));
+    }
+
     return (
         <React.Fragment>
             <div id="app">
-                <div className="d-block d-lg-none">{/* <Sidebar /> */}</div>
+                <div className="d-block d-lg-none">
+                    <Sidebar />
+                </div>
                 <div className="content-wrapper">
                     <Header />
                     <div className="content">
@@ -73,11 +88,19 @@ const OrdersHistory: React.FC = ({ children }: any) => {
                                             className="form-control"
                                             placeholder="Search"
                                             title="Search"
+                                            value={searchOrder || ""}
+                                            onChange={(e) => setSearchOrder(e.target.value)}
+                                            onKeyDown={(event) => {
+                                                if (event.key === "Enter") {
+                                                    fetchOrdersByFilter();
+                                                }
+                                            }}
                                         />
                                         <div className="input-group-append">
                                             <button
                                                 type="button"
                                                 className="input-group-text pointer"
+                                                onClick={() => fetchOrdersByFilter()}
                                             >
                                                 <span className="fa fa-search"></span>
                                             </button>
@@ -86,7 +109,12 @@ const OrdersHistory: React.FC = ({ children }: any) => {
                                 </div>
                                 <div className="m-l-10">
                                     <div className="input-group d-flex">
-                                        <DatePicker />
+                                        <DatePicker
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            setStartDate={setStartDate}
+                                            setEndDate={setEndDate}
+                                        />
                                         <div className="input-group-append">
                                             <span className="input-group-text">
                                                 <i className="icon dripicons-calendar"></i>
@@ -94,14 +122,6 @@ const OrdersHistory: React.FC = ({ children }: any) => {
                                         </div>
                                     </div>
                                 </div>
-                                {/* <div className="m-l-10">
-                                    <Select
-                                        className="custom-select-dropdown w-170"
-                                        value={this.state.selectedValue ? ((SelectStatus || []).find(prod => prod.value === this.state.selectedValue) || null) : null}
-                                        onChange={(val) => this.setState({ selectedValue: (val.value || '') })} placeholder="-- Select Status --"
-                                        options={SelectStatus || []}
-                                    />
-                                </div> */}
                                 <div className="m-l-10">
                                     <Dropdown>
                                         <Dropdown.Toggle
@@ -115,46 +135,19 @@ const OrdersHistory: React.FC = ({ children }: any) => {
                                                 <b>Choose filters</b>
                                             </div>
                                             <form id="filter-form" className="px-3">
-                                                {/* <div className="form-group">
-                                                    <label>Zipcode</label>
-                                                    <Select
-                                                        className="custom-select-dropdown"
-                                                        value={this.state.selectedValue ? ((SelectZipcode || []).find(prod => prod.value === this.state.selectedValue) || null) : null}
-                                                        onChange={(val) => this.setState({ selectedValue: (val.value || '') })} placeholder="-- Select --"
-                                                        options={SelectZipcode || []}
-                                                    />
-                                                </div> */}
-                                                {/* <div className="form-group">
-                          <label>Order Type</label>
-                          <Select
-                            className="custom-select-dropdown"
-                            value={
-                              selectedValue2
-                                ? (SelectOrdertype || []).find(
-                                  (prod) => prod.value === selectedValue2
-                                ) || null
-                                : null
-                            }
-                            onChange={(val) =>
-                              setSelectedValue2((val && val.value) || "")
-                            }
-                            placeholder="-- Select --"
-                            options={SelectOrdertype || []}
-                          />
-                        </div> */}
                                                 <div className="form-group">
                                                     <label>Status</label>
                                                     <Select
                                                         className="custom-select-dropdown"
                                                         value={
-                                                            selectedValue2
+                                                            orderStatus
                                                                 ? (SelectStatus || []).find(
-                                                                    (prod) => prod.value === selectedValue2
+                                                                    (prod) => prod.value === orderStatus
                                                                 ) || null
                                                                 : null
                                                         }
                                                         onChange={(val) =>
-                                                            setSelectedValue2((val && val.value) || "")
+                                                            setorderStatus((val && val.value) || "")
                                                         }
                                                         placeholder="-- Select --"
                                                         options={SelectStatus || []}
@@ -165,7 +158,7 @@ const OrdersHistory: React.FC = ({ children }: any) => {
                                     </Dropdown>
                                 </div>
                                 <div className="m-l-10">
-                                    <button type="button" className="btn btn-primary2">
+                                    <button type="button" className="btn btn-primary2" onClick={() => fetchOrdersByFilter()}>
                                         Submit
                                     </button>
                                 </div>
@@ -174,11 +167,6 @@ const OrdersHistory: React.FC = ({ children }: any) => {
                                         Reset
                                     </button>
                                 </div>
-                                {/* <div className="m-l-10">
-                                    <button type="button" className="btn btn-primary" onClick={this.handleRedirectToAddVendor}>
-                                        Add New Vendor
-                                    </button>
-                                </div> */}
                             </div>
                         </header>
                         <section className="page-content container-fluid">
@@ -187,29 +175,26 @@ const OrdersHistory: React.FC = ({ children }: any) => {
                                     <div className="card-header clearfix ">
                                         <ul className="nav nav-tabs primary-tabs align-items-center">
                                             <li className="nav-item" role="presentation">
-                                                <a
-                                                    onClick={() => setTabValue(tabValue)}
-                                                    className={
-                                                        tabValue === 1 ? "nav-link active show" : "nav-link"
-                                                    }
+                                                <NavLink
+                                                    to="/orders/orders-history/fuel"
+                                                    className={(navData) => navData.isActive ? "nav-link show active" : "nav-link"}
                                                 >
                                                     Fuel
-                                                </a>
+                                                </NavLink>
                                             </li>
                                             <li className="nav-item" role="presentation">
-                                                <a
-                                                    onClick={() => setTabValue(2)}
-                                                    className={
-                                                        tabValue === 2 ? "nav-link active show" : "nav-link"
-                                                    }
+                                                <NavLink
+                                                    to="/orders/orders-history/gas"
+                                                    className={(navData) => navData.isActive ? "nav-link show active" : "nav-link"}
+
                                                 >
                                                     Gas
-                                                </a>
+                                                </NavLink>
                                             </li>
                                         </ul>
                                     </div>
 
-                                    {{ children }}
+                                    {children}
                                 </>
                             </div>
                         </section>
