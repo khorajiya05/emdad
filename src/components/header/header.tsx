@@ -8,24 +8,10 @@ import User from "../../assets/img/user.jpg";
 import { useState } from "react";
 
 const Header: React.FC = () => {
-  // constructor() {
-  //     super();
-  //     state = {
-  //         OpenProfileActionMenu: false,
-  //         OpenNotificationMenu: false,
-  //         topbarToggle: false,
-  //         sidebarToggle: false,
-  //         MobileToggle: false,
-  //         activeId: null,
-  //     };
-  //   }
 
-  const [openProfileActionMenu, setOpenProfileActionMenu] = useState<
-    boolean | object
-  >(false);
-  const [openNotificationMenu, setOpenNotificationMenu] = useState<
-    boolean | object
-  >(false);
+
+  const [openProfileActionMenu, setOpenProfileActionMenu] = useState<boolean | object>(false);
+  const [openNotificationMenu, setOpenNotificationMenu] = useState<boolean | object>(false);
   const [sidebarToggle, setSidebarToggle] = useState<boolean>(false);
   const [mobileToggle, setMobileToggle] = useState<boolean>(false);
   const location = useLocation();
@@ -50,13 +36,8 @@ const Header: React.FC = () => {
     }
   };
 
-  const isActive = (item: typeof navItems[0]) =>
-    (item.routes || []).some((route) =>
-      item?.activeRoute
-        ? location.pathname.startsWith(route)
-        : location.pathname === route
-    );
-
+  const isActive = (item: typeof navItems[0]) =>  (item.routes).some((route) => item?.activeRoute ? location.pathname.startsWith(route) : location.pathname === route)
+  
   const navItems = [
     {
       to: "/dashboard",

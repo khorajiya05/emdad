@@ -470,8 +470,21 @@ body .top-toolbar.navbar-desktop .navbar-nav .nav-item > a i {
   color: rgba(255, 255, 255, 0.95);
 }
 
-body .sidebar.sidebar-left .sidebar-content .main-menu .nav.metismenu li a:hover,
-body .sidebar.sidebar-left .sidebar-content .main-menu .nav.metismenu li a:hover i {
+body
+  .sidebar.sidebar-left
+  .sidebar-content
+  .main-menu
+  .nav.metismenu
+  li
+  a:hover,
+body
+  .sidebar.sidebar-left
+  .sidebar-content
+  .main-menu
+  .nav.metismenu
+  li
+  a:hover
+  i {
   color: #8d865f !important;
 }
 
@@ -538,10 +551,35 @@ body.aside-left-open .sidebar.sidebar-left .sidebar-content {
 }
 
 body .sidebar.sidebar-left .sidebar-content .main-menu .metismenu .open > a,
-body .sidebar.sidebar-left .sidebar-content .main-menu .metismenu .open > a:focus,
-body .sidebar.sidebar-left .sidebar-content .main-menu .metismenu .open > a:hover,
-body .sidebar.sidebar-left .sidebar-content .main-menu .nav.metismenu > li.active > a,
-body .sidebar.sidebar-left .sidebar-content .main-menu .nav.metismenu > li.active > a > i,
+body
+  .sidebar.sidebar-left
+  .sidebar-content
+  .main-menu
+  .metismenu
+  .open
+  > a:focus,
+body
+  .sidebar.sidebar-left
+  .sidebar-content
+  .main-menu
+  .metismenu
+  .open
+  > a:hover,
+body
+  .sidebar.sidebar-left
+  .sidebar-content
+  .main-menu
+  .nav.metismenu
+  > li.active
+  > a,
+body
+  .sidebar.sidebar-left
+  .sidebar-content
+  .main-menu
+  .nav.metismenu
+  > li.active
+  > a
+  > i,
 body
   .sidebar.sidebar-left
   .sidebar-content
@@ -564,14 +602,44 @@ body
   > ul
   > li
   > a:hover,
-body .sidebar.sidebar-left .sidebar-content .main-menu .nav.metismenu > li > a:active,
-body .sidebar.sidebar-left .sidebar-content .main-menu .nav.metismenu > li > a:hover {
+body
+  .sidebar.sidebar-left
+  .sidebar-content
+  .main-menu
+  .nav.metismenu
+  > li
+  > a:active,
+body
+  .sidebar.sidebar-left
+  .sidebar-content
+  .main-menu
+  .nav.metismenu
+  > li
+  > a:hover {
   color: #8d865f;
 }
 
-body .sidebar.sidebar-left .sidebar-content .main-menu .nav.metismenu > li.active > a,
-body .sidebar.sidebar-left .sidebar-content .main-menu .nav.metismenu > li.active > a:focus,
-body .sidebar.sidebar-left .sidebar-content .main-menu .nav.metismenu > li.active > a:hover {
+body
+  .sidebar.sidebar-left
+  .sidebar-content
+  .main-menu
+  .nav.metismenu
+  > li.active
+  > a,
+body
+  .sidebar.sidebar-left
+  .sidebar-content
+  .main-menu
+  .nav.metismenu
+  > li.active
+  > a:focus,
+body
+  .sidebar.sidebar-left
+  .sidebar-content
+  .main-menu
+  .nav.metismenu
+  > li.active
+  > a:hover {
   border-left: solid 3px #8d865f;
 }
 
@@ -599,8 +667,21 @@ body
   > a
   > i,
 body .sidebar.sidebar-left .sidebar-content .main-menu .nav.metismenu > li > a,
-body .sidebar.sidebar-left .sidebar-content .main-menu .nav.metismenu > li > a > i {
+body
+  .sidebar.sidebar-left
+  .sidebar-content
+  .main-menu
+  .nav.metismenu
+  > li
+  > a
+  > i {
   color: #617182;
+}
+
+
+.active-header,
+.active-header > a {
+  color: #8d865f !important;
 }
 
 /* ********************************************************************************************
@@ -984,12 +1065,16 @@ label em,
 }
 
 /* Select2 */
-.input-group .select2-container--default:first-of-type .select2-selection--single {
+.input-group
+  .select2-container--default:first-of-type
+  .select2-selection--single {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
 }
 
-.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+.select2-container--default
+  .select2-selection--multiple
+  .select2-selection__choice__remove {
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -998,7 +1083,9 @@ label em,
   min-height: 35px;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__rendered {
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__rendered {
   /*padding: 0.49rem 1rem;*/
   color: #323a48;
   position: relative;
@@ -1036,11 +1123,13 @@ select.form-control:not([size]):not([multiple]) {
   border: 1px solid #8d865f;
 }
 
-.control.control-outline.control-primary.control--checkbox .control__indicator:after {
+.control.control-outline.control-primary.control--checkbox
+  .control__indicator:after {
   border-color: #8d865f;
 }
 
-.control.control-outline.control-primary.control--radio .control__indicator:after {
+.control.control-outline.control-primary.control--radio
+  .control__indicator:after {
   background-color: #8d865f;
 }
 
@@ -1066,7 +1155,8 @@ select.form-control:not([size]):not([multiple]) {
 .register-box {
   width: 100%;
   max-width: 410px;
-  box-shadow: 0 10px 40px 0 rgba(18, 106, 211, 0.07), 0 2px 9px 0 rgba(18, 106, 211, 0.06);
+  box-shadow: 0 10px 40px 0 rgba(18, 106, 211, 0.07),
+    0 2px 9px 0 rgba(18, 106, 211, 0.06);
   border-radius: 10px;
   margin: 3% auto;
 }
