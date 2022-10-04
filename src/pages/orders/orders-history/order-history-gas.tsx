@@ -5,9 +5,13 @@ import OrdersHistory from './orders-history'
 function OrderHistoryGas() {
   return (
     <OrdersHistory>
-    <div className="card-body p-0">
-      <Pagination ItemsComponent={OrderHistoryGasList} />
-    </div>
+      {
+        (fetchOrdersByFilter:Function) => (
+          <div className="card-body p-0">
+            <Pagination ItemsComponent={OrderHistoryGasList} dispatchAction={fetchOrdersByFilter} />
+          </div>
+        )
+      }
     </OrdersHistory>
   )
 }

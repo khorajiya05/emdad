@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 
 import Header from "../../../components/header/header";
 import Sidebar from "../../../components/sidebar/sidebar";
@@ -7,12 +7,11 @@ import { Modal } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import Select from "react-select";
 import { DatePicker } from "../../../components";
-import Pagination from "../../../components/pagination/pagination";
 import User from "../../../assets/img/user.jpg";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 interface Prop {
-    children: ReactNode;
+    children: Function;
 }
 const SelectZipcode = [
     { value: "All", label: "All" },
@@ -34,17 +33,23 @@ const SelectOrdertype = [
 
 const PendingOrders: React.FC<Prop> = ({ children }) => {
 
-    const [show, setShow] = useState<boolean>(false);
-    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-    const [showUnAssignOrderModal, setShowUnAssignOrderModal] =
-        useState<boolean>(false);
-    const [showAssignOrderModal, setShowAssignOrderModal] =
-        useState<boolean>(false);
-    const [showChangeStatusModal, setShowChangeStatusModal] =
-        useState<boolean>(false);
-    const [selectedValue2, setSelectedValue2] = useState("All");
+    const location = useLocation();
 
-    const [tabValue, setTabValue] = useState<number>(1);
+    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+    const [showUnAssignOrderModal, setShowUnAssignOrderModal] = useState<boolean>(false);
+    const [showAssignOrderModal, setShowAssignOrderModal] = useState<boolean>(false);
+    const [showChangeStatusModal, setShowChangeStatusModal] = useState<boolean>(false);
+
+    const [orderStatus, setOrderStatus] = useState("All");
+    const [searchOrder, setSearchOrder] = useState<string>("");
+    const [startDate, setStartDate] = useState<moment.Moment | null | undefined>();
+    const [endDate, setEndDate] = useState<moment.Moment | null | undefined>();
+    const ordersOf = location.pathname === "/orders/pending-orders/fuel" ? "fuel" : "gas"
+
+
+    const fetchOrdersByFilter = () => {
+        alert(JSON.stringify({ startDate, endDate, orderStatus, searchOrder, ordersOf }));
+    }
 
     const handleCloseDelete = () => {
         // setState({ showDeleteModal: false});
@@ -103,11 +108,19 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
                                             className="form-control"
                                             placeholder="Search"
                                             title="Search"
+                                            value={searchOrder}
+                                            onChange={(e) => setSearchOrder(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") {
+                                                    fetchOrdersByFilter();
+                                                }
+                                            }}
                                         />
                                         <div className="input-group-append">
                                             <button
                                                 type="button"
                                                 className="input-group-text pointer"
+                                                onClick={() => fetchOrdersByFilter()}
                                             >
                                                 <span className="fa fa-search"></span>
                                             </button>
@@ -116,7 +129,12 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
                                 </div>
                                 <div className="m-l-10">
                                     <div className="input-group d-flex">
-                                        <DatePicker />
+                                        <DatePicker
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            setStartDate={setStartDate}
+                                            setEndDate={setEndDate}
+                                        />
                                         <div className="input-group-append">
                                             <span className="input-group-text">
                                                 <i className="icon dripicons-calendar"></i>
@@ -124,14 +142,6 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
                                         </div>
                                     </div>
                                 </div>
-                                {/* <div className="m-l-10">
-                                    <Select
-                                        className="custom-select-dropdown w-170"
-                                        value={state.selectedValue ? ((SelectStatus || []).find(prod => prod.value === state.selectedValue) || null) : null}
-                                        onChange={(val) => setState({ selectedValue: (val.value || '') })} placeholder="-- Select Status --"
-                                        options={SelectStatus || []}
-                                    />
-                                </div> */}
                                 <div className="m-l-10">
                                     <Dropdown>
                                         <Dropdown.Toggle
@@ -145,46 +155,19 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
                                                 <b>Choose filters</b>
                                             </div>
                                             <form id="filter-form" className="px-3">
-                                                {/* <div className="form-group">
-                                                    <label>Zipcode</label>
-                                                    <Select
-                                                        className="custom-select-dropdown"
-                                                        value={state.selectedValue ? ((SelectZipcode || []).find(prod => prod.value === state.selectedValue) || null) : null}
-                                                        onChange={(val) => setState({ selectedValue: (val.value || '') })} placeholder="-- Select --"
-                                                        options={SelectZipcode || []}
-                                                    />
-                                                </div> */}
-                                                {/* <div className="form-group">
-                          <label>Order Type</label>
-                          <Select
-                            className="custom-select-dropdown"
-                            value={
-                              selectedValue2
-                                ? (SelectOrdertype || []).find(
-                                  (prod) => prod.value === selectedValue2
-                                ) || null
-                                : null
-                            }
-                            onChange={(val) =>
-                              setSelectedValue2((val && val.value) || "")
-                            }
-                            placeholder="-- Select --"
-                            options={SelectOrdertype || []}
-                          />
-                        </div> */}
                                                 <div className="form-group">
                                                     <label>Status</label>
                                                     <Select
                                                         className="custom-select-dropdown"
                                                         value={
-                                                            selectedValue2
+                                                            orderStatus
                                                                 ? (SelectStatus || []).find(
-                                                                    (prod) => prod.value === selectedValue2
+                                                                    (prod) => prod.value === orderStatus
                                                                 ) || null
                                                                 : null
                                                         }
                                                         onChange={(val) =>
-                                                            setSelectedValue2((val && val.value) || "")
+                                                            setOrderStatus((val && val.value) || "")
                                                         }
                                                         placeholder="-- Select --"
                                                         options={SelectStatus || []}
@@ -195,20 +178,29 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
                                     </Dropdown>
                                 </div>
                                 <div className="m-l-10">
-                                    <button type="button" className="btn btn-primary2">
+                                    <button type="button" className="btn btn-primary2" onClick={() => fetchOrdersByFilter()}>
                                         Submit
                                     </button>
                                 </div>
                                 <div className="m-l-10">
-                                    <button type="button" className="btn btn-secondary">
+                                    <button type="button" className="btn btn-secondary"
+                                        onClick={() => {
+                                            setSearchOrder("");
+                                            setStartDate(null || undefined);
+                                            setEndDate(null || undefined);
+                                            setOrderStatus("All");
+
+                                            setTimeout(() => {
+                                                fetchOrdersByFilter();
+                                            }, 300);
+
+                                        }
+                                        }
+                                    >
                                         Reset
                                     </button>
                                 </div>
-                                {/* <div className="m-l-10">
-                                    <button type="button" className="btn btn-primary" onClick={handleRedirectToAddVendor}>
-                                        Add New Vendor
-                                    </button>
-                                </div> */}
+
                             </div>
                         </header>
                         <section className="page-content container-fluid">
@@ -234,7 +226,7 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
                                             </li>
                                         </ul>
                                     </div>
-                                    {children}
+                                    {children(fetchOrdersByFilter)}
                                 </>
                             </div>
                         </section>

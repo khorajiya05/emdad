@@ -6,9 +6,13 @@ import OrderHistoryFuelList from './order-history-fuel-llist'
 const OrderHistoryFuel = () => {
     return (
         <OrdersHistory>
-            <div className="card-body p-0">
-                <Pagination ItemsComponent={OrderHistoryFuelList} />
-            </div>
+            {
+        (fetchOrdersByFilter:Function) => (
+          <div className="card-body p-0">
+            <Pagination ItemsComponent={OrderHistoryFuelList} dispatchAction={fetchOrdersByFilter} />
+          </div>
+        )
+      }
         </OrdersHistory>
 
 

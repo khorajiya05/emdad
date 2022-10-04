@@ -22,7 +22,7 @@ interface Props {
 
     useEffect(()=>{
       dispatchAction && dispatchAction()
-    },[dispatchAction])
+    },[])
 
     return (
       <div>

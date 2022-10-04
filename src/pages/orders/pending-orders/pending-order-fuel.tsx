@@ -5,9 +5,11 @@ import PendingOrders from './pending-orders'
 const PendingOrderFuel = () => {
     return (
         <PendingOrders>
-            <div className="card-body p-0">
-                <Pagination ItemsComponent={PendingOrderFuelList} />
-            </div>
+            {(fetchOrdersByFilter: Function) => (
+                <div className="card-body p-0">
+                    <Pagination ItemsComponent={PendingOrderFuelList} dispatchAction={fetchOrdersByFilter} />
+                </div>
+            )}
         </PendingOrders>
     )
 }

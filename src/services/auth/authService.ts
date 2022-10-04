@@ -20,15 +20,11 @@ export const authLogin = (values: TLoginPayloadData): Promise<any> => {
  * @param values
  * @returns
  */
-export const authForgotPassword = (
-  values: TForgotPasswordPayloadData
-): Promise<any> => {
+export const authForgotPassword = (values: TForgotPasswordPayloadData): Promise<any> => {
   return API.post("/users/forget-password", values);
 };
 
-export const authResetForgotPassword = (
-  values: TResetForgotPasswordPayloadData
-): Promise<any> => {
+export const authResetForgotPassword = (values: TResetForgotPasswordPayloadData): Promise<any> => {
   return API.post("/users/update-password", values);
 };
 
@@ -37,9 +33,7 @@ export const authResetForgotPassword = (
  * @param values
  * @returns
  */
-export const authChangePassword = (
-  values: TChangePasswordPayloadData
-): Promise<any> => {
+export const authChangePassword = (values: TChangePasswordPayloadData): Promise<any> => {
   return API.patch("/users/change-password", values);
 };
 

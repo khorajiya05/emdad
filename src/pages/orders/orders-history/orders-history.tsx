@@ -1,17 +1,16 @@
-import React, { ReactNode } from "react";
-
-// import { Sidebar } from '../../components/sidebar/sidebar';
+import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Modal } from "react-bootstrap";
 import Select from "react-select";
 import { useState } from "react";
-import { DatePicker, Header } from "../../../components";
-import { Link, NavLink } from "react-router-dom";
-import Sidebar from "../../../components/sidebar/sidebar";
+import { NavLink, useLocation } from "react-router-dom";
 import moment from "moment";
 
+import { DatePicker, Header } from "../../../components";
+import Sidebar from "../../../components/sidebar/sidebar";
+
 interface Prop {
-    children: any;
+    children: Function;
 }
 
 const SelectZipcode = [
@@ -32,15 +31,18 @@ const SelectOrdertype = [
     { value: "Gas", label: "Gas" },
 ];
 
-const OrdersHistory: React.FC<Prop> = ({ children }: any) => {
+const OrdersHistory: React.FC<Prop> = ({ children }) => {
+
+    const location = useLocation()
 
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const [showChangeStatusModal, setShowChangeStatusModal] = useState<boolean>(false);
 
-    const [orderStatus, setorderStatus] = useState("All");
+    const [orderStatus, setOrderStatus] = useState("All");
     const [searchOrder, setSearchOrder] = useState<string>("");
     const [startDate, setStartDate] = useState<moment.Moment | null | undefined>();
     const [endDate, setEndDate] = useState<moment.Moment | null | undefined>();
+    const ordersOf = location.pathname === "/orders/orders-history/fuel" ? "fuel" : "gas"
 
     const handleCloseDelete = () => {
         setShowDeleteModal(false);
@@ -64,7 +66,7 @@ const OrdersHistory: React.FC<Prop> = ({ children }: any) => {
     //   };
 
     const fetchOrdersByFilter = () => {
-        alert(JSON.stringify({ startDate, endDate, orderStatus, searchOrder }));
+        alert(JSON.stringify({ startDate, endDate, orderStatus, searchOrder, ordersOf }));
     }
 
     return (
@@ -147,7 +149,7 @@ const OrdersHistory: React.FC<Prop> = ({ children }: any) => {
                                                                 : null
                                                         }
                                                         onChange={(val) =>
-                                                            setorderStatus((val && val.value) || "")
+                                                            setOrderStatus((val && val.value) || "")
                                                         }
                                                         placeholder="-- Select --"
                                                         options={SelectStatus || []}
@@ -163,7 +165,20 @@ const OrdersHistory: React.FC<Prop> = ({ children }: any) => {
                                     </button>
                                 </div>
                                 <div className="m-l-10">
-                                    <button type="button" className="btn btn-secondary">
+                                    <button type="button" className="btn btn-secondary"
+                                        onClick={() => {
+                                            setSearchOrder("");
+                                            setStartDate(null || undefined);
+                                            setEndDate(null || undefined);
+                                            setOrderStatus("All");
+
+                                            setTimeout(() => {
+                                                fetchOrdersByFilter();
+                                            }, 300);
+
+                                        }
+                                        }
+                                    >
                                         Reset
                                     </button>
                                 </div>
@@ -194,7 +209,7 @@ const OrdersHistory: React.FC<Prop> = ({ children }: any) => {
                                         </ul>
                                     </div>
 
-                                    {children}
+                                    {children(fetchOrdersByFilter)}
                                 </>
                             </div>
                         </section>

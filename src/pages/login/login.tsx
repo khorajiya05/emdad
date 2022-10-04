@@ -6,7 +6,7 @@ import * as Yup from "yup";
 
 import { getWithExpiry } from "../../utils/helpers/password";
 import LogoColor from "../../assets/img/logo.png";
-// import { loginActionThunk } from "../../store/auth/auth.actions.async";
+import { loginActionThunk } from "../../store/auth/auth.actions.async";
 import TRootState from "../../store/root.types";
 import { BarsLoader } from "../../components/loader/Loader";
 
