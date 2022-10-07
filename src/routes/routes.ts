@@ -200,11 +200,11 @@ export const privateRoutes = [
     element: lazy(() => import("../pages/sub-admins/list")),
   },
   {
-    path: "/roles-permissions/list",
+    path: "settings/roles-permissions",
     element: lazy(() => import("../pages/roles-permissions/list")),
   },
   {
-    path: "/roles-permissions/:id",
+    path: "settings/roles-permissions/:id",
     element: lazy(() => import("../pages/roles-permissions/form")),
   },
   {

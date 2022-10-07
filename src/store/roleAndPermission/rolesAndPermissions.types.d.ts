@@ -1,44 +1,86 @@
-type TRoleAndPermissionSingleData = {
-    id: number,
-    uuid: string,
-    name: string,
-    createdAt: string,
-    updatedAt: string,
-    createdBy: string,
-    updatedBy: string,
-    deletedAt: string,
-    isActive: boolean
-    permissions: {
-        id: number,
-        all: boolean,
-        index: boolean,
-        add: boolean,
-        edit: boolean,
-        delete: boolean,
-        view: boolean,
-        module: {
-            id: number,
-            name: string,
-            parentId: number
-            child?: any[]
-        }
-    }[]
-}
 
-type TRolesAndPermissionsPayload = TRoleAndPermissionSingleData[];
+type TModulesData = {
+    count: number;
+    modules: { id: number; name: string; parentId: number; child?: any[] }[];
+};
+
+type TRolesData = {
+    count: number;
+    roles: {
+        createdAt: string;
+        createdBy: string;
+        deletedAt: string;
+        id: number;
+        isActive: boolean;
+        name: string;
+        updatedAt: string;
+        updatedBy: string;
+    }[];
+};
+
+
+type TRolesPayload = Partial<{
+  id: string;
+  isActive: boolean;
+  name: string;
+  permissions: {
+    all: boolean;
+    index: boolean;
+    add: boolean;
+    edit: boolean;
+    view: boolean;
+    delete: boolean;
+    id?: number;
+    module: { id: number; name: string; parentId: number; child?: any[] };
+  }[];
+  [];
+}>;
+
 
 type TRolesAndPermissionsState = {
-    loading:boolean;
-    rolesData:TRolesAndPermissionsPayload;
-    singleRoleData:TRoleAndPermissionSingleData;
-}
-
+    loading: boolean;
+    modulesData: {
+      count: number;
+      modules: { id: number; name: string; parentId: number; child?: any[] }[];
+    };
+    rolesData: {
+      count: number;
+      roles: {
+        createdAt: string;
+        createdBy: string;
+        deletedAt: string;
+        id: number;
+        isActive: boolean;
+        name: string;
+        updatedAt: string;
+        updatedBy: string;
+      }[];
+    };
+    
+    singleRolesData: Partial<{
+      id: string;
+      isActive: boolean;
+      name: string;
+      permissions: {
+        all: boolean;
+        index: boolean;
+        add: boolean;
+        edit: boolean;
+        view: boolean;
+        delete: boolean;
+        id?: number;
+        module: { id: number; name: string; parentId: number; child?: any[] };
+      }[];
+      [];
+    }>;
+  };
 type TRolesAndPermissionActionTypes = ActionType<typeof actions>;
 
 
 export {
-    TRoleAndPermissionSingleData,
-    TRolesAndPermissionsPayload,
     TRolesAndPermissionsState,
-    TRolesAndPermissionActionTypes
+    TRolesAndPermissionActionTypes,
+    TModulesData,
+    TRolesData,
+    TRolesPayload
 }

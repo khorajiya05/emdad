@@ -12,7 +12,7 @@ export const apiMiddleware: Middleware = (storeApi: MiddlewareAPI<any>) => (next
 
   API.interceptors.request.use(
     (config: any) => {
-      const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NjQ4ODQ3MTMsImV4cCI6MTY2NzQ3NjcxMywiYXVkIjoiYWNjZXNzX3Rva2VuIiwic3ViIjoiNTAyNGNhMTEtN2M5NC00MTYxLWE0NTktOTA1NTMxOWM2ZGM0In0.IF1hKvlxdLPeUocB8s-zYFa8xzEiT_n7BhQSHlja6zA"
+      const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NjUwNTMwOTAsImV4cCI6MTY2NzY0NTA5MCwiYXVkIjoiYWNjZXNzX3Rva2VuIiwic3ViIjoiNzA2ZGQ5MDctM2I5Ni00YWQ3LTg0YTQtZjVhYzkxZWJkNjhjIn0.pSmtbyyL08bVQgtItLIpR23pAHCmgZLrBF3UjheMqeg"
       // storeApi.getState().auth.token;
       if (authToken) {
         config.headers.Authorization = `Bearer ${authToken}`;

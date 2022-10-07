@@ -1,8 +1,5 @@
-import { TRoleAndPermissionSingleData } from "../../store/roleAndPermission/rolesAndPermissions.types";
 import { API } from "../../middleware/middleware";
-// const API = axios.create({
-//     baseURL: "http://localhost:3000",
-// });
+import { TRolesPayload } from "../../store/roleAndPermission/rolesAndPermissions.types";
 
 
 /**
@@ -12,9 +9,18 @@ import { API } from "../../middleware/middleware";
  * @param search
  * @returns
  */
-const getRoles = (): Promise<any> => {
-   
-    return API.get("/roles");
+const getRoles = (
+  page: number,
+  perPage: number,
+  search?: string
+): Promise<any> => {
+  return API.get("/roles", {
+    params: {
+      page,
+      perPage,
+      search: search || undefined,
+    },
+  });
 };
 
 /**
@@ -22,17 +28,10 @@ const getRoles = (): Promise<any> => {
  * @param id
  * @returns
  */
-const getRolesById = (id: string): Promise<any> => {    
-    return API.get("/roles/" + JSON.parse(id));
+const getRolesById = (id: string): Promise<any> => {
+  return API.get("/roles/" + JSON.parse(id));
 };
 
-/**
- * Get modules API call
- * @returns
- */
-const getModules = (): Promise<any> => {
-    return API.get("/modules");
-};
 
 /**
  * Update roles API call
@@ -40,8 +39,8 @@ const getModules = (): Promise<any> => {
  * @param id
  * @returns
  */
-const updateRoles = (values: TRoleAndPermissionSingleData, id: string): Promise<any> => {
-    return API.put("/roles" + id, { ...values });
+const updateRoles = (values: TRolesPayload, id: string): Promise<any> => {
+  return API.put("/roles" + id, { ...values });
 };
 
 /**
@@ -50,7 +49,7 @@ const updateRoles = (values: TRoleAndPermissionSingleData, id: string): Promise<
  * @returns
  */
 const deleteRoles = (id: string): Promise<any> => {
-    return API.delete("/roles/" + id);
+  return API.delete("/roles/" + id);
 };
 
 /**
@@ -58,8 +57,8 @@ const deleteRoles = (id: string): Promise<any> => {
  * @param values
  * @returns
  */
-const addRoles = (values: TRoleAndPermissionSingleData): Promise<any> => {
-    return API.post("/roles", values);
+const addRoles = (values: TRolesPayload): Promise<any> => {
+  return API.post("/roles", values);
 };
 
 /**
@@ -69,17 +68,27 @@ const addRoles = (values: TRoleAndPermissionSingleData): Promise<any> => {
  * @returns
  */
 const updateRolesStatus = (
-    isActive: boolean,
-    id: string | number
+  isActive: boolean,
+  id: string | number
 ): Promise<any> => {
-    return API.put("/roles/" + id, { isActive });
+  return API.put("/roles/" + id, { isActive });
 };
+
+/**
+ * Get modules API call
+ * @returns
+ */
+const getModules = (): Promise<any> => {
+  return API.get("/modules");
+};
+
+
 export {
-    getRoles,
-    addRoles,
-    getModules,
-    updateRoles,
-    getRolesById,
-    deleteRoles,
-    updateRolesStatus,
+  getRoles,
+  addRoles,
+  getModules,
+  updateRoles,
+  getRolesById,
+  deleteRoles,
+  updateRolesStatus,
 };

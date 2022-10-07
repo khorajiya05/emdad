@@ -4,10 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
+import * as yup from "yup";
+import { useFormik } from "formik";
+
+
 import Header from "../../components/header/header";
 import Sidebar from "../../components/sidebar/sidebar";
-import { getRoleByIdActionThunk } from "../../store/roleAndPermission/rolesAndPermissions.action.async";
-import TRootState from "../../store/root.types";
+import { addRolesAndActionThunk, getModulesActionThunk, getRoleByIdActionThunk, updateRolesAndPermissionActionThunk } from "../../store/roleAndPermission/rolesAndPermissions.action.async";
+import TRootState from '../../store/root.types';
+import { TRolesPayload } from '../../store/roleAndPermission/rolesAndPermissions.types';
 
 interface Roles {
     [key: string]: boolean | number | Record<string, any> | undefined;
@@ -31,143 +36,115 @@ const RolesPermissionsForm: React.FC = () => {
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
     const navigate = useNavigate();
 
-    const singleRolesData = useSelector((state: TRootState) => state.rolesAndPermissions?.singleRoleData);
-    const moduleData: { id: number, name: string, parentId: any, child?: any[] | undefined }[] = [
-        {
-            id: 1,
-            name: "Dashboard",
-            parentId: null
-        },
-        {
-            id: 2,
-            name: "Orders",
-            parentId: null
-        },
-        {
-            id: 3,
-            name: "Pending Orders",
-            parentId: 2
-        },
-        {
-            id: 4,
-            name: "Orders History",
-            parentId: 2
-        },
 
-        {
-            id: 5,
-            name: "Vendors",
-            parentId: null
-        },
-        {
-            id: 6,
-            name: "Drivers",
-            parentId: null
-        },
-        {
-            id: 7,
-            name: "Users",
-            parentId: null
-        },
-        {
-            id: 8,
-            name: "Vehicles",
-            parentId: null
-        },
-        {
-            id: 9,
-            name: "Gas",
-            parentId: null
-        },
-        {
-            id: 10,
-            name: "Fuel",
-            parentId: null
-        },
-        {
-            id: 11,
-            name: "Reports",
-            parentId: null
-        },
-        {
-            id: 12,
-            name: "My Profile",
-            parentId: null
-        },
-        {
-            id: 13,
-            name: "Geofences",
-            parentId: null
-        },
-        {
-            id: 14,
-            name: "Vendors Category",
-            parentId: null
-        },
-        {
-            id: 15,
-            name: "Vehicle (Fuel Type)",
-            parentId: null
-        },
-        {
-            id: 16,
-            name: "Referral Code",
-            parentId: null
-        },
-        {
-            id: 17,
-            name: "Time Slots",
-            parentId: null
-        },
-        {
-            id: 18,
-            name: "Roles & Permissions",
-            parentId: null
-        },
-        {
-            id: 19,
-            name: "Sub Admins",
-            parentId: null
-        },
-        {
-            id: 20,
-            name: "Notifications",
-            parentId: null
-        },
-        {
-            id: 21,
-            name: "App Settings",
-            parentId: null
-        },
-        {
-            id: 22,
-            name: "Email Templates",
-            parentId: null
-        },
-        {
-            id: 23,
-            name: "CMS Pages",
-            parentId: null
-        },
-        {
-            id: 24,
-            name: "Driver Handbook",
-            parentId: null
-        },
-        {
-            id: 25,
-            name: "FAQs",
-            parentId: null
-        }
-
-    ]
-
-    const { id } = useParams<{ id: string }>();
+    const { id = "1" } = useParams<{ id: string }>();
+    const [roleName, setRoleName] = useState("");
+    const [permissionError, setPermissionError] = useState(false);
+    const [isActive, setIsActive] = useState(1);
     const [modifiedData, setModifiedData] = useState<Roles[]>([]);
+    console.log("intial modified data", modifiedData);
 
-    const handleRedirectToRolespermissions = () => {
-        navigate("/roles-permissions/list");
+
+    const singleRolesData = useSelector((state: TRootState) => state.rolesAndPermissions?.singleRolesData);
+    console.log(singleRolesData);
+    
+    const moduleData = useSelector((state: TRootState) => state.rolesAndPermissions?.modulesData?.modules);
+
+    const handleRedirectToRole = () => {
+        navigate("/settings/roles-permissions");
     };
+
+    const rolesAndPermissionSchema = yup.object().shape({
+        roleName: yup.string().required("Role name is required"),
+    });
+
+    const checkPermission = modifiedData.filter((data) => data.all || data.index || data.add || data.delete || data.view || data.edit);
+
+    const checkInnerPermission = modifiedData.filter((child) => child?.module?.child)?.map((role) => [...(role?.module?.child || [])])?.flat(Infinity)?.filter((data) => data.all || data.index || data.add || data.delete || data.view || data.edit);
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        validationSchema: rolesAndPermissionSchema,
+        initialValues: {
+            roleName: roleName || "",
+        },
+        onSubmit: () => {
+            if (
+                checkPermission &&
+                checkPermission.length === 0 &&
+                checkInnerPermission &&
+                checkInnerPermission.length === 0
+            ) {
+                setPermissionError(true);
+            }
+            const permissions = {};
+            for (let permission of modifiedData) {
+                if (permission?.module?.child) {
+                    for (let innerPermission of permission?.module?.child) {
+                        Object.assign(permissions, {
+                            [innerPermission?.module?.id]: {
+                                permissionId: id === "new" ? undefined : singleRolesData?.permissions && singleRolesData?.permissions?.find(
+                                    (role) =>
+                                        role?.module?.id === innerPermission?.module?.id
+                                )?.id,
+                                all: innerPermission.all,
+                                edit: innerPermission.edit,
+                                index: innerPermission.index,
+                                view: innerPermission.view,
+                                delete: innerPermission.delete,
+                                add: innerPermission.add,
+                            },
+                        });
+                    }
+                } else {
+                    if (permission?.module?.id !== -1) {
+                        Object.assign(permissions, {
+                            [permission?.module?.id]: {
+                                permissionId:
+                                    id === "new"
+                                        ? undefined
+                                        : singleRolesData?.permissions &&
+                                        singleRolesData?.permissions?.find(
+                                            (role) => role?.module?.id === permission?.module?.id
+                                        )?.id,
+                                all: permission.all,
+                                edit: permission.edit,
+                                index: permission.index,
+                                view: permission.view,
+                                delete: permission.delete,
+                                add: permission.add,
+                            },
+                        });
+                    }
+                }
+            }
+            if (checkPermission.length === 0 && checkInnerPermission.length === 0) {
+                return;
+            }
+            if (id === "new") {
+                dispatch(
+                    addRolesAndActionThunk({
+                        name: roleName,
+                        isActive: isActive ? true : false,
+                        permissions: permissions,
+                    } as TRolesPayload)
+                );
+            } else {
+                dispatch(
+                    updateRolesAndPermissionActionThunk(
+                        {
+                            name: roleName,
+                            isActive: isActive ? true : false,
+                            permissions: permissions,
+                        } as TRolesPayload,
+                        id || "1"
+                    )
+                );
+            }
+            setTimeout(() => handleRedirectToRole(), 300);
+        },
+    });
+    const { errors, touched } = formik;
 
     const checkall = (val: Roles | undefined, key: string, innerKey?: string) => {
         if (key === "permission") {
@@ -198,11 +175,7 @@ const RolesPermissionsForm: React.FC = () => {
                         temp.push(role);
                     }
                 }
-                val &&
-                    (val.all =
-                        temp.length ===
-                        moduleData?.length -
-                        modifiedData?.filter((module) => module?.module?.child).length);
+                val && (val.all = temp.length === moduleData?.length - modifiedData?.filter((module) => module?.module?.child).length);
                 return val && val.all;
             } else {
                 const temp = [];
@@ -255,7 +228,7 @@ const RolesPermissionsForm: React.FC = () => {
         checkedValue: boolean,
         childKey?: number
     ) => {
-        // setPermissionError(false);
+        setPermissionError(false);
         const cloneData = _.cloneDeep(modifiedData);
         if (role?.module?.name === "permission") {
             if (permission === "all") {
@@ -331,17 +304,23 @@ const RolesPermissionsForm: React.FC = () => {
                 }
             }
         }
+
         setModifiedData(cloneData);
     };
 
     useEffect(() => {
-        if (id !== "new") {
-            dispatch(getRoleByIdActionThunk(id || "1"));
-        }
-    }, [dispatch, id])
+        Promise.resolve(dispatch(getModulesActionThunk())).then(() => {
+            if (id !== "new") {
+                dispatch(getRoleByIdActionThunk(id || "1"));
+            }
+        });
+    }, [dispatch, id]);
 
     useEffect(() => {
-
+        if (singleRolesData && id !== "new") {
+            setRoleName(singleRolesData?.name || "");
+            setIsActive(singleRolesData?.isActive ? 1 : 0);
+        }
         if (singleRolesData?.permissions && id !== "new") {
             for (let permission of modifiedData) {
                 if (permission?.module?.child) {
@@ -381,7 +360,6 @@ const RolesPermissionsForm: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [singleRolesData, moduleData]);
 
-
     useEffect(() => {
         if (modifiedData?.length <= 1) {
             const cloneModuleData = _.cloneDeep(moduleData);
@@ -414,6 +392,7 @@ const RolesPermissionsForm: React.FC = () => {
                     delete: false,
                     module: permission,
                 }));
+
             updatedPermission.splice(0, 0, {
                 all: false,
                 index: false,
@@ -424,15 +403,16 @@ const RolesPermissionsForm: React.FC = () => {
                 module: {
                     name: "permission",
                     id: -1,
-                    parentId: -1 || -1,
+                    parentId: -1,
                 },
             });
-            setModifiedData(updatedPermission);
+
+            console.log("updated", updatedPermission);
+            setModifiedData(() => updatedPermission);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [moduleData])
-
-
+    }, [moduleData]);
+    useEffect(() => { }, [modifiedData]);
 
     return (
         <React.Fragment>
@@ -444,10 +424,10 @@ const RolesPermissionsForm: React.FC = () => {
                         <header className="page-header">
                             <div className="d-flex align-items-center">
                                 <div className="mr-auto">
-                                    <h1>Add New Role</h1>
+                                    <h1>{id !== "new" ? "Update" : "Add New"}</h1>
                                 </div>
                                 <div className="m-l-10">
-                                    <button className="btn btn-secondary" onClick={handleRedirectToRolespermissions}>
+                                    <button className="btn btn-secondary" onClick={handleRedirectToRole}>
                                         <i className="fa fa-angle-left">&nbsp;</i> Back
                                     </button>
                                 </div>
@@ -455,13 +435,14 @@ const RolesPermissionsForm: React.FC = () => {
                         </header>
                         <section className="page-content container-fluid">
                             <div className="card">
-                                <form className="form-horizontal">
+                                <form className="form-horizontal" onSubmit={formik.handleSubmit}>
                                     <div className="card-body">
                                         <div className="mt-3">
                                             <div className="form-group row">
                                                 <label className="control-label text-md-right col-md-3">Role Name <span className="text-danger">*</span></label>
                                                 <div className="col-md-5">
-                                                    <input type="text" className="form-control" placeholder="" />
+                                                    <input type="text" className="form-control" id='rolename' value={formik?.values?.roleName} onChange={(e) => { setRoleName(e.target.value); formik.handleChange(e); }} placeholder="" />
+                                                    {errors.roleName && touched.roleName && (<div className='text-danger'>{errors.roleName}</div>)}
                                                 </div>
                                             </div>
                                             <div className="form-group row">
@@ -469,17 +450,25 @@ const RolesPermissionsForm: React.FC = () => {
                                                 <div className="col-md-5">
                                                     <div className="mt-1">
                                                         <label className="control control-outline d-inline-block control-primary control--radio mb-0 mr-3"> Active
-                                                            <input type="radio" value="radio1" checked name="radio-1" id="status1" />
+                                                            <input type="radio" value={1} checked={isActive === 1} onChange={e => setIsActive(Number(e.target.value))} name="radio-1" id="status1" />
                                                             <div className="control__indicator"></div>
                                                         </label>
                                                         <label className="control control-outline d-inline-block control-primary control--radio mb-0"> Inactive
-                                                            <input type="radio" value="radio11" name="radio-1" id="status2" />
+                                                            <input type="radio" value={0} name="radio-1" checked={isActive === 0} onChange={e => setIsActive(Number(e.target.value))} id="status2" />
                                                             <div className="control__indicator"></div>
                                                         </label>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        {permissionError && (
+                                            <div
+                                                className="text-danger"
+                                                style={{ textAlign: "center" }}
+                                            >
+                                                Please select atleast one permission
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="card-body p-0">
                                         <div className="table-responsive table-thead-fix">
@@ -490,16 +479,16 @@ const RolesPermissionsForm: React.FC = () => {
                                                         <th>
                                                             <label className="control control-outline control-primary control--checkbox m-0">
                                                                 All
-                                                                <input type="checkbox"
-                                                                    checked={modifiedData?.length > 1
-                                                                        ? checkall(
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={checkall(
                                                                         modifiedData?.find(
                                                                             (data) =>
                                                                                 data?.module?.name === "permission"
                                                                         ),
                                                                         "permission",
                                                                         "all"
-                                                                    ) : false}
+                                                                    )}
                                                                     onChange={(e) => {
                                                                         updatedStatus(
                                                                             modifiedData?.find(
@@ -517,17 +506,16 @@ const RolesPermissionsForm: React.FC = () => {
                                                         <th>
                                                             <label className="control control-outline control-primary control--checkbox m-0">
                                                                 Index
-
-                                                                <input type="checkbox"
-                                                                    checked={modifiedData?.length > 1
-                                                                        ? checkall(
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={checkall(
                                                                         modifiedData?.find(
                                                                             (data) =>
                                                                                 data?.module?.name === "permission"
                                                                         ),
                                                                         "permission",
                                                                         "index"
-                                                                    ) : false}
+                                                                    )}
                                                                     onChange={(e) => {
                                                                         updatedStatus(
                                                                             modifiedData?.find(
@@ -545,7 +533,8 @@ const RolesPermissionsForm: React.FC = () => {
                                                         <th>
                                                             <label className="control control-outline control-primary control--checkbox m-0">
                                                                 Add
-                                                                <input type="checkbox"
+                                                                <input
+                                                                    type="checkbox"
                                                                     checked={
                                                                         modifiedData?.length > 1
                                                                             ? checkall(
@@ -569,7 +558,6 @@ const RolesPermissionsForm: React.FC = () => {
                                                                             e.target.checked
                                                                         );
                                                                     }}
-
                                                                 />
                                                                 <div className="control__indicator"></div>
                                                             </label>
@@ -577,7 +565,8 @@ const RolesPermissionsForm: React.FC = () => {
                                                         <th>
                                                             <label className="control control-outline control-primary control--checkbox m-0">
                                                                 Edit
-                                                                <input type="checkbox"
+                                                                <input
+                                                                    type="checkbox"
                                                                     checked={checkall(
                                                                         modifiedData?.find(
                                                                             (data) =>
@@ -603,7 +592,7 @@ const RolesPermissionsForm: React.FC = () => {
                                                         <th>
                                                             <label className="control control-outline control-primary control--checkbox m-0">
                                                                 View
-                                                                <input type="checkbox"
+                                                                <input
                                                                     checked={
                                                                         modifiedData?.length > 1
                                                                             ? checkall(
@@ -617,7 +606,7 @@ const RolesPermissionsForm: React.FC = () => {
                                                                             )
                                                                             : false
                                                                     }
-
+                                                                    type="checkbox"
                                                                     onChange={(e) => {
                                                                         updatedStatus(
                                                                             modifiedData?.find(
@@ -635,7 +624,8 @@ const RolesPermissionsForm: React.FC = () => {
                                                         <th>
                                                             <label className="control control-outline control-primary control--checkbox m-0">
                                                                 Delete
-                                                                <input type="checkbox"
+                                                                <input
+                                                                    type="checkbox"
                                                                     checked={checkall(
                                                                         modifiedData?.find(
                                                                             (data) =>
@@ -665,10 +655,13 @@ const RolesPermissionsForm: React.FC = () => {
                                                         return !data?.module?.child &&
                                                             data?.module?.name !== "permission" ? (
                                                             <tr key={data?.id}>
-                                                                <td>{data?.module?.name} </td>
+                                                                <td>{data?.module?.name}</td>
                                                                 <td>
-                                                                    <label className="control control-outline control-primary control--checkbox m-0"> &nbsp;
-                                                                        <input type="checkbox"
+                                                                    <label className="control control-outline control-primary control--checkbox m-0">
+                                                                        {" "}
+                                                                        &nbsp;
+                                                                        <input
+                                                                            type="checkbox"
                                                                             checked={checkall(
                                                                                 data,
                                                                                 data?.module?.name
@@ -685,8 +678,11 @@ const RolesPermissionsForm: React.FC = () => {
                                                                     </label>
                                                                 </td>
                                                                 <td>
-                                                                    <label className="control control-outline control-primary control--checkbox m-0"> &nbsp;
-                                                                        <input type="checkbox"
+                                                                    <label className="control control-outline control-primary control--checkbox m-0">
+                                                                        {" "}
+                                                                        &nbsp;
+                                                                        <input
+                                                                            type="checkbox"
                                                                             checked={data.index || false}
                                                                             onChange={(e) => {
                                                                                 updatedStatus(
@@ -700,8 +696,11 @@ const RolesPermissionsForm: React.FC = () => {
                                                                     </label>
                                                                 </td>
                                                                 <td>
-                                                                    <label className="control control-outline control-primary control--checkbox m-0"> &nbsp;
-                                                                        <input type="checkbox"
+                                                                    <label className="control control-outline control-primary control--checkbox m-0">
+                                                                        {" "}
+                                                                        &nbsp;
+                                                                        <input
+                                                                            type="checkbox"
                                                                             checked={data?.add}
                                                                             onChange={(e) => {
                                                                                 updatedStatus(
@@ -715,8 +714,11 @@ const RolesPermissionsForm: React.FC = () => {
                                                                     </label>
                                                                 </td>
                                                                 <td>
-                                                                    <label className="control control-outline control-primary control--checkbox m-0"> &nbsp;
-                                                                        <input type="checkbox"
+                                                                    <label className="control control-outline control-primary control--checkbox m-0">
+                                                                        {" "}
+                                                                        &nbsp;
+                                                                        <input
+                                                                            type="checkbox"
                                                                             checked={data?.edit}
                                                                             onChange={(e) => {
                                                                                 updatedStatus(
@@ -730,8 +732,11 @@ const RolesPermissionsForm: React.FC = () => {
                                                                     </label>
                                                                 </td>
                                                                 <td>
-                                                                    <label className="control control-outline control-primary control--checkbox m-0"> &nbsp;
-                                                                        <input type="checkbox"
+                                                                    <label className="control control-outline control-primary control--checkbox m-0">
+                                                                        {" "}
+                                                                        &nbsp;
+                                                                        <input
+                                                                            type="checkbox"
                                                                             checked={data?.view}
                                                                             onChange={(e) => {
                                                                                 updatedStatus(
@@ -745,8 +750,11 @@ const RolesPermissionsForm: React.FC = () => {
                                                                     </label>
                                                                 </td>
                                                                 <td>
-                                                                    <label className="control control-outline control-primary control--checkbox m-0"> &nbsp;
-                                                                        <input type="checkbox"
+                                                                    <label className="control control-outline control-primary control--checkbox m-0">
+                                                                        {" "}
+                                                                        &nbsp;
+                                                                        <input
+                                                                            type="checkbox"
                                                                             checked={data?.delete}
                                                                             onChange={(e) => {
                                                                                 updatedStatus(
@@ -762,8 +770,8 @@ const RolesPermissionsForm: React.FC = () => {
                                                             </tr>
                                                         ) : (
                                                             data?.module?.name !== "permission" && (
-                                                                <React.Fragment>
-                                                                    <tr key={data?.id}>
+                                                                <React.Fragment key={data?.id}>
+                                                                    <tr>
                                                                         <td>{data?.module?.name} </td>
                                                                         <td></td>
                                                                         <td></td>
@@ -777,8 +785,11 @@ const RolesPermissionsForm: React.FC = () => {
                                                                                 {innerData?.module?.name + " "}
                                                                             </td>
                                                                             <td>
-                                                                                <label className="control control-outline control-primary control--checkbox m-0"> &nbsp;
-                                                                                    <input type="checkbox"
+                                                                                <label className="control control-outline control-primary control--checkbox m-0">
+                                                                                    {" "}
+                                                                                    &nbsp;
+                                                                                    <input
+                                                                                        type="checkbox"
                                                                                         checked={checkall(
                                                                                             innerData,
                                                                                             "all",
@@ -797,7 +808,9 @@ const RolesPermissionsForm: React.FC = () => {
                                                                                 </label>
                                                                             </td>
                                                                             <td>
-                                                                                <label className="control control-outline control-primary control--checkbox m-0"> &nbsp;
+                                                                                <label className="control control-outline control-primary control--checkbox m-0">
+                                                                                    {" "}
+                                                                                    &nbsp;
                                                                                     <input
                                                                                         type="checkbox"
                                                                                         checked={innerData?.index}
@@ -814,8 +827,11 @@ const RolesPermissionsForm: React.FC = () => {
                                                                                 </label>
                                                                             </td>
                                                                             <td>
-                                                                                <label className="control control-outline control-primary control--checkbox m-0"> &nbsp;
-                                                                                    <input type="checkbox"
+                                                                                <label className="control control-outline control-primary control--checkbox m-0">
+                                                                                    {" "}
+                                                                                    &nbsp;
+                                                                                    <input
+                                                                                        type="checkbox"
                                                                                         checked={innerData?.add}
                                                                                         onChange={(e) => {
                                                                                             updatedStatus(
@@ -830,8 +846,11 @@ const RolesPermissionsForm: React.FC = () => {
                                                                                 </label>
                                                                             </td>
                                                                             <td>
-                                                                                <label className="control control-outline control-primary control--checkbox m-0"> &nbsp;
-                                                                                    <input type="checkbox"
+                                                                                <label className="control control-outline control-primary control--checkbox m-0">
+                                                                                    {" "}
+                                                                                    &nbsp;
+                                                                                    <input
+                                                                                        type="checkbox"
                                                                                         checked={innerData?.edit}
                                                                                         onChange={(e) => {
                                                                                             updatedStatus(
@@ -846,8 +865,11 @@ const RolesPermissionsForm: React.FC = () => {
                                                                                 </label>
                                                                             </td>
                                                                             <td>
-                                                                                <label className="control control-outline control-primary control--checkbox m-0"> &nbsp;
-                                                                                    <input type="checkbox"
+                                                                                <label className="control control-outline control-primary control--checkbox m-0">
+                                                                                    {" "}
+                                                                                    &nbsp;
+                                                                                    <input
+                                                                                        type="checkbox"
                                                                                         checked={innerData?.view}
                                                                                         onChange={(e) => {
                                                                                             updatedStatus(
@@ -862,8 +884,11 @@ const RolesPermissionsForm: React.FC = () => {
                                                                                 </label>
                                                                             </td>
                                                                             <td>
-                                                                                <label className="control control-outline control-primary control--checkbox m-0"> &nbsp;
-                                                                                    <input type="checkbox"
+                                                                                <label className="control control-outline control-primary control--checkbox m-0">
+                                                                                    {" "}
+                                                                                    &nbsp;
+                                                                                    <input
+                                                                                        type="checkbox"
                                                                                         checked={innerData?.delete}
                                                                                         onChange={(e) => {
                                                                                             updatedStatus(
@@ -888,8 +913,8 @@ const RolesPermissionsForm: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="card-footer bg-light text-right">
-                                        <button type="button" className="btn btn-secondary clear-form mr-2" onClick={handleRedirectToRolespermissions}>Cancel</button>
-                                        <button type="button" className="btn btn-primary" onClick={handleRedirectToRolespermissions}>Submit</button>
+                                        <button type="button" className="btn btn-secondary clear-form mr-2" onClick={handleRedirectToRole}>Cancel</button>
+                                        <button type="submit" className="btn btn-primary">Submit</button>
                                     </div>
                                 </form>
                             </div>
@@ -902,3 +927,5 @@ const RolesPermissionsForm: React.FC = () => {
 };
 
 export default RolesPermissionsForm;
+
+

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -9,9 +9,11 @@ import LogoColor from "../../assets/img/logo.png";
 import { loginActionThunk } from "../../store/auth/auth.actions.async";
 import TRootState from "../../store/root.types";
 import { BarsLoader } from "../../components/loader/Loader";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 
 const Login = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
   const getCredentialsData = getWithExpiry("rememberMe");
   const getRememberMe = localStorage.getItem("rememberMe");
 
@@ -40,16 +42,16 @@ const Login = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: (values) => {
-      // dispatch(
-      //   loginActionThunk(
-      //     {
-      //       email: values.email,
-      //       password: values.password,
-      //       userType: "admin",
-      //     },
-      //     rememberMe
-      //   )
-      // );
+      dispatch(
+        loginActionThunk(
+          {
+            email: values.email,
+            password: values.password,
+            userType: "admin",
+          },
+          rememberMe
+        )
+      );
       navigate("/dashboard", { replace: true });
     },
   });

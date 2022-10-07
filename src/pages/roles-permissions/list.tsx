@@ -1,30 +1,36 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Dropdown from 'react-bootstrap/Dropdown';
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/header/header";
 import Pagination from "../../components/pagination/pagination";
 import Sidebar from "../../components/sidebar/sidebar";
 import { getRolesActionThunk } from "../../store/roleAndPermission/rolesAndPermissions.action.async";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import RolesAndPermssions from "../../components/rolesAndPermissions/rolesAndPermissions";
+import TRootState from "../../store/root.types";
 const RolesPermissionsList: React.FC = () => {
 
+    const navigate = useNavigate();
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
 
+    const [page, setPage] = useState(Number(1));
+    const [search, setSearch] = useState("");
+    const [sort, setSort] = useState("ASC");
 
-    const [tabValue, setTabValue] = useState<number>(1);
-    const [show, setShow] = useState<boolean>(false);
-    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+    const count = useSelector((state: TRootState) => state.rolesAndPermissions?.rolesData?.count);
 
-    const fetchRoles = () =>{
-        dispatch(getRolesActionThunk())};
+    const fetchRoles = (page: number, search?: string) => {
+        dispatch(getRolesActionThunk(page, 10, search))
+    };
 
-    const navigate = useNavigate();
+    const reset = () => {
+        setSearch(() => "");
+        dispatch(getRolesActionThunk(page, 10, ""));
+    }
 
     const handleRedirectToRolespermissions = () => {
-        navigate("/roles-permissions/form");
+        navigate("/settings/roles-permissions/new");
     };
 
     return (
@@ -41,11 +47,39 @@ const RolesPermissionsList: React.FC = () => {
                                 </div>
                                 <div className="m-l-10">
                                     <div className="input-group w-250">
-                                        <input type="text" className="form-control" placeholder="Search" title="Search" />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Search"
+                                            title="Search"
+                                            value={search}
+                                            onChange={(e) => {
+                                                setSearch(e.target.value);
+                                            }}
+                                        />
                                         <div className="input-group-append">
-                                            <button type="button" className="input-group-text pointer"><span className="fa fa-search"></span></button>
+                                            <button
+                                                type="button"
+                                                className="input-group-text pointer"
+                                                onClick={(e) => {
+                                                    dispatch(
+                                                        getRolesActionThunk(page, 10, search)
+                                                    );
+                                                }}
+                                            >
+                                                <span className="fa fa-search"></span>
+                                            </button>
                                         </div>
                                     </div>
+                                </div>
+                                <div className="m-l-10">
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        onClick={reset}
+                                    >
+                                        Reset
+                                    </button>
                                 </div>
                                 <div className="m-l-10">
                                     <button type="button" className="btn btn-primary" onClick={handleRedirectToRolespermissions}>
@@ -57,9 +91,14 @@ const RolesPermissionsList: React.FC = () => {
                         <section className="page-content container-fluid">
                             <div className="card">
                                 <div className="card-body p-0">
-                                    <Pagination 
+                                    <Pagination
                                         ItemsComponent={RolesAndPermssions}
+                                        pageCount={count}
                                         dispatchAction={fetchRoles}
+                                        page={page}
+                                        setPage={setPage}
+                                        filter={sort}
+                                        setFilter={setSort}
                                     />
                                 </div>
                             </div>

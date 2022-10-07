@@ -1,13 +1,13 @@
 import { action } from "typesafe-actions";
 import RolesandPermissionTypeEnum from "./rolesAndPermissions.enum";
-import { TRoleAndPermissionSingleData, TRolesAndPermissionsPayload } from "./rolesAndPermissions.types";
+import { TModulesData, TRolesData, TRolesPayload } from "./rolesAndPermissions.types";
 
 /**
  * Get Roles  Action Creator
  * @returns
  */
 const getRolesLoading = () => {
-    return action(RolesandPermissionTypeEnum.GET_ROLES_LOADING);
+  return action(RolesandPermissionTypeEnum.GET_ROLES_LOADING);
 };
 
 /**
@@ -15,7 +15,7 @@ const getRolesLoading = () => {
  * @returns
  */
 const getRolesLoaded = () => {
-    return action(RolesandPermissionTypeEnum.GET_ROLES_LOADED);
+  return action(RolesandPermissionTypeEnum.GET_ROLES_LOADED);
 };
 
 /**
@@ -23,33 +23,34 @@ const getRolesLoaded = () => {
  * @returns
  */
 const getRolesFailed = () => {
-    return action(RolesandPermissionTypeEnum.GET_ROLES_FAILED);
+  return action(RolesandPermissionTypeEnum.GET_ROLES_FAILED);
 };
 
 /**
  * Get role action creator
  * @returns
  */
-const getRoles = (payload: TRolesAndPermissionsPayload) => {
-    return action(RolesandPermissionTypeEnum.GET_ROLES, payload);
+const getRoles = (payload: TRolesData) => {
+  return action(RolesandPermissionTypeEnum.GET_ROLES, payload);
 };
 
 /**
  * Get role by id action creator
  * @returns
  */
-const getRoleById = (payload: TRoleAndPermissionSingleData) => {
-    return action(RolesandPermissionTypeEnum.GET_ROLES_BY_ID, payload);
+const getRoleById = (payload: TRolesPayload) => {
+  return action(RolesandPermissionTypeEnum.GET_ROLES_BY_ID, payload);
 };
 
 
-// /**
-//  * Update Roles and Permission  Action Creator
-//  * @returns
-//  */
-// const updateRolesAndPermission = (payload:TRoleAndPermissionSingleData) => {
-//     return action(RolesandPermissionTypeEnum.UPDATE_ROLES_AND_PERMISSION,payload);
-// };
+
+/**
+ * Update Roles and Permission  Action Creator
+ * @returns
+ */
+const updateRolesAndPermission = (payload: { values: TRolesPayload, id: string }) => {
+  return action(RolesandPermissionTypeEnum.UPDATE_ROLES_AND_PERMISSION, payload);
+};
 
 
 // /**
@@ -61,34 +62,74 @@ const getRoleById = (payload: TRoleAndPermissionSingleData) => {
 // };
 
 
-// /**
-//  * Add roles action creator
-//  * @returns
-//  */
-// const addRole = (payload:TRoleAndPermissionSingleData) => {
-//     return action(RolesandPermissionTypeEnum.ADD_ROLES,payload);
-// };
+/**
+ * Add roles action creator
+ * @returns
+ */
+const addRole = (payload: TRolesPayload) => {
+  return action(RolesandPermissionTypeEnum.ADD_ROLES, payload);
+};
 
 
 
-// /**
-//  * Update roles status  action creator
-//  * @returns
-//  */
-// const updateRolesStatus = (payload:TRoleAndPermissionSingleData) => {
-//     return action(RolesandPermissionTypeEnum.UPDATE_ROLES_STATUS,payload);
-// };
+/**
+ * Update roles status  action creator
+ * @returns
+ */
+const updateRolesStatus = (payload: {
+  isActive: boolean;
+  id: string | number;
+}) => {
+  return action(RolesandPermissionTypeEnum.UPDATE_ROLES_STATUS, payload);
+};
+
+/**
+ * Get module pending
+ * @returns
+ */
+const getMoulesLoading = () => {
+  return action(RolesandPermissionTypeEnum.GET_MODULES_LOADING);
+};
+
+/**
+ * Get modules success action creator
+ * @param payload
+ * @returns
+ */
+const getModulesLoaded = () => {
+  return action(RolesandPermissionTypeEnum.GET_MODULES_LOADED);
+};
+
+/**
+ * Get modules failed action creator
+ * @returns
+ */
+const getModulesFailed = () => {
+  return action(RolesandPermissionTypeEnum.GET_MODULES_FAILED);
+};
+
+/**
+ * Get modules data action creator
+ * @param payload 
+ * @returns 
+ */
+const getModules = (payload: TModulesData) => {
+  return action(RolesandPermissionTypeEnum.GET_MODULES, payload)
+}
 
 
 export {
-    getRolesLoading,
-    getRolesLoaded,
-    getRolesFailed,
+  getRolesLoading,
+  getRolesLoaded,
+  getRolesFailed,
+  getRoles,
+  getRoleById,
+  updateRolesStatus,
+  addRole,
+  updateRolesAndPermission,
 
-    getRoles,
-    // addRole,
-    getRoleById,
-    // deleteRole,
-    // updateRolesAndPermission,
-    // updateRolesStatus,
+  getMoulesLoading,
+  getModulesLoaded,
+  getModulesFailed,
+  getModules,
 };

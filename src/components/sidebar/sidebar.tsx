@@ -32,7 +32,7 @@ const Sidebar: React.FC = () => {
       title: "Time Slots"
     },
     {
-      to: "/roles-permissions/list",
+      to: "/settings/roles-permissions",
       icon: "icons dripicons-menu",
       title: "Roles & Permissions"
     },
