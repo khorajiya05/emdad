@@ -13,6 +13,6 @@ const reducers: Reducer<CombinedState<any>, any> = combineReducers({
   auth: authReducer,
   reports: reportsReducer,
   refferalCodes: refferalCodeReducer,
-  rolesAndPermissions:rolesAndPermissionReducer,
+  rolesAndPermission: rolesAndPermissionReducer,
 });
 export default reducers;

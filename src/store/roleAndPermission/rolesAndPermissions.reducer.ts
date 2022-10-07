@@ -1,154 +1,156 @@
-import RolesAndPermissionTypeEnum from "./rolesAndPermissions.enum";
-import {  TRolesAndPermissionActionTypes, TRolesAndPermissionsState, TRolesData, TRolesPayload } from "./rolesAndPermissions.types";
+import actionTypes from "./rolesAndPermissions.enum";
+import {
+  TRolesAndPermissionActionTypes,
+  TRolesAndPermissionState,
+} from "./rolesAndPermissions.types";
 
-const ininitialState: TRolesAndPermissionsState = {
-    loading: false,
-    modulesData: {count:0, modules:[]},
-    rolesData: {} as TRolesData,
-    singleRolesData: {} as TRolesPayload,
+const ininitialState: TRolesAndPermissionState = {
+  loading: false,
+  modulesData: { count: 0, modules: [] },
+  rolesData: {
+    count: 0,
+    roles: [],
+  },
+  singleRolesData: {},
 };
 const rolesAndPermissionReducer = (
-    state = ininitialState,
-    action: TRolesAndPermissionActionTypes
+  state = ininitialState,
+  action: TRolesAndPermissionActionTypes
 ) => {
-    switch (action.type) {
-        case RolesAndPermissionTypeEnum.GET_ROLES_LOADING:
-            return { ...state, loading: true };
+  switch (action.type) {
+    case actionTypes.GET_ROLES_PENDING:
+      return { ...state, loading: true };
 
-        case RolesAndPermissionTypeEnum.GET_ROLES_LOADED:
-            return { ...state, loading: false };
+    case actionTypes.GET_ROLES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        rolesData: action.payload,
+      };
 
-        case RolesAndPermissionTypeEnum.GET_ROLES_FAILED:
-            return { ...state, loading: false };
+    case actionTypes.GET_ROLES_FAILED:
+      return { ...state, loading: false };
 
-        case RolesAndPermissionTypeEnum.GET_ROLES:
-            return { ...state, loading: false, rolesData: action.payload };
+    case actionTypes.GET_MODULES_PENDING:
+      return { ...state, loading: true };
 
-        case RolesAndPermissionTypeEnum.GET_ROLES_BY_ID:
-            return { ...state, loading: false, singleRolesData: action.payload?.role }
+    case actionTypes.GET_MODULES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        modulesData: {count:action.payload.count, modules:action.payload.modules},
+      };
 
-        case RolesAndPermissionTypeEnum.UPDATE_ROLES_STATUS:
-            const updatedRoleStatus = [...state.rolesData.roles];
-            const updateRolesStatusId = updatedRoleStatus.findIndex((role) => role.id === Number(action.payload.id))
-            if (updateRolesStatusId > -1) {
-                updatedRoleStatus[updateRolesStatusId]["isActive"] = action.payload.isActive;
-            }
-            return { ...state, loading: false, roleData: { ...state?.rolesData, roles: updatedRoleStatus } }
+    case actionTypes.GET_MODULES_FAILED:
+      return { ...state, loading: false };
 
-        case RolesAndPermissionTypeEnum.ADD_ROLES:
-            const rolesList = [...state.rolesData?.roles]
-            if (state?.rolesData?.roles.length < action.payload.itemsPerPage) {
-                rolesList.push(action.payload.addRoles)
-            }
-            return { ...state, loading: false, rolesData: { ...state?.rolesData, roles: rolesList } }
+    case actionTypes.GET_ROLES_BY_ID_PENDING:
+      return { ...state, loading: true };
 
-        case RolesAndPermissionTypeEnum.UPDATE_ROLES_AND_PERMISSION:
-            const roleId = action?.payload.id;
-            const rolesLists = [...state?.rolesData?.roles];
-            const roleIndex = rolesLists?.findIndex((role) => role?.id === Number(roleId));
+    case actionTypes.GET_ROLES_BY_ID_SUCCESS:
+      return { ...state, loading: false, singleRolesData: action.payload };
 
-            if (roleIndex > -1) {
-                rolesLists[roleIndex] = { ...rolesLists[roleIndex], name: action?.payload.values.name, isActive: action?.payload.values.status };
-            }
-            return { ...state, loading: false, rolesData: { ...state?.rolesData, roles: rolesLists } }
+    case actionTypes.GET_ROLES_BY_ID_FAILED:
+      return { ...state, loading: true };
 
+    case actionTypes.ADD_ROLES_PENDING:
+      return { ...state, loading: true };
 
-        //-------------------- cases for module action---------------------------
+    case actionTypes.ADD_ROLES_SUCCESS:
+      const addRoles = [...state.rolesData?.roles];
+      if (state.rolesData.roles.length < action.payload.itemsPerPage) {
+        addRoles.push(action.payload.addRoles);
+      }
 
-        case RolesAndPermissionTypeEnum.GET_MODULES_LOADING:
-            return { ...state, loading: true }
+      return {
+        ...state,
+        loading: false,
+        rolesData: { ...state?.rolesData, roles: addRoles },
+      };
 
-        case RolesAndPermissionTypeEnum.GET_MODULES_LOADED:
-            return { ...state, loading: false }
+    case actionTypes.ADD_ROLES_FAILED:
+      return { ...state, loading: false };
 
-        case RolesAndPermissionTypeEnum.GET_MODULES_FAILED:
-            return { ...state, loading: false }
+    case actionTypes.UPDATE_ROLES_AND_PERMISSION_PENDING:
+      return { ...state, loading: true };
 
-        case RolesAndPermissionTypeEnum.GET_MODULES:
-            return { ...state, modulesData: action.payload }
+    case actionTypes.UPDATE_ROLES_AND_PERMISSION_SUCCESS:
+      const roleId = action.payload.id;
+      const updatedRole = [...state.rolesData?.roles];
+      const roleIndex = updatedRole?.findIndex(
+        (role) => role.id === Number(roleId)
+      );
+      if (roleIndex > -1) {
+        updatedRole[roleIndex].name = action.payload.values.name;
+        updatedRole[roleIndex].isActive = action.payload.values.status;
+      }
+      return {
+        ...state,
+        loading: false,
+        rolesData: {
+          ...state?.rolesData,
+          roles: updatedRole,
+        },
+      };
 
-        // case RolesAndPermissionTypeEnum.ADD_ROLES:
-        //     const addRoles = [...state.rolesData?.roles];
-        //     if (state.rolesData.roles.length < action.payload.itemsPerPage) {
-        //         addRoles.push(action.payload.addRoles);
-        //     }
+    case actionTypes.UPDATE_ROLES_AND_PERMISSION_FAILED:
+      return { ...state, loading: false };
 
-        // return {
-        //     ...state,
-        //     loading: false,
-        //     rolesData: { ...state?.rolesData, roles: addRoles },
-        // };
+    case actionTypes.DELETE_ROLES_PENDING:
+      return { ...state, loading: true };
 
+    case actionTypes.DELETE_ROLES_SUCCESS:
+      const deleteRoleId = action.payload;
+      const deleteRole = [...state.rolesData?.roles];
+      const deleteRoleIndex = deleteRole?.findIndex(
+        (role) => role.id === deleteRoleId
+      );
+      if (deleteRoleIndex > -1) {
+        deleteRole.splice(deleteRoleIndex, 1);
+      }
 
+      return {
+        ...state,
+        loading: false,
+        rolesData: {
+          ...state?.rolesData,
+          roles: deleteRole,
+          count:
+            deleteRoleIndex > -1
+              ? state?.rolesData?.count - 1
+              : state?.rolesData?.count,
+        },
+      };
 
+    case actionTypes.DELETE_ROLES_FAILED:
+      return { ...state, loading: false };
 
+    case actionTypes.UPDATE_ROLES_STATUS_PENDING:
+      return { ...state, loading: true };
 
-        // case RolesAndPermissionTypeEnum.UPDATE_ROLES_AND_PERMISSION:
-        //     const roleId = action.payload.id;
-        //     const updatedRole = [...state.rolesData?.roles];
-        //     const roleIndex = updatedRole?.findIndex(
-        //         (role) => role.id === Number(roleId)
-        //     );
-        //     if (roleIndex > -1) {
-        //         updatedRole[roleIndex].name = action.payload.values.name;
-        //         updatedRole[roleIndex].isActive = action.payload.values.status;
-        //     }
-        //     return {
-        //         ...state,
-        //         loading: false,
-        //         rolesData: {
-        //             ...state?.rolesData,
-        //             roles: updatedRole,
-        //         },
-        //     };
+    case actionTypes.UPDATE_ROLES_STATUS_SUCCESS:
+      const updatedRoleStatus = [...state.rolesData.roles];
+      const updateRolesStatusId = updatedRoleStatus.findIndex(
+        (roles) => roles.id === Number(action.payload.id)
+      );
+      if (updateRolesStatusId > -1) {
+        updatedRoleStatus[updateRolesStatusId]["isActive"] =
+          action.payload.isActive;
+      }
+      return {
+        ...state,
+        loading: false,
+        rolesData: {
+          ...state?.rolesData,
+          roles: updatedRoleStatus,
+        },
+      };
 
+    case actionTypes.UPDATE_ROLES_STATUS_FAILED:
+      return { ...state, loading: false };
 
-
-        // case RolesAndPermissionTypeEnum.DELETE_ROLES:
-        //     const deleteRoleId = action.payload;
-        //     const deleteRole = [...state.rolesData?.roles];
-        //     const deleteRoleIndex = deleteRole?.findIndex(
-        //         (role) => role.id === deleteRoleId
-        //     );
-        //     if (deleteRoleIndex > -1) {
-        //         deleteRole.splice(deleteRoleIndex, 1);
-        //     }
-
-        //     return {
-        //         ...state,
-        //         loading: false,
-        //         rolesData: {
-        //             ...state?.rolesData,
-        //             roles: deleteRole,
-        //             count:
-        //                 deleteRoleIndex > -1
-        //                     ? state?.rolesData?.count - 1
-        //                     : state?.rolesData?.count,
-        //         },
-        //     };
-
-
-
-        // case RolesAndPermissionTypeEnum.UPDATE_ROLES_STATUS:
-        //     const updatedRoleStatus = [...state.rolesData.roles];
-        //     const updateRolesStatusId = updatedRoleStatus.findIndex(
-        //         (roles) => roles.id === Number(action.payload.id)
-        //     );
-        //     if (updateRolesStatusId > -1) {
-        //         updatedRoleStatus[updateRolesStatusId]["isActive"] =
-        //             action.payload.isActive;
-        //     }
-        //     return {
-        //         ...state,
-        //         loading: false,
-        //         rolesData: {
-        //             ...state?.rolesData,
-        //             roles: updatedRoleStatus,
-        //         },
-        //     };
-
-        default:
-            return state;
-    }
+    default:
+      return state;
+  }
 };
 export default rolesAndPermissionReducer;

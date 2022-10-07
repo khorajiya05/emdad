@@ -1,21 +1,22 @@
 import { action } from "typesafe-actions";
-import RolesandPermissionTypeEnum from "./rolesAndPermissions.enum";
-import { TModulesData, TRolesData, TRolesPayload } from "./rolesAndPermissions.types";
+import actionTypes from "./rolesAndPermissions.enum";
+import { TRolesPayload } from "./rolesAndPermissions.types";
 
 /**
- * Get Roles  Action Creator
+ * Get Roles Pending Action Creator
  * @returns
  */
-const getRolesLoading = () => {
-  return action(RolesandPermissionTypeEnum.GET_ROLES_LOADING);
+const getRolesPending = () => {
+  return action(actionTypes.GET_ROLES_PENDING);
 };
 
 /**
  * Get Roles Success Action Creator
+ * @param payload
  * @returns
  */
-const getRolesLoaded = () => {
-  return action(RolesandPermissionTypeEnum.GET_ROLES_LOADED);
+const getRolesSuccess = (payload: object) => {
+  return action(actionTypes.GET_ROLES_SUCCESS, payload);
 };
 
 /**
@@ -23,72 +24,40 @@ const getRolesLoaded = () => {
  * @returns
  */
 const getRolesFailed = () => {
-  return action(RolesandPermissionTypeEnum.GET_ROLES_FAILED);
+  return action(actionTypes.GET_ROLES_FAILED);
 };
 
 /**
- * Get role action creator
+ * Get role by id pending action creator
  * @returns
  */
-const getRoles = (payload: TRolesData) => {
-  return action(RolesandPermissionTypeEnum.GET_ROLES, payload);
+const getRoleByIdPending = () => {
+  return action(actionTypes.GET_ROLES_BY_ID_PENDING);
 };
 
 /**
- * Get role by id action creator
+ * Get role by id success action creator
+ * @param payload
  * @returns
  */
-const getRoleById = (payload: TRolesPayload) => {
-  return action(RolesandPermissionTypeEnum.GET_ROLES_BY_ID, payload);
+const getRoleByIdSuccess = (payload: object) => {
+  return action(actionTypes.GET_ROLES_BY_ID_SUCCESS, payload);
 };
 
-
-
 /**
- * Update Roles and Permission  Action Creator
+ * Get role by id failed action creator
  * @returns
  */
-const updateRolesAndPermission = (payload: { values: TRolesPayload, id: string }) => {
-  return action(RolesandPermissionTypeEnum.UPDATE_ROLES_AND_PERMISSION, payload);
-};
-
-
-// /**
-//  * Delete role action creator
-//  * @returns
-//  */
-// const deleteRole = (payload:number) => {
-//     return action(RolesandPermissionTypeEnum.DELETE_ROLES,payload);
-// };
-
-
-/**
- * Add roles action creator
- * @returns
- */
-const addRole = (payload: TRolesPayload) => {
-  return action(RolesandPermissionTypeEnum.ADD_ROLES, payload);
-};
-
-
-
-/**
- * Update roles status  action creator
- * @returns
- */
-const updateRolesStatus = (payload: {
-  isActive: boolean;
-  id: string | number;
-}) => {
-  return action(RolesandPermissionTypeEnum.UPDATE_ROLES_STATUS, payload);
+const getRoleByIdFailed = () => {
+  return action(actionTypes.GET_ROLES_BY_ID_FAILED);
 };
 
 /**
  * Get module pending
  * @returns
  */
-const getMoulesLoading = () => {
-  return action(RolesandPermissionTypeEnum.GET_MODULES_LOADING);
+const getMoulesPending = () => {
+  return action(actionTypes.GET_MODULES_PENDING);
 };
 
 /**
@@ -96,8 +65,8 @@ const getMoulesLoading = () => {
  * @param payload
  * @returns
  */
-const getModulesLoaded = () => {
-  return action(RolesandPermissionTypeEnum.GET_MODULES_LOADED);
+const getModulesSuccess = (payload: object) => {
+  return action(actionTypes.GET_MODULES_SUCCESS, payload);
 };
 
 /**
@@ -105,31 +74,132 @@ const getModulesLoaded = () => {
  * @returns
  */
 const getModulesFailed = () => {
-  return action(RolesandPermissionTypeEnum.GET_MODULES_FAILED);
+  return action(actionTypes.GET_MODULES_FAILED);
+};
+/**
+ * Update Roles and Permission Pending Action Creator
+ * @returns
+ */
+const updateRolesAndPermissionPending = () => {
+  return action(actionTypes.UPDATE_ROLES_AND_PERMISSION_PENDING);
 };
 
 /**
- * Get modules data action creator
- * @param payload 
- * @returns 
+ * Update Roles and Permission Success Action Creator
+ * @param payload
+ * @returns
  */
-const getModules = (payload: TModulesData) => {
-  return action(RolesandPermissionTypeEnum.GET_MODULES, payload)
-}
+const updateRolesAndPermissionSuccess = (payload: {
+  values: TRolesPayload;
+  id: string;
+}) => {
+  return action(actionTypes.UPDATE_ROLES_AND_PERMISSION_SUCCESS, payload);
+};
 
+/**
+ * Update Roles and Permission Failed Action Creator
+ * @returns
+ */
+const updateRolesAndPermissionFailed = () => {
+  return action(actionTypes.UPDATE_ROLES_AND_PERMISSION_FAILED);
+};
 
+/**
+ * Delete role pending action creator
+ * @returns
+ */
+const deleteRolePending = () => {
+  return action(actionTypes.DELETE_ROLES_PENDING);
+};
+
+/**
+ * Delete role success action creator
+ * @returns
+ */
+const deleteRoleSuccess = (payload: string) => {
+  return action(actionTypes.DELETE_ROLES_SUCCESS, Number(payload));
+};
+
+/**
+ * Delete role failed action creator
+ * @returns
+ */
+const deleteRoleFailed = () => {
+  return action(actionTypes.DELETE_ROLES_FAILED);
+};
+
+/**
+ * Add roles pending action creator
+ * @returns
+ */
+const addRolesPending = () => {
+  return action(actionTypes.ADD_ROLES_PENDING);
+};
+
+/**
+ * Add roles success action creator
+ * @param payload
+ * @returns
+ */
+const addRolesSuccess = (payload: object) => {
+  return action(actionTypes.ADD_ROLES_SUCCESS, payload);
+};
+
+/**
+ * Add roles failed action creator
+ * @returns
+ */
+const addRolesFailed = () => {
+  return action(actionTypes.ADD_ROLES_FAILED);
+};
+
+/**
+ * Update roles status pending action creator
+ * @returns
+ */
+const updateRolesStatusPending = () => {
+  return action(actionTypes.UPDATE_ROLES_STATUS_PENDING);
+};
+
+/**
+ * Update roles status success action creator
+ * @param payload
+ * @returns
+ */
+const updateRolesStatusSuccess = (payload: {
+  isActive: boolean;
+  id: string | number;
+}) => {
+  return action(actionTypes.UPDATE_ROLES_STATUS_SUCCESS, payload);
+};
+
+/**
+ * Update roles status failed action creator
+ * @returns
+ */
+const updateRolesStatusFailed = () => {
+  return action(actionTypes.UPDATE_ROLES_STATUS_FAILED);
+};
 export {
-  getRolesLoading,
-  getRolesLoaded,
+  getRolesPending,
+  getRolesSuccess,
   getRolesFailed,
-  getRoles,
-  getRoleById,
-  updateRolesStatus,
-  addRole,
-  updateRolesAndPermission,
-
-  getMoulesLoading,
-  getModulesLoaded,
+  getMoulesPending,
+  getModulesSuccess,
   getModulesFailed,
-  getModules,
+  addRolesPending,
+  addRolesSuccess,
+  addRolesFailed,
+  getRoleByIdPending,
+  getRoleByIdSuccess,
+  getRoleByIdFailed,
+  deleteRolePending,
+  deleteRoleSuccess,
+  deleteRoleFailed,
+  updateRolesAndPermissionPending,
+  updateRolesAndPermissionSuccess,
+  updateRolesAndPermissionFailed,
+  updateRolesStatusPending,
+  updateRolesStatusSuccess,
+  updateRolesStatusFailed,
 };

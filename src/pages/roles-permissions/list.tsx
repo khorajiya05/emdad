@@ -18,8 +18,8 @@ const RolesPermissionsList: React.FC = () => {
     const [search, setSearch] = useState("");
     const [sort, setSort] = useState("ASC");
 
-    const count = useSelector((state: TRootState) => state.rolesAndPermissions?.rolesData?.count);
-
+    const count = useSelector((state: TRootState) => state.rolesAndPermission?.rolesData?.count);
+    
     const fetchRoles = (page: number, search?: string) => {
         dispatch(getRolesActionThunk(page, 10, search))
     };

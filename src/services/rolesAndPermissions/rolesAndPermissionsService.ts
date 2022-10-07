@@ -1,7 +1,5 @@
 import { API } from "../../middleware/middleware";
 import { TRolesPayload } from "../../store/roleAndPermission/rolesAndPermissions.types";
-
-
 /**
  * Get roles API call
  * @param page
@@ -12,13 +10,16 @@ import { TRolesPayload } from "../../store/roleAndPermission/rolesAndPermissions
 const getRoles = (
   page: number,
   perPage: number,
+  // sort: string,
   search?: string
 ): Promise<any> => {
   return API.get("/roles", {
     params: {
       page,
       perPage,
+      // sort,
       search: search || undefined,
+      // sortBy: "fullName",
     },
   });
 };
@@ -29,9 +30,16 @@ const getRoles = (
  * @returns
  */
 const getRolesById = (id: string): Promise<any> => {
-  return API.get("/roles/" + JSON.parse(id));
+  return API.get("/roles/" + id);
 };
 
+/**
+ * Get modules API call
+ * @returns
+ */
+const getModules = (): Promise<any> => {
+  return API.get("/modules");
+};
 
 /**
  * Update roles API call
@@ -40,7 +48,7 @@ const getRolesById = (id: string): Promise<any> => {
  * @returns
  */
 const updateRoles = (values: TRolesPayload, id: string): Promise<any> => {
-  return API.put("/roles" + id, { ...values });
+  return API.put("/roles/" + id, { ...values });
 };
 
 /**
@@ -73,16 +81,6 @@ const updateRolesStatus = (
 ): Promise<any> => {
   return API.put("/roles/" + id, { isActive });
 };
-
-/**
- * Get modules API call
- * @returns
- */
-const getModules = (): Promise<any> => {
-  return API.get("/modules");
-};
-
-
 export {
   getRoles,
   addRoles,

@@ -1,20 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import { Dropdown } from "react-bootstrap";
+import SweetAlert from "react-bootstrap-sweetalert";
 import { useDispatch, useSelector } from "react-redux";
+
+import TRootState from "../../store/root.types";
+import { deleteRoleActionThunk, updateRolesStatusActionThunk } from "../../store/roleAndPermission/rolesAndPermissions.action.async";
+import { BarsLoader } from "../loader/Loader";
+import { AppendedMyComponent } from "../appendToBody/appendToBody";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 
-import TRootState from "../../store/root.types";
-import { BarsLoader } from "../loader/Loader";
-import { updateRolesStatusActionThunk } from "../../store/roleAndPermission/rolesAndPermissions.action.async";
-import { AppendedMyComponent } from "../appendToBody/appendToBody";
-
 // interface Prop {
-//     setFilter?: any;
-//     filter?: string;
-//   }
-
+//   setFilter: Function;
+//   filter: string;
+// }
 const RolesAndPermssions: React.FC = () => {
 
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
@@ -23,11 +23,11 @@ const RolesAndPermssions: React.FC = () => {
     const [showChangeStatusAlert, setShowChangeStatusAlert] = useState(false);
     const [id, setId] = useState("");
     const [editRoles, setEditRoles] = useState<{ isActive: boolean } | null>(null);
-    const [filter, setFilter] = useState<string>("ASC");
+    const [filter, setFilter] = useState("ASC")
 
-    const rolesData = useSelector((state: TRootState) => state.rolesAndPermissions?.rolesData?.roles);
-    const loading = useSelector((state: TRootState) => state.rolesAndPermissions?.loading);
-
+    const rolesData = useSelector((state: TRootState) => state.rolesAndPermission?.rolesData?.roles);
+    const loading = useSelector((state: TRootState) => state.rolesAndPermission?.loading);
+    
     const showAlert = () => {
         setSweetAlert(true);
     };
@@ -51,7 +51,8 @@ const RolesAndPermssions: React.FC = () => {
                             <span
                                 onClick={() =>
                                     filter === "ASC" ? setFilter("DESC") : setFilter("ASC")
-                                }>
+                                }
+                            >
                                 Role Name
                             </span>
                         </th>
@@ -70,8 +71,8 @@ const RolesAndPermssions: React.FC = () => {
                                             href="#"
                                             onClick={() => {
                                                 setShowChangeStatusAlert(true);
-                                                setEditRoles({ isActive: !roles?.isActive });
-                                                setId(roles?.id.toString());
+                                                setEditRoles({ isActive: !roles?.isActive, });
+                                                setId(roles.id.toString());
                                             }}
                                         >
                                             {roles?.isActive ? (
@@ -80,31 +81,37 @@ const RolesAndPermssions: React.FC = () => {
                                                 <i className="icon dripicons-cross text-danger font-size-20"></i>
                                             )}
                                         </a>
-
                                     </td>
                                     <td className="table-field-actions">
                                         <Dropdown className="btn-group">
-                                            <Dropdown.Toggle id="dropdown-basic" className="btn btn-sm btn-icon-only">
+                                            <Dropdown.Toggle
+                                                id="dropdown-basic"
+                                                className="btn btn-sm btn-icon-only"
+                                            >
                                                 <i className="icon dripicons-dots-3 zmdi-hc-fw"></i>
                                             </Dropdown.Toggle>
                                             <AppendedMyComponent>
-                                            <Dropdown.Menu>
-                                                <Dropdown.Item
-                                                    href={"/settings/roles-permissions/" + roles.id}
-                                                    onClick={() => { setId(roles.id.toString()) }}
-                                                >
-                                                    <i className="fa fa-edit fa-fw text-accent-custom"></i> Edit
-                                                </Dropdown.Item>
-                                                <Dropdown.Item
-                                                    href="#"
-                                                    onClick={() => {
-                                                        setId(roles.id.toString());
-                                                        showAlert();
-                                                    }}
-                                                >
-                                                    <i className="fa fa-trash-alt fa-fw text-accent-custom"></i> Delete
-                                                </Dropdown.Item>
-                                            </Dropdown.Menu>
+                                                <Dropdown.Menu>
+                                                    <Dropdown.Item
+                                                        href={"/settings/roles-permissions/" + roles.id}
+                                                        onClick={() => {
+                                                            setId(roles.id.toString());
+                                                        }}
+                                                    >
+                                                        <i className="fa fa-edit fa-fw text-accent-custom"></i>{" "}
+                                                        Edit
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item
+                                                        href="#"
+                                                        onClick={() => {
+                                                            setId(roles.id.toString());
+                                                            showAlert();
+                                                        }}
+                                                    >
+                                                        <i className="fa fa-trash-alt fa-fw text-accent-custom"></i>{" "}
+                                                        Delete
+                                                    </Dropdown.Item>
+                                                </Dropdown.Menu>
                                             </AppendedMyComponent>
                                         </Dropdown>
                                     </td>
@@ -126,62 +133,60 @@ const RolesAndPermssions: React.FC = () => {
                     )}
                 </tbody>
             </table>
-            {/* {
-{sweetAlert && (
-    <SweetAlert
-      danger
-      showCancel
-      title="Are you sure want to delete role?"
-      onConfirm={hideAlert}
-      onCancel={hideAlert}
-      customButtons={
-        <React.Fragment>
-          <button
-            className="btn btn-dark min-w-100 mr-3"
-            onClick={hideAlert}
-          >
-            No
-          </button>
-          <button
-            className="btn btn-danger min-w-100"
-            onClick={() => {
-              dispatch(deleteRoleActionThunk(id));
-              hideAlert();
-            }}
-          >
-            Yes
-          </button>
-        </React.Fragment>
-      }
-    ></SweetAlert>
-  )}
-  {showChangeStatusAlert && (
-    <SweetAlert
-      success
-      showCancel
-      title="Are you sure want to change status?"
-      onConfirm={() => setShowChangeStatusAlert(false)}
-      onCancel={() => setShowChangeStatusAlert(false)}
-      customButtons={
-        <React.Fragment>
-          <button
-            className="btn btn-dark min-w-100 mr-3"
-            onClick={() => setShowChangeStatusAlert(false)}
-          >
-            No
-          </button>
-          <button
-            className="btn btn-danger min-w-100"
-            onClick={changeRolesStatusHandler}
-          >
-            Yes
-          </button>
-        </React.Fragment>
-      }
-    ></SweetAlert>
-  )}
-            } */}
-        </div >
+            {sweetAlert && (
+                <SweetAlert
+                    danger
+                    showCancel
+                    title="Are you sure want to delete role?"
+                    onConfirm={hideAlert}
+                    onCancel={hideAlert}
+                    customButtons={
+                        <React.Fragment>
+                            <button
+                                className="btn btn-dark min-w-100 mr-3"
+                                onClick={hideAlert}
+                            >
+                                No
+                            </button>
+                            <button
+                                className="btn btn-danger min-w-100"
+                                onClick={() => {
+                                    dispatch(deleteRoleActionThunk(id));
+                                    hideAlert();
+                                }}
+                            >
+                                Yes
+                            </button>
+                        </React.Fragment>
+                    }
+                ></SweetAlert>
+            )}
+            {showChangeStatusAlert && (
+                <SweetAlert
+                    success
+                    showCancel
+                    title="Are you sure want to change status?"
+                    onConfirm={() => setShowChangeStatusAlert(false)}
+                    onCancel={() => setShowChangeStatusAlert(false)}
+                    customButtons={
+                        <React.Fragment>
+                            <button
+                                className="btn btn-dark min-w-100 mr-3"
+                                onClick={() => setShowChangeStatusAlert(false)}
+                            >
+                                No
+                            </button>
+                            <button
+                                className="btn btn-danger min-w-100"
+                                onClick={changeRolesStatusHandler}
+                            >
+                                Yes
+                            </button>
+                        </React.Fragment>
+                    }
+                ></SweetAlert>
+            )}
+        </div>
     );
 };
 export default RolesAndPermssions;
