@@ -96,7 +96,7 @@ const SubAdminsList: React.FC = () => {
                                             </tbody>
                                         </table>
                                     </div>
-                                    <Pagination />
+                                    {/* <Pagination /> */}
                                 </div>
                             </div>
                         </section>

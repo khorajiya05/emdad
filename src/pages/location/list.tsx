@@ -234,7 +234,7 @@ const LocationList: React.FC = () => {
                       </tbody>
                     </table>
                   </div>
-                  <Pagination />
+                  {/* <Pagination /> */}
                 </div>
               </div>
             </section>

@@ -11,23 +11,22 @@ import { AppendedMyComponent } from "../appendToBody/appendToBody";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 
-// interface Prop {
-//   setFilter: Function;
-//   filter: string;
-// }
-const RolesAndPermssions: React.FC = () => {
+interface Prop {
+  setFilter: Function;
+  filter: string;
+}
+const RolesAndPermssions: React.FC<Prop> = ({ filter, setFilter }) => {
 
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
 
     const [sweetAlert, setSweetAlert] = useState(false);
     const [showChangeStatusAlert, setShowChangeStatusAlert] = useState(false);
     const [id, setId] = useState("");
-    const [editRoles, setEditRoles] = useState<{ isActive: boolean } | null>(null);
-    const [filter, setFilter] = useState("ASC")
+    const [editRoles, setEditRoles] = useState<{ isActive: boolean, name: string, permissions: object } | null>(null);
 
     const rolesData = useSelector((state: TRootState) => state.rolesAndPermission?.rolesData?.roles);
     const loading = useSelector((state: TRootState) => state.rolesAndPermission?.loading);
-    
+
     const showAlert = () => {
         setSweetAlert(true);
     };
@@ -37,7 +36,7 @@ const RolesAndPermssions: React.FC = () => {
 
     const changeRolesStatusHandler = () => {
         if (editRoles) {
-            dispatch(updateRolesStatusActionThunk(editRoles.isActive, id));
+            dispatch(updateRolesStatusActionThunk(editRoles, id));
         }
         setShowChangeStatusAlert(false);
     };
@@ -71,7 +70,7 @@ const RolesAndPermssions: React.FC = () => {
                                             href="#"
                                             onClick={() => {
                                                 setShowChangeStatusAlert(true);
-                                                setEditRoles({ isActive: !roles?.isActive, });
+                                                setEditRoles({ isActive: !roles?.isActive, name: roles?.name, permissions: {} });
                                                 setId(roles.id.toString());
                                             }}
                                         >

@@ -8,7 +8,7 @@ const PendingOrderGas = () => {
             {(fetchOrdersByFilter: Function) => (
 
                 <div className="card-body p-0">
-                    <Pagination ItemsComponent={PendingOrderGasList} dispatchAction={fetchOrdersByFilter} />
+                    {/* <Pagination ItemsComponent={PendingOrderGasList} dispatchAction={fetchOrdersByFilter} /> */}
                 </div>
             )}
         </PendingOrders>

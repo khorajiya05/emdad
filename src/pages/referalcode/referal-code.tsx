@@ -1,11 +1,11 @@
 import React from "react";
+import { ThunkDispatch } from "redux-thunk";
+import { useDispatch } from "react-redux";
+import { AnyAction } from "redux";
 
 import Header from "../../components/header/header";
 import Sidebar from "../../components/sidebar/sidebar";
 import Pagination from "../../components/pagination/pagination";
-import { useDispatch } from "react-redux";
-import { AnyAction } from "redux";
-import { ThunkDispatch } from "redux-thunk";
 import { getAllRefferalCodesActionThunk } from "../../store/refferalCodes/refferalCodes.actions.async";
 import ReferalCodeList from "./list";
 
@@ -53,10 +53,10 @@ const ReferalCode: React.FC = () => {
             <section className="page-content container-fluid">
               <div className="card">
                 <div className="card-body p-0">
-                  <Pagination
+                  {/* <Pagination
                     ItemsComponent={ReferalCodeList}
                     dispatchAction={fetchReferralCode}
-                  />
+                  /> */}
                 </div>
               </div>
             </section>

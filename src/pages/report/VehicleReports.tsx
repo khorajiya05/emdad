@@ -244,7 +244,7 @@ function VehicleReports() {
                     </div>
                 </div>
                 <VehicleReportsList />
-                <Pagination />
+                {/* <Pagination /> */}
             </div>
         </Report>
 

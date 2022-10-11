@@ -5,5 +5,6 @@ const errorToast = (msg: string) => {
   toast.clearWaitingQueue();
 };
 const successToast = (msg: string) => toast.success(msg);
-const warningToast = (msg: string) => toast.warning(msg);
+const warningToast = (msg: string) => toast.warning(msg);   
+
 export { errorToast, successToast, warningToast };

@@ -206,7 +206,7 @@ const UserReports = () => {
                     </div>
                 </div>
                 <UserReportsList />
-                <Pagination />
+                {/* <Pagination /> */}
             </div>
 
         </Report>

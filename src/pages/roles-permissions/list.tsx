@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../components/header/header";
 import Pagination from "../../components/pagination/pagination";
 import Sidebar from "../../components/sidebar/sidebar";
@@ -9,17 +9,21 @@ import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import RolesAndPermssions from "../../components/rolesAndPermissions/rolesAndPermissions";
 import TRootState from "../../store/root.types";
+
 const RolesPermissionsList: React.FC = () => {
 
+    const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
 
-    const [page, setPage] = useState(Number(1));
+    const state = location?.state as { page: string; state: string };
+
+    const [page, setPage] = useState(Number(state?.page) || 1);
     const [search, setSearch] = useState("");
     const [sort, setSort] = useState("ASC");
 
     const count = useSelector((state: TRootState) => state.rolesAndPermission?.rolesData?.count);
-    
+
     const fetchRoles = (page: number, search?: string) => {
         dispatch(getRolesActionThunk(page, 10, search))
     };

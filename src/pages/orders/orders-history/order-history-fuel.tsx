@@ -9,7 +9,7 @@ const OrderHistoryFuel = () => {
             {
         (fetchOrdersByFilter:Function) => (
           <div className="card-body p-0">
-            <Pagination ItemsComponent={OrderHistoryFuelList} dispatchAction={fetchOrdersByFilter} />
+            {/* <Pagination ItemsComponent={OrderHistoryFuelList} dispatchAction={fetchOrdersByFilter} /> */}
           </div>
         )
       }

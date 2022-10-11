@@ -286,7 +286,7 @@ const DriverReports = () => {
                     </div>
                 </div>
                 <DriverReportsList />
-                <Pagination />
+                {/* <Pagination /> */}
             </div>
 
         </Report>

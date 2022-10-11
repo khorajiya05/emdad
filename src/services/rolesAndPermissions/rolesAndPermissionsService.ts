@@ -71,16 +71,14 @@ const addRoles = (values: TRolesPayload): Promise<any> => {
 
 /**
  * Update roles status API Integration
- * @param isActive
+ * @param editRoles
  * @param id
  * @returns
  */
-const updateRolesStatus = (
-  isActive: boolean,
-  id: string | number
-): Promise<any> => {
-  return API.put("/roles/" + id, { isActive });
+const updateRolesStatus = (editRoles: object, id: string | number): Promise<any> => {
+  return API.put("/roles/" + id, editRoles);
 };
+
 export {
   getRoles,
   addRoles,

@@ -581,7 +581,7 @@ const PendingOrders: React.FC = () => {
                       </div>
                     ) : null}
                   </div>
-                  <Pagination />
+                  {/* <Pagination /> */}
                 </div>
               </div>
             </section>

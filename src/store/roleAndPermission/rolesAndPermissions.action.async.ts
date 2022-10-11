@@ -94,7 +94,7 @@ export const getModulesActionThunk = (): ThunkAction<
     return requestFromServer
       .getModules()
       .then((res) => {
-        
+
         dispatch(getModulesSuccess(res.data.data));
       })
       .catch((error) => {
@@ -188,15 +188,15 @@ export const deleteRoleActionThunk = (
  * @returns
  */
 export const updateRolesStatusActionThunk = (
-  isActive: boolean,
+  editRoles: { isActive: boolean, name: string, permissions: object },
   id: string | number
 ): ThunkAction<void, {}, {}, AnyAction> => {
   return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(updateRolesStatusPending());
     requestFromServer
-      .updateRolesStatus(isActive, id)
+      .updateRolesStatus(editRoles, id)
       .then((res) => {
-        dispatch(updateRolesStatusSuccess({ isActive, id }));
+        dispatch(updateRolesStatusSuccess({isActive:editRoles?.isActive, id }));
         successToast("Role status updated successfully");
       })
       .catch((err) => {

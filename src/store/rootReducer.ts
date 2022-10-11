@@ -7,6 +7,7 @@ import reportsReducer from "./reports/reports.reducer";
 import authReducer from "./auth/auth.reducer";
 import refferalCodeReducer from "./refferalCodes/refferalCodes.reducer";
 import rolesAndPermissionReducer from "./roleAndPermission/rolesAndPermissions.reducer";
+import paginationReducer from "./pagination/pagination.reducer";
 
 
 const reducers: Reducer<CombinedState<any>, any> = combineReducers({
@@ -14,5 +15,6 @@ const reducers: Reducer<CombinedState<any>, any> = combineReducers({
   reports: reportsReducer,
   refferalCodes: refferalCodeReducer,
   rolesAndPermission: rolesAndPermissionReducer,
+  pagination:paginationReducer,
 });
 export default reducers;

@@ -179,7 +179,7 @@ const OrderReports = () => {
                     </div>
                 </div>
                 <OrderReportsList />
-                <Pagination />
+                {/* <Pagination /> */}
             </div>
 
         </Report>
