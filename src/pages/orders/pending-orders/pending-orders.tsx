@@ -9,6 +9,11 @@ import Select from "react-select";
 import { DatePicker } from "../../../components";
 import User from "../../../assets/img/user.jpg";
 import { NavLink, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction } from "redux";
+import { getOrdersFuelActionThunk } from "../../../store/orders/orders.actions.async";
+import TRootState from "../../../store/root.types";
 
 interface Prop {
     children: Function;
@@ -21,8 +26,8 @@ const SelectZipcode = [
 
 const SelectStatus = [
     { value: "All", label: "All" },
-    { value: "Pending", label: "Pending" },
-    { value: "Live", label: "Live" },
+    { value: "pending", label: "Pending" },
+    { value: "live", label: "Live" },
 ];
 
 const SelectOrdertype = [
@@ -34,21 +39,38 @@ const SelectOrdertype = [
 const PendingOrders: React.FC<Prop> = ({ children }) => {
 
     const location = useLocation();
+    const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+
+    const { state } = location;
+    const perPage = useSelector((state: TRootState) => state?.pagination?.perPageItems)
+    const ordersOf = location.pathname === "/orders/pending-orders/fuel" ? "fuel" : "gas"
 
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const [showUnAssignOrderModal, setShowUnAssignOrderModal] = useState<boolean>(false);
     const [showAssignOrderModal, setShowAssignOrderModal] = useState<boolean>(false);
     const [showChangeStatusModal, setShowChangeStatusModal] = useState<boolean>(false);
 
+    const [page, setPage] = useState<number>(Number(state?.page) || 1)
     const [orderStatus, setOrderStatus] = useState("All");
     const [searchOrder, setSearchOrder] = useState<string>("");
     const [startDate, setStartDate] = useState<moment.Moment | null | undefined>();
     const [endDate, setEndDate] = useState<moment.Moment | null | undefined>();
-    const ordersOf = location.pathname === "/orders/pending-orders/fuel" ? "fuel" : "gas"
+    const [sort, setSort] = useState("DESC");
+    const [sortBy, setSortBy] = useState<string | null>(null);
+
 
 
     const fetchOrdersByFilter = () => {
-        alert(JSON.stringify({ startDate, endDate, orderStatus, searchOrder, ordersOf }));
+
+        dispatch(getOrdersFuelActionThunk(
+            searchOrder === "" ? null : searchOrder,
+            page, perPage,
+            startDate,
+            endDate,
+            sort,
+            sortBy,
+            orderStatus === "All" ? "pending" : orderStatus
+        ))
     }
 
     const handleCloseDelete = () => {
@@ -226,7 +248,7 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
                                             </li>
                                         </ul>
                                     </div>
-                                    {children(fetchOrdersByFilter)}
+                                    {children(sort, setSort, setSortBy, fetchOrdersByFilter)}
                                 </>
                             </div>
                         </section>

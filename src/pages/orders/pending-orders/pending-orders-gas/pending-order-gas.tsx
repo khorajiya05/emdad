@@ -1,6 +1,6 @@
-import Pagination from '../../../components/pagination/pagination'
+import Pagination from '../../../../components/pagination/pagination'
 import PendingOrderGasList from './pending-order-gas-list'
-import PendingOrders from './pending-orders'
+import PendingOrders from '../pending-orders'
 
 const PendingOrderGas = () => {
     return (

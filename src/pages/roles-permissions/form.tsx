@@ -301,8 +301,6 @@ const RolesPermissionsForm = () => {
       }
     }
     console.log("cloneData propane", cloneData);
-
-
     setModifiedData(cloneData);
   };
 
@@ -420,8 +418,6 @@ const RolesPermissionsForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [moduleData]);
 
-
-  useEffect(() => { }, [modifiedData]);
   return (
     <React.Fragment>
       <div id="app">

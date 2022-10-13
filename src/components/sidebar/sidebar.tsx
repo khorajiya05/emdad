@@ -42,7 +42,7 @@ const Sidebar: React.FC = () => {
       title: "Sub Admins"
     },
     {
-      to: "/notification/list",
+      to: "/settings/notifications/received",
       icon: "icons dripicons-bell",
       title: "Notifications"
     },

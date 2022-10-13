@@ -49,11 +49,11 @@ export const privateRoutes = [
   },
   {
     path: "/orders/pending-orders/fuel",
-    element: lazy(() => import("../pages/orders/pending-orders/pending-order-fuel"))
+    element: lazy(() => import("../pages/orders/pending-orders/pending-orders-fuel/pending-order-fuel"))
   },
   {
     path: "/orders/pending-orders/gas",
-    element: lazy(() => import("../pages/orders/pending-orders/pending-order-gas"))
+    element: lazy(() => import("../pages/orders/pending-orders/pending-orders-gas/pending-order-gas"))
   },
   {
     path: "/orders/orders-history/fuel",
@@ -144,11 +144,15 @@ export const privateRoutes = [
     element: lazy(() => import("../pages/timeslot/list")),
   },
   {
-    path: "/notification/list",
-    element: lazy(() => import("../pages/notification/list")),
+    path: "/settings/notifications/received",
+    element: lazy(() => import("../pages/notification/notificatoinReceived")),
   },
   {
-    path: "/notification/form",
+    path: "/settings/notifications/sent",
+    element: lazy(() => import("../pages/notification/notificationSent")),
+  },
+  {
+    path: "/settings/notification/new",
     element: lazy(() => import("../pages/notification/form")),
   },
   {

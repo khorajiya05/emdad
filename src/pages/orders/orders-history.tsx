@@ -32,8 +32,7 @@ const OrdersHistory: React.FC = () => {
 
   const [show, setShow] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-  const [showChangeStatusModal, setShowChangeStatusModal] =
-    useState<boolean>(false);
+  const [showChangeStatusModal, setShowChangeStatusModal] = useState<boolean>(false);
   const [selectedValue2, setSelectedValue2] = useState("All");
   const [tabValue, setTabValue] = useState<number>(1);
   const handleCloseDelete = () => {
@@ -153,8 +152,8 @@ const OrdersHistory: React.FC = () => {
                             value={
                               selectedValue2
                                 ? (SelectStatus || []).find(
-                                    (prod) => prod.value === selectedValue2
-                                  ) || null
+                                  (prod) => prod.value === selectedValue2
+                                ) || null
                                 : null
                             }
                             onChange={(val) =>

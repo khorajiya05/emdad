@@ -291,7 +291,7 @@ const Header: React.FC = () => {
                       </div>
                     </div>
                     <div className="clearfix text-center">
-                      <Link to="/notification">VIEW ALL</Link>
+                      <Link to="/settings/notification/list">VIEW ALL</Link>
                     </div>
                   </div>
                 </div>
