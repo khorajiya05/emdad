@@ -13,11 +13,7 @@ interface Prop {
     children: Function;
 }
 
-const SelectZipcode = [
-    { value: "All", label: "All" },
-    { value: "33602", label: "33602" },
-    { value: "33603", label: "33603" },
-];
+
 
 const SelectStatus = [
     { value: "All", label: "All" },

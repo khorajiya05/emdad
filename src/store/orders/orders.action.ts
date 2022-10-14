@@ -2,7 +2,7 @@ import { action } from "typesafe-actions";
 import OrdersActionTypeEnum from "./orders.enum";
 import {
   TOrdersFuel,
-  TOrdersTank,
+  TOrdersGas,
   TRescheduleTimeSlots,
   TOrderByIdPayload,
 } from "./orders.types";
@@ -49,14 +49,14 @@ const getOrderFuelAction = (fuelOrders: TOrdersFuel) =>
  * @param tankOrders
  * @returns
  */
-const getOrderTankAction = (tankOrders: TOrdersTank) =>
-  action(OrdersActionTypeEnum.GET_ORDERS_TANK, tankOrders);
+const getOrderGasAction = (tankOrders: TOrdersGas) =>
+  action(OrdersActionTypeEnum.GET_ORDERS_GAS, tankOrders);
 
 /**
  * cancel order action creator
  * @returns
  */
-const cancelOrderAction = () => action(OrdersActionTypeEnum.CANCEL_ORDER);
+const cancelOrderAction = (payload: { orderType: number, id: number | string }) => action(OrdersActionTypeEnum.CANCEL_ORDER, payload);
 
 /**
  * get reschedule time slots action creator
@@ -79,7 +79,7 @@ export {
   getOrderIdAction,
   getOrderByIdAction,
   getOrderFuelAction,
-  getOrderTankAction,
+  getOrderGasAction,
   cancelOrderAction,
   getRescheduleSlotOrderAction,
   rescheduleOrderAction,

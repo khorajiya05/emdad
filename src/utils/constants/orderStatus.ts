@@ -9,7 +9,7 @@ export const status = [
     id: 2,
     StatusName: "pending",
     name: "Pending",
-    color: "green",
+    color: "warning",
   },
   {
     id: 3,
@@ -53,4 +53,10 @@ export const status = [
     name: "Emergency Order",
     color: "danger",
   },
+  {
+    id:10,
+    StatusName:"live",
+    name:"Live",
+    color:"green"
+  }
 ];

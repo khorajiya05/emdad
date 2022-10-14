@@ -1,181 +1,105 @@
-import { ActionType } from "typesafe-actions";
-import * as actions from "./orders.action";
+import { ActionType } from "typesafe - actions";
+import * as actions from "./ orders.action";
 
-type TOrderByIdPayload = {
-  order: {
-    id: number;
-    orderType: number;
-    status: string;
-    imageOne: null | string;
-    imageTwo: null | string;
-    startTime: string;
-    endTime: string;
-    subTotal: number;
-    grandTotal: number;
-    leakageFee: number;
-    scheduleDate: string;
-    indexPrice: number;
-    vendorDeliveryFee: number;
-    generalDeliveryFee: null | number;
-    vendorReceivedAmount: number;
-    freelanceDriverReceivedAmount: number;
-    driverCancellationCharge: number;
-    customerCancellationCharge: number;
-    adminReceivedAmount: number;
-    refundAmount: number;
-    cancellationReasonOther: null | number;
-    salesTaxPercentage: number;
-    salesTaxAmount: number;
-    locationFee: number;
-    cylindersize: number;
-    qty: number;
-    priority: null | string;
-    isDelivered: boolean;
-    promocodeDiscountAmount: number;
-    promocodeDiscountPercentage: number;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: null | string;
-    createdBy: null | string;
-    updatedBy: null | string;
-    order: {
-      id: number;
-      uuid: string;
-      invoicedReceiptUrl: "https://pay.stripe.com/receipts/acct_1IbOxSSBJPMsjmRO/ch_3KvfKESBJPMsjmRO0yND9XQN/rcpt_LcvAP4UVkMiXf6JhX7C5iICDjnvOB2B";
-      cancellationReasonOther: null;
-      serviceFee: null | number;
-      serviceCharge: null | number;
-      grandTotal: number;
-      adminTotalDeliveryFee: null | number;
-      vendorTotalDeliveryfee: number;
-      paymentType: null;
-      lat: number;
-      long: number;
-      address: string;
-      stripePaymentIntentId: string;
-      isPaid: boolean;
-      createdAt: string;
-      updatedAt: string;
-      deletedAt: null | string;
-      createdBy: string | null;
-      updatedBy: string | null;
-      timeSlot: {
-        id: number;
-        startTime: string;
-        endTime: string;
-      };
-      timeSlotsId: number;
-      userId: string;
-      user: {
-        id: string;
-        fullName: string;
-        email: string;
-        countryCode: string;
-        mobileNumber: string;
-        profileImage: string;
-        userSubscriptionCount: number;
-        address: {
-          id: number;
-          zipCode: {
-            id: number;
-            areaName: string;
-            zipcode: number;
-          };
-        }[];
-      };
-    };
-    vendor: {
-      id: string;
-      fullName: string;
-      email: string;
-      countryCode: string;
-      mobileNumber: string;
-      profileImage: null | string;
-    };
+type TOrderByIdPayload =
+  {
+    id: number,
+    uuid: string,
+    address: string,
+    city: string,
+    state: string,
+    country: string,
+    lat: number,
+    long: number,
+    orderType: number,
+    qty: number,
+    price: number,
+    scheduleDate: string,
+    startTime: string,
+    endTime: string,
+    driverStartTime: null | string,
+    driverEndTime: null | string,
+    fuelQtyDriver: null | string,
+    pumpReadingImage: null | string,
+    tankCheckComment: null | string,
+    subTotal: number,
+    grandTotal: number,
+    vatPercentage: number,
+    vatPrice: number,
+    deliveryVatPercentage: number,
+    deliveryVatPrice: number,
+    deliveryPrice: number,
+    adminPercentage: null | number,
+    adminReceivedAmount: number,
+    refundAmount: null | number,
+    priority: number,
+    isDelivered: boolean,
+    isPaid: boolean,
+    isRefunded: boolean,
+    promocodeDiscountAmount: null | number,
+    promocodeDiscountPercentage: null | number,
+    referralDiscountAmount: null | number,
+    referralDiscountPercentage: null | number,
+    safetyChecks: null | string,
+    tankChecks: null | stirng,
+    status: string,
+    rating: null | number,
+    orderFeedback: null | string,
+    driverCancellationCharge: null | number,
+    customerCancellationCharge: null | number,
+    cancellationReasonOther: null | number,
+    createdAt: stirng,
+    updatedAt: stirng,
+    deletedAt: null | stirng,
+    createdBy: stirng,
+    updatedBy: stirng,
+    user: {
+      id: stirng,
+      fullName: stirng,
+      email: stirng,
+      countryCode: stirng,
+      mobileNumber: number,
+      userType: stirng,
+      profileImage: null | stirng,
+      addresses: null | stirng,
+      emailVerify: boolean,
+      mobileVerify: boolean,
+      firstOrderComplete: boolean,
+      referBenefitUsed: boolean,
+      referralCode: stirng,
+      createdAt: stirng,
+      updatedAt: stirng,
+      deletedAt: null | stirng,
+      createdBy: null | stirng,
+      updatedBy: null | stirng,
+      isActive: boolean
+    },
     driver: {
-      id: string;
-      fullName: string;
-      email: string;
-      countryCode: string;
-      mobileNumber: string;
-      profileImage: string;
-      createdAt: string;
-      driver: null | string;
-    };
-    product: {
-      id: number;
-      name: string;
-      logo: string;
-      details: {
-        id: number;
-        indexPrice: number;
-        discount: number;
-      }[];
-    };
-    orderLogs: [];
-    category: {
-      id: number;
-      name: string;
-      orderType: number;
-    };
-    // accessory: null | number | string;
-    accessory: {
-      name: string;
-      image: string;
-      price: number;
-      description: string;
-    };
-    cylinderSize: {
-      id: number;
-      cylinderSize: number;
-    };
-    location: {
-      id: number;
-      name: string;
-      description: null | string;
-      price: number;
-    };
-    promocodes: {
-      discount: number;
-      id: number;
-      promocode: string;
-      title: string;
-    };
-    cancellationReason: null | { reason: string; id: number | string };
-    orderId: number;
-    productId: number;
-    vendorId: string;
-    driverId: string;
-    locationId: number;
-    cylinderSizeId: null | number;
-    categoryId: number;
-    accessoryId: null | number;
-    promocodeId: null | number;
-    cancellationReasonId: null | number;
-  };
-  drivers: {
-    id: string;
-    fullName: string;
-    email: string;
-    countryCode: string;
-    mobileNumber: string;
-    profileImage: null | string;
-    createdAt: string;
-    driver: {
-      id: number;
-      orderType: number;
-      personalId: null | string;
-      idInformation: null | string;
-      driverVehicle: null | string;
-      vehicalNo: string;
-      identity: null | string;
-      licenceNo: null | string;
-      orderCapacity: null | number;
-    };
-    completedOrderCount: number;
-    orders: { 2: number; 1: number };
-  }[];
-};
+      id: stirng,
+      fullName: stirng,
+      email: stirng,
+      countryCode: stirng,
+      mobileNumber: number,
+      userType: stirng,
+      profileImage: null | stirng,
+      addresses: null | stirng,
+      emailVerify: boolean,
+      mobileVerify: boolean,
+      firstOrderComplete: boolean,
+      referBenefitUsed: boolean,
+      referralCode: stirng,
+      createdAt: stirng,
+      updatedAt: stirng,
+      deletedAt: null | stirng,
+      createdBy: null | stirng,
+      updatedBy: null | stirng,
+      isActive: boolean
+    },
+    cancellationReasonId: null | stirng,
+    userAddressId: null | string,
+    userId: string
+  }
+
 type TOrdersFuel = {
   count: number;
   orders: {
@@ -247,27 +171,76 @@ type TOrdersFuel = {
   }[];
 };
 
-type TOrdersTank = {
-  count: number;
+type TOrdersGas = {
+  count: number,
   orders: {
-    id: string | number;
-    status: string;
-    createdAt: string;
-    customerName: string;
-    scheduleDate: string;
-    startTime: string;
-    endTime: string;
-    address: string;
-    vendorName: string;
-    categoryName: string;
-    driverName: string;
-    isVendorsDriver: number;
-    vendorId: string | number;
-    driverId: string;
-    lat: string;
-    long: string;
-  }[];
-};
+    id: number,
+    uuid: string,
+    address: string,
+    city: string,
+    state: string,
+    country: string,
+    lat: number,
+    long: number,
+    orderType: number,
+    qty: number,
+    price: number,
+    scheduleDate: string,
+    startTime: string,
+    endTime: string,
+    driverStartTime: null | string,
+    driverEndTime: null | string,
+    fuelQtyDriver: null | number,
+    pumpReadingImage: null | string,
+    tankCheckComment: null | string,
+    subTotal: number,
+    grandTotal: number,
+    vatPercentage: number,
+    vatPrice: number,
+    deliveryVatPercentage: number,
+    deliveryVatPrice: number,
+    deliveryPrice: number,
+    adminPercentage: null | number,
+    adminReceivedAmount: number,
+    refundAmount: null | number,
+    priority: number,
+    isDelivered: boolean,
+    isPaid: boolean,
+    isRefunded: boolean,
+    promocodeDiscountAmount: null | number,
+    promocodeDiscountPercentage: null | number,
+    referralDiscountAmount: null | number,
+    referralDiscountPercentage: null | number,
+    safetyChecks: null | stirng,
+    tankChecks: null | stirng,
+    status: string,
+    rating: null | number,
+    orderFeedback: null | string,
+    driverCancellationCharge: null | number,
+    customerCancellationCharge: null | number,
+    cancellationReasonOther: null | stirng,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: null | string,
+    createdBy: string,
+    updatedBy: string,
+    user: {
+      id: string,
+      fullName: string,
+      mobileNumber: number,
+      profileImage: null | string
+    },
+    driver: {
+      id: string,
+      fullName: string,
+      mobileNumber: number,
+      profileImage: null | string
+    },
+    cancellationReasonId: null | string,
+    userAddressId: null | string,
+    userId: string
+  }[]
+}
 
 type TRescheduleTimeSlots = {
   id: number | string;
@@ -278,9 +251,9 @@ type TRescheduleTimeSlots = {
 type TOrdersState = {
   loading: boolean;
   orderId: string | number;
-  orderById: TOrderByIdPayload | null;
+  orderById: TOrderByIdPayload;
   orderFuelData: TOrdersFuel;
-  orderTankData: TOrdersTank;
+  orderGasData: TOrdersGas;
   rescheduleTimeSlots: TRescheduleTimeSlots;
 };
 
@@ -290,7 +263,7 @@ export {
   TOrdersActionType,
   TOrdersState,
   TOrdersFuel,
-  TOrdersTank,
+  TOrdersGas,
   TRescheduleTimeSlots,
   TOrderByIdPayload,
 };

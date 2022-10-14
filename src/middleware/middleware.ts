@@ -3,9 +3,8 @@ import { Middleware, MiddlewareAPI, Dispatch, AnyAction, Action } from "redux";
 import { loginSuccess, logout } from "../store/auth/auth.action";
 
 export const API = axios.create({
-  baseURL: "",
+  baseURL: "http://192.168.1.243:3007/",
 });
-//http://192.168.1.243:3007/
 
 export const apiMiddleware: Middleware = (storeApi: MiddlewareAPI<any>) => (next: Dispatch<AnyAction>) => (action: Action) => {
   const { dispatch } = storeApi;

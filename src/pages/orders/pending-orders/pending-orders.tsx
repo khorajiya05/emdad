@@ -3,37 +3,24 @@ import React from "react";
 import Header from "../../../components/header/header";
 import Sidebar from "../../../components/sidebar/sidebar";
 import { useState } from "react";
-import { Modal } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import Select from "react-select";
 import { DatePicker } from "../../../components";
-import User from "../../../assets/img/user.jpg";
 import { NavLink, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
-import { getOrdersFuelActionThunk } from "../../../store/orders/orders.actions.async";
+import { cancelOrderActionThunk, getOrdersActionThunk } from "../../../store/orders/orders.actions.async";
 import TRootState from "../../../store/root.types";
 
 interface Prop {
     children: Function;
 }
-const SelectZipcode = [
-    { value: "All", label: "All" },
-    { value: "33602", label: "33602" },
-    { value: "33603", label: "33603" },
-];
 
 const SelectStatus = [
     { value: "All", label: "All" },
     { value: "pending", label: "Pending" },
     { value: "live", label: "Live" },
-];
-
-const SelectOrdertype = [
-    { value: "All", label: "All" },
-    { value: "Fuek", label: "Fuel" },
-    { value: "Gas", label: "Gas" },
 ];
 
 const PendingOrders: React.FC<Prop> = ({ children }) => {
@@ -43,12 +30,11 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
 
     const { state } = location;
     const perPage = useSelector((state: TRootState) => state?.pagination?.perPageItems)
-    const ordersOf = location.pathname === "/orders/pending-orders/fuel" ? "fuel" : "gas"
+    const orderType = location.pathname === "/orders/pending-orders/fuel" ? 1 : 2;
 
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const [showUnAssignOrderModal, setShowUnAssignOrderModal] = useState<boolean>(false);
     const [showAssignOrderModal, setShowAssignOrderModal] = useState<boolean>(false);
-    const [showChangeStatusModal, setShowChangeStatusModal] = useState<boolean>(false);
 
     const [page, setPage] = useState<number>(Number(state?.page) || 1)
     const [orderStatus, setOrderStatus] = useState("All");
@@ -62,21 +48,18 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
 
     const fetchOrdersByFilter = () => {
 
-        dispatch(getOrdersFuelActionThunk(
+        dispatch(getOrdersActionThunk(
             searchOrder === "" ? null : searchOrder,
-            page, perPage,
+            page,
+            perPage,
             startDate,
             endDate,
             sort,
             sortBy,
-            orderStatus === "All" ? "pending" : orderStatus
+            orderStatus === "All" ? ["pending", "live"] : [orderStatus],
+            orderType
         ))
     }
-
-    const handleCloseDelete = () => {
-        // setState({ showDeleteModal: false});
-        setShowDeleteModal(false);
-    };
 
     const handleShowDelete = () => {
         setShowDeleteModal(true);
@@ -97,19 +80,6 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
     const handleShowUnAssignOrder = () => {
         setShowUnAssignOrderModal(true);
     };
-
-    const handleShowChangeStatus = () => {
-        // setState({ showChangeStatusModal: true});
-        setShowChangeStatusModal(true);
-    };
-
-    const handleCloseChangeStatus = () => {
-        setShowChangeStatusModal(false);
-    };
-
-    //   handleRedirectToAddVendor = () => {
-    //     props.history.push("/vendors/add");
-    //   };
 
     return (
         <React.Fragment>
@@ -212,10 +182,17 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
                                             setEndDate(null || undefined);
                                             setOrderStatus("All");
 
-                                            setTimeout(() => {
-                                                fetchOrdersByFilter();
-                                            }, 300);
-
+                                            dispatch(getOrdersActionThunk(
+                                                null,
+                                                page,
+                                                perPage,
+                                                null,
+                                                null,
+                                                sort,
+                                                sortBy,
+                                                ["pending", "live"],
+                                                orderType
+                                            ))
                                         }
                                         }
                                     >
@@ -248,315 +225,13 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
                                             </li>
                                         </ul>
                                     </div>
-                                    {children(sort, setSort, setSortBy, fetchOrdersByFilter)}
+                                    {children(sort, setSort, setSortBy, page, setPage, fetchOrdersByFilter)}
                                 </>
                             </div>
                         </section>
                     </div>
                 </div>
             </div>
-            <Modal
-                centered
-                show={showChangeStatusModal}
-                onHide={() => handleCloseChangeStatus()}
-            >
-                <Modal.Header className="justify-content-center border-0">
-                    <h3 className="modal-title">Change Status</h3>
-                </Modal.Header>
-                <Modal.Body className="text-center">
-                    <span>
-                        <i className="far fa-check-circle fa-3x text-success"></i>
-                    </span>
-                    <p className="font-size-18 m-0 mt-2">
-                        Are you sure want to change status?
-                    </p>
-                </Modal.Body>
-                <Modal.Footer className="justify-content-center border-0">
-                    <button
-                        className="btn btn-dark min-w-100"
-                        onClick={() => handleCloseChangeStatus()}
-                    >
-                        No
-                    </button>
-                    <button
-                        className="btn btn-danger min-w-100"
-                        onClick={() => handleCloseChangeStatus()}
-                    >
-                        Yes
-                    </button>
-                </Modal.Footer>
-            </Modal>
-            <Modal centered show={showDeleteModal} onHide={() => handleCloseDelete()}>
-                <Modal.Header className="justify-content-center border-0">
-                    <h3 className="modal-title">Delete</h3>
-                </Modal.Header>
-                <Modal.Body className="text-center">
-                    <span>
-                        <i className="far fa-times-circle fa-3x text-danger"></i>
-                    </span>
-                    <p className="font-size-18 m-0 mt-2">Are you sure want to delete?</p>
-                </Modal.Body>
-                <Modal.Footer className="justify-content-center border-0">
-                    <button
-                        className="btn btn-dark min-w-100"
-                        onClick={() => handleCloseDelete()}
-                    >
-                        No
-                    </button>
-                    <button
-                        className="btn btn-danger min-w-100"
-                        onClick={() => handleCloseDelete()}
-                    >
-                        Yes
-                    </button>
-                </Modal.Footer>
-            </Modal>
-            <Modal
-                centered
-                show={showUnAssignOrderModal}
-                onHide={() => handleUnAssignOrder()}
-            >
-                <Modal.Header className="justify-content-center border-0">
-                    <h3 className="modal-title">Unassign Order</h3>
-                </Modal.Header>
-                <Modal.Body className="text-center">
-                    <span>
-                        <i className="far fa-times-circle fa-3x text-danger"></i>
-                    </span>
-                    <p className="font-size-18 m-0 mt-2">
-                        Are you sure want to Unassign Order?
-                    </p>
-                </Modal.Body>
-                <Modal.Footer className="justify-content-center border-0">
-                    <button
-                        className="btn btn-dark min-w-100"
-                        onClick={() => handleUnAssignOrder()}
-                    >
-                        No
-                    </button>
-                    <button
-                        className="btn btn-danger min-w-100"
-                        onClick={() => handleUnAssignOrder()}
-                    >
-                        Yes
-                    </button>
-                </Modal.Footer>
-            </Modal>
-            <Modal
-                centered
-                scrollable
-                show={showAssignOrderModal}
-                onHide={() => handleAssignOrder()}
-            >
-                <Modal.Header>
-                    <h3 className="modal-title">Assign Order - Drivers</h3>
-                </Modal.Header>
-                <Modal.Body className="p-0 assign-order-radio">
-                    <label className="control control-outline control-primary control--radio pr-4 py-2 border-bottom d-flex justify-content-between">
-                        <div className="media flex-fill">
-                            <img
-                                className="align-self-center m-r-10 w-40 h-40 rounded-circle o-cover"
-                                src={User}
-                            />
-                            <div className="media-body d-flex align-items-end">
-                                <div className="mr-auto">
-                                    <h6 className="mt-1 mb-0"> John Smith</h6>
-                                    <span>+249 98765 43210</span>
-                                </div>
-                                <span>MK11 7HX</span>
-                            </div>
-                        </div>
-                        <input
-                            type="radio"
-                            name="assign-order-radio"
-                            id="assign-order-radio-1"
-                        />
-                        <div className="control__indicator"></div>
-                    </label>
-                    <label className="control control-outline control-primary control--radio pr-4 py-2 border-bottom d-flex justify-content-between">
-                        <div className="media flex-fill">
-                            <img
-                                className="align-self-center m-r-10 w-40 h-40 rounded-circle o-cover"
-                                src={User}
-                            />
-                            <div className="media-body d-flex align-items-end">
-                                <div className="mr-auto">
-                                    <h6 className="mt-1 mb-0"> John Smith</h6>
-                                    <span>+249 98765 43210</span>
-                                </div>
-                                <span>MK11 7HX</span>
-                            </div>
-                        </div>
-                        <input
-                            type="radio"
-                            name="assign-order-radio"
-                            id="assign-order-radio-2"
-                        />
-                        <div className="control__indicator"></div>
-                    </label>
-                    <label className="control control-outline control-primary control--radio pr-4 py-2 border-bottom d-flex justify-content-between">
-                        <div className="media flex-fill">
-                            <img
-                                className="align-self-center m-r-10 w-40 h-40 rounded-circle o-cover"
-                                src={User}
-                            />
-                            <div className="media-body d-flex align-items-end">
-                                <div className="mr-auto">
-                                    <h6 className="mt-1 mb-0"> John Smith</h6>
-                                    <span>+249 98765 43210</span>
-                                </div>
-                                <span>MK11 7HX</span>
-                            </div>
-                        </div>
-                        <input
-                            type="radio"
-                            name="assign-order-radio"
-                            id="assign-order-radio-3"
-                        />
-                        <div className="control__indicator"></div>
-                    </label>
-                    <label className="control control-outline control-primary control--radio pr-4 py-2 border-bottom d-flex justify-content-between">
-                        <div className="media flex-fill">
-                            <img
-                                className="align-self-center m-r-10 w-40 h-40 rounded-circle o-cover"
-                                src={User}
-                            />
-                            <div className="media-body d-flex align-items-end">
-                                <div className="mr-auto">
-                                    <h6 className="mt-1 mb-0"> John Smith</h6>
-                                    <span>+249 98765 43210</span>
-                                </div>
-                                <span>MK11 7HX</span>
-                            </div>
-                        </div>
-                        <input
-                            type="radio"
-                            name="assign-order-radio"
-                            id="assign-order-radio-4"
-                        />
-                        <div className="control__indicator"></div>
-                    </label>
-                    <label className="control control-outline control-primary control--radio pr-4 py-2 border-bottom d-flex justify-content-between">
-                        <div className="media flex-fill">
-                            <img
-                                className="align-self-center m-r-10 w-40 h-40 rounded-circle o-cover"
-                                src={User}
-                            />
-                            <div className="media-body d-flex align-items-end">
-                                <div className="mr-auto">
-                                    <h6 className="mt-1 mb-0"> John Smith</h6>
-                                    <span>+249 98765 43210</span>
-                                </div>
-                                <span>MK11 7HX</span>
-                            </div>
-                        </div>
-                        <input
-                            type="radio"
-                            name="assign-order-radio"
-                            id="assign-order-radio-5"
-                        />
-                        <div className="control__indicator"></div>
-                    </label>
-                    <label className="control control-outline control-primary control--radio pr-4 py-2 border-bottom d-flex justify-content-between">
-                        <div className="media flex-fill">
-                            <img
-                                className="align-self-center m-r-10 w-40 h-40 rounded-circle o-cover"
-                                src={User}
-                            />
-                            <div className="media-body d-flex align-items-end">
-                                <div className="mr-auto">
-                                    <h6 className="mt-1 mb-0"> John Smith</h6>
-                                    <span>+249 98765 43210</span>
-                                </div>
-                                <span>MK11 7HX</span>
-                            </div>
-                        </div>
-                        <input
-                            type="radio"
-                            name="assign-order-radio"
-                            id="assign-order-radio-6"
-                        />
-                        <div className="control__indicator"></div>
-                    </label>
-                    <label className="control control-outline control-primary control--radio pr-4 py-2 border-bottom d-flex justify-content-between">
-                        <div className="media flex-fill">
-                            <img
-                                className="align-self-center m-r-10 w-40 h-40 rounded-circle o-cover"
-                                src={User}
-                            />
-                            <div className="media-body d-flex align-items-end">
-                                <div className="mr-auto">
-                                    <h6 className="mt-1 mb-0"> John Smith</h6>
-                                    <span>+249 98765 43210</span>
-                                </div>
-                                <span>MK11 7HX</span>
-                            </div>
-                        </div>
-                        <input
-                            type="radio"
-                            name="assign-order-radio"
-                            id="assign-order-radio-6"
-                        />
-                        <div className="control__indicator"></div>
-                    </label>
-                    <label className="control control-outline control-primary control--radio pr-4 py-2 border-bottom d-flex justify-content-between">
-                        <div className="media flex-fill">
-                            <img
-                                className="align-self-center m-r-10 w-40 h-40 rounded-circle o-cover"
-                                src={User}
-                            />
-                            <div className="media-body d-flex align-items-end">
-                                <div className="mr-auto">
-                                    <h6 className="mt-1 mb-0"> John Smith</h6>
-                                    <span>+249 98765 43210</span>
-                                </div>
-                                <span>MK11 7HX</span>
-                            </div>
-                        </div>
-                        <input
-                            type="radio"
-                            name="assign-order-radio"
-                            id="assign-order-radio-6"
-                        />
-                        <div className="control__indicator"></div>
-                    </label>
-                    <label className="control control-outline control-primary control--radio pr-4 py-2 border-bottom d-flex justify-content-between">
-                        <div className="media flex-fill">
-                            <img
-                                className="align-self-center m-r-10 w-40 h-40 rounded-circle o-cover"
-                                src={User}
-                            />
-                            <div className="media-body d-flex align-items-end">
-                                <div className="mr-auto">
-                                    <h6 className="mt-1 mb-0"> John Smith</h6>
-                                    <span>+249 98765 43210</span>
-                                </div>
-                                <span>MK11 7HX</span>
-                            </div>
-                        </div>
-                        <input
-                            type="radio"
-                            name="assign-order-radio"
-                            id="assign-order-radio-6"
-                        />
-                        <div className="control__indicator"></div>
-                    </label>
-                </Modal.Body>
-                <Modal.Footer className="justify-content-end">
-                    <button
-                        className="btn btn-secondary min-w-100"
-                        onClick={() => handleAssignOrder()}
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        className="btn btn-primary min-w-100"
-                        onClick={() => handleAssignOrder()}
-                    >
-                        Assign
-                    </button>
-                </Modal.Footer>
-            </Modal>
         </React.Fragment>
     );
 };

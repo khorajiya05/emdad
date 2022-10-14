@@ -1,6 +1,6 @@
-import Pagination from '../../../components/pagination/pagination'
+import Pagination from '../../../../components/pagination/pagination'
 import OrderHistoryGasList from './order-history-gas-list'
-import OrdersHistory from './orders-history'
+import OrdersHistory from '../orders-history'
 
 function OrderHistoryGas() {
   return (

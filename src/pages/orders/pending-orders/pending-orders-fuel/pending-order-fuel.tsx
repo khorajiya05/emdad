@@ -11,7 +11,7 @@ const PendingOrderFuel = () => {
 
     return (
         <PendingOrders >
-            {(sort: string, setSort: React.Dispatch<React.SetStateAction<string>>, setSortBy: React.Dispatch<React.SetStateAction<string>>, fetchOrdersByFilter: Function) => (
+            {(sort: string, setSort: React.Dispatch<React.SetStateAction<string>>, setSortBy: React.Dispatch<React.SetStateAction<string>>, page:number, setPage: React.Dispatch<React.SetStateAction<number>>, fetchOrdersByFilter: Function) => (
                 <div className="card-body p-0">
                     <Pagination
                         ItemsComponent={PendingOrderFuelList}
@@ -20,6 +20,8 @@ const PendingOrderFuel = () => {
                         filter={sort}
                         setFilter={setSort}
                         setFilterBy={setSortBy}
+                        page={page}
+                        setPage={setPage}
                     />
                 </div>
             )}

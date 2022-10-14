@@ -9,11 +9,6 @@ import Select from "react-select";
 import { DatePicker } from "../../components";
 import Pagination from "../../components/pagination/pagination";
 import User from "../../assets/img/user.jpg";
-const SelectZipcode = [
-  { value: "All", label: "All" },
-  { value: "33602", label: "33602" },
-  { value: "33603", label: "33603" },
-];
 
 const SelectStatus = [
   { value: "All", label: "All" },
@@ -21,21 +16,8 @@ const SelectStatus = [
   { value: "Live", label: "Live" },
 ];
 
-const SelectOrdertype = [
-  { value: "All", label: "All" },
-  { value: "Fuek", label: "Fuel" },
-  { value: "Gas", label: "Gas" },
-];
-
 const PendingOrders: React.FC = () => {
-  // constructor() {
-  //     super();
-  //     state = {
-  //         show: false,
-  //         showDeleteModal: false,
-  //         showChangeStatusModal: false,
-  //     };
-  //   }
+
   const [show, setShow] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUnAssignOrderModal, setShowUnAssignOrderModal] =
@@ -181,8 +163,8 @@ const PendingOrders: React.FC = () => {
                             value={
                               selectedValue2
                                 ? (SelectStatus || []).find(
-                                    (prod) => prod.value === selectedValue2
-                                  ) || null
+                                  (prod) => prod.value === selectedValue2
+                                ) || null
                                 : null
                             }
                             onChange={(val) =>

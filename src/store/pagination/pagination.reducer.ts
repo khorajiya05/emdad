@@ -2,7 +2,7 @@ import PaginationActionTypeEnum from "./pagination.enum";
 import { TPaginationActionType, TPaginationState } from "./pagination.types";
 
 const INITIAL_STATE: TPaginationState = {
-  perPageItems: 10,
+  perPageItems: 5,
 };
 
 const paginationReducer = (

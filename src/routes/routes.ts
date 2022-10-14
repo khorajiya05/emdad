@@ -38,13 +38,13 @@ export const privateRoutes = [
   //   element: lazy(() => import("../pages/forgot-password/forgot-password")),
   //
   // },
-  {
-    path: "/orders/pending-orders",
-    element: lazy(() => import("../pages/orders/pending-orders")),
-  },
+  // {
+  //   path: "/orders/pending-orders",
+  //   element: lazy(() => import("../pages/orders/pending-orders")),
+  // },
 
   {
-    path: "/orders/view",
+    path: "/orders/:orderId",
     element: lazy(() => import("../pages/orders/view-order")),
   },
   {
@@ -57,11 +57,11 @@ export const privateRoutes = [
   },
   {
     path: "/orders/orders-history/fuel",
-    element: lazy(() => import("../pages/orders/orders-history/order-history-fuel")),
+    element: lazy(() => import("../pages/orders/orders-history/history-orders-fuel/order-history-fuel")),
   },
   {
     path: "/orders/orders-history/gas",
-    element: lazy(() => import("../pages/orders/orders-history/order-history-gas")),
+    element: lazy(() => import("../pages/orders/orders-history/history-orders-gas/order-history-gas")),
   },
   {
     path: "/vehicle/list",

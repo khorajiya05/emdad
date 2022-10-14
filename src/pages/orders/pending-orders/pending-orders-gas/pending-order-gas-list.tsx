@@ -1,11 +1,42 @@
+import moment from 'moment';
 import React, { useState } from 'react'
 import { Dropdown } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppendedMyComponent } from '../../../../components/appendToBody/appendToBody';
+import { BarsLoader } from '../../../../components/loader/Loader';
+import AssignOrderModal from '../../../../components/orders/assignOrder-modal';
+import DeleteModal from '../../../../components/orders/delete-modal';
+import UnassignOrderModal from '../../../../components/orders/unassignOrder-modal';
+import OrderStatus from '../../../../components/orderStatus/OrderStatus';
+import { convertTo12 } from '../../../../helpers/timeConvert';
+import { cancelOrderActionThunk } from '../../../../store/orders/orders.actions.async';
+import TRootState from '../../../../store/root.types';
 
-const PendingOrderGasList = () => {
+interface Prop {
+    setFilter: Function;
+    filter: string;
+    setFilterBy: Function;
+    getAction: Function;
+}
 
+const PendingOrderFuelList: React.FC<Prop> = ({ setFilter, filter, setFilterBy }) => {
+
+    const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+
+    const { loading, orderGasData: { orders } } = useSelector((state: TRootState) => state.orders)
+
+    const [id, setId] = useState<number | string>("")
     const [showAssignOrderModal, setShowAssignOrderModal] = useState<boolean>(false);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const [showUnAssignOrderModal, setShowUnAssignOrderModal] = useState<boolean>(false);
+
+    const handleDeleteOrder = () => {
+        dispatch(cancelOrderActionThunk(id, 2))
+        setShowDeleteModal(false);
+    }
 
     const handleShowAssignOrder = () => {
         setShowAssignOrderModal(true);
@@ -13,175 +44,111 @@ const PendingOrderGasList = () => {
 
     const handleShowUnAssignOrder = () => {
         setShowUnAssignOrderModal(true);
-      };
-
-    const handleShowDelete = () => {
-        setShowDeleteModal(true);
     };
 
     return (
-        <div className="tab-content">
-            <div className="tab-pane fadeIn active" id="tab-1">
-                <div className="table-responsive">
-                    <table className="table table-hover nowrap m-0">
-                        <thead>
-                            <tr>
-                                <th className="sorting">
-                                    <span>Order Id</span>
-                                </th>
-                                <th>Date & Timeslot</th>
-                                <th>Location</th>
-                                {/* <th>User Name</th> */}
-                                <th>Qty (Ltr)</th>
-                                <th>Price (SDG)</th>
-                                <th>Assigned by Admin</th>
-                                <th>Driver Name</th>
-                                <th className="table-field-status">Status</th>
-                                <th className="table-field-actions">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {[...Array(5)].map((elementInArray, index) => (
-                                <React.Fragment>
-                                    <tr key={index}>
-
-                                        <td>#00001 </td>
-                                        <td>30/04/2022 11:00 AM - 12:00 AM</td>
-
-
-                                        <td>
-                                            <p className="mb-0">
-                                                211 SW 16th St, For Lauderdale, Khartoum
-                                                North, Sudan
-                                            </p>
-                                        </td>
-
-                                        <td>1000</td>
-                                        <td>50.00</td>
-
-                                        <td>Abdul Kareem</td>
-                                        <td>Abdul Kareem</td>
-                                        {/* <td className="text-center">
-                                              <span className="badge badge-pill badge-warning">Pending</span>
-                                          </td> */}
-                                        <td className="text-center">
-                                            <span className="badge badge-pill badge-warning">
-                                                Pending
-                                            </span>
-                                        </td>
-                                        <td className="table-field-actions">
-                                            <Dropdown className="btn-group">
-                                                <Dropdown.Toggle
-                                                    id="dropdown-basic"
-                                                    className="btn btn-sm btn-icon-only"
-                                                >
-                                                    <i className="icon dripicons-dots-3 zmdi-hc-fw"></i>
-                                                </Dropdown.Toggle>
-                                                <Dropdown.Menu>
-                                                    <Dropdown.Item href="/orders/view">
-                                                        <i className="fa fa-info-circle fa-fw text-accent-custom"></i>
-                                                        View
-                                                    </Dropdown.Item>
-                                                    <Dropdown.Item
-                                                        href="#"
-                                                        onClick={() =>
-                                                            handleShowAssignOrder()
-                                                        }
-                                                    >
-                                                        <i className="fa fa-check fa-fw text-accent-custom"></i>
-                                                        Assign Order
-                                                    </Dropdown.Item>
-                                                    <Dropdown.Item
-                                                        href="#"
-                                                        onClick={() => handleShowDelete()}
-                                                    >
-                                                        <i className="fa fa-trash-alt fa-fw text-accent-custom"></i>
-                                                        Delete
-                                                    </Dropdown.Item>
-                                                </Dropdown.Menu>
-                                            </Dropdown>
+        <>
+            <div className="tab-content">
+                <div className="tab-pane fadeIn active" id="tab-1">
+                    <div className="table-responsive">
+                        <table className="table table-hover nowrap m-0">
+                            <thead>
+                                <tr>
+                                    <th className="sorting">
+                                        <span
+                                            onClick={() => {
+                                                filter === "ASC" ? setFilter("DESC") : setFilter("ASC");
+                                                setFilterBy("orderNumber");
+                                            }}
+                                        >
+                                            Order Id
+                                        </span>
+                                    </th>
+                                    <th>Date & Timeslot</th>
+                                    <th>Location</th>
+                                    <th>Qty (Ltr)</th>
+                                    <th>Price (SDG)</th>
+                                    <th>Assigned by Admin</th>
+                                    <th>Driver Name</th>
+                                    <th className="table-field-status">Status</th>
+                                    <th className="table-field-actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan={10} style={{ textAlign: "center" }}>
+                                            <BarsLoader />
                                         </td>
                                     </tr>
-                                    <tr key={index}>
-                                        {/* <td>
-                                               <div className="media">
-                                                   <img className="align-self-center m-r-10 w-40 h-40 rounded-circle o-cover" src={User} /> 
-                                                  <div className="media-body">
-                                                      <h6 className="mt-1 mb-0">John Smith</h6>
-                                                      <span className="text-muted">+1 987 654 3210</span>
-                                                  </div>
-                                              </div> 
-                                          </td> */}
-                                        <td>#00001 </td>
-                                        <td>30/04/2022 11:00 AM - 12:00 AM</td>
-
-                                        {/* <td>$2500</td>
-                                          <td>$4500</td>
-                                          <td className="text-center">
-                                              <span className="badge badge-pill badge-success">Active</span>
-                                          </td> */}
-
-                                        <td>
-                                            <p className="mb-0">
-                                                211 SW 16th St, For Lauderdale, Khartoum
-                                                North, Sudan
-                                            </p>
-                                        </td>
-                                        <td>1000</td>
-                                        <td>50.00</td>
-
-                                        <td>Abdul Kareem</td>
-                                        <td>Abdul Kareem</td>
-                                        {/* <td className="text-center">
-                                              <span className="badge badge-pill badge-warning">Pending</span>
-                                          </td> */}
-                                        <td className="text-center">
-                                            <span className="badge badge-pill badge-success">
-                                                Live
-                                            </span>
-                                        </td>
-                                        <td className="table-field-actions">
-                                            <Dropdown className="btn-group">
-                                                <Dropdown.Toggle
-                                                    id="dropdown-basic"
-                                                    className="btn btn-sm btn-icon-only"
-                                                >
-                                                    <i className="icon dripicons-dots-3 zmdi-hc-fw"></i>
-                                                </Dropdown.Toggle>
-                                                <Dropdown.Menu>
-                                                    <Dropdown.Item href="/orders/view">
-                                                        <i className="fa fa-info-circle fa-fw text-accent-custom"></i>
-                                                        View
-                                                    </Dropdown.Item>
-                                                    <Dropdown.Item
-                                                        href="#"
-                                                        onClick={() =>
-                                                            handleShowUnAssignOrder()
-                                                        }
+                                ) : orders && orders.length > 0 ? (
+                                    orders.map((order) => (
+                                        <tr key={order?.id}>
+                                            <td>{order?.id} </td>
+                                            <td>{moment(order?.scheduleDate).format("MM/DD/YYYY")}{" "}
+                                                {order?.startTime ? convertTo12(order?.startTime) : null} -{" "}
+                                                {order?.endTime ? convertTo12(order?.endTime) : null}</td>
+                                            <td><p className="mb-0">{`${order?.address}, ${order?.city}, ${order?.state}, ${order?.country}`}</p></td>
+                                            <td>{order?.qty}</td>
+                                            <td>{order?.price}</td>
+                                            <td>Abdul Kareem</td>
+                                            <td>{order?.driver?.fullName}</td>
+                                            <td className="text-center">
+                                                <OrderStatus status={order?.status} />
+                                            </td>
+                                            <td className="table-field-actions">
+                                                <Dropdown className="btn-group">
+                                                    <Dropdown.Toggle
+                                                        id="dropdown-basic"
+                                                        className="btn btn-sm btn-icon-only"
                                                     >
-                                                        <i className="fa dripicons-cross fa-fw text-accent-custom"></i>
-                                                        Unassign Order
-                                                    </Dropdown.Item>
-                                                    <Dropdown.Item
-                                                        href="#"
-                                                        onClick={() => handleShowDelete()}
-                                                    >
-                                                        <i className="fa fa-trash-alt fa-fw text-accent-custom"></i>
-                                                        Delete
-                                                    </Dropdown.Item>
-                                                </Dropdown.Menu>
-                                            </Dropdown>
+                                                        <i className="icon dripicons-dots-3 zmdi-hc-fw"></i>
+                                                    </Dropdown.Toggle>
+                                                    <AppendedMyComponent>
+                                                        <Dropdown.Menu>
+                                                            <Dropdown.Item as={Link} to={`/orders/${order?.id}`}>
+                                                                <i className="fa fa-info-circle fa-fw text-accent-custom"></i>
+                                                                View
+                                                            </Dropdown.Item>
+                                                            <Dropdown.Item
+                                                                href="#"
+                                                                onClick={() =>
+                                                                    handleShowAssignOrder()
+                                                                }
+                                                            >
+                                                                <i className="fa fa-check fa-fw text-accent-custom"></i>
+                                                                Assign Order
+                                                            </Dropdown.Item>
+                                                            <Dropdown.Item
+                                                                href="#"
+                                                                onClick={() => { setId(order?.id); setShowDeleteModal(true); }}
+                                                            >
+                                                                <i className="fa fa-trash-alt fa-fw text-accent-custom"></i>
+                                                                Delete
+                                                            </Dropdown.Item>
+                                                        </Dropdown.Menu>
+                                                    </AppendedMyComponent>
+                                                </Dropdown>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={10} style={{ textAlign: "center" }}>
+                                            No orders available
                                         </td>
                                     </tr>
-                                </React.Fragment>
-                            ))}
-                        </tbody>
-                    </table>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-
-        </div>
+            {showDeleteModal && <DeleteModal show={showDeleteModal} setShow={setShowDeleteModal} handleDelete={handleDeleteOrder} />}
+            {showAssignOrderModal && <AssignOrderModal />}
+            {showUnAssignOrderModal && <UnassignOrderModal />}
+        </>
     )
 }
 
-export default PendingOrderGasList
+export default PendingOrderFuelList
