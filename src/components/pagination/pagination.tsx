@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useSelector } from "react-redux";
-import {  useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import TRootState from "../../store/root.types";
 // import { RouteComponentProps } from "react-router-dom";
 
@@ -42,7 +42,7 @@ const Pagination: React.FC<Props> = ({
 
   const handlePageClick = (event: { selected: number }) => {
     setPage && setPage(event.selected + 1);
-    navigate(location.pathname, { state: { page: page - 1 } });
+    navigate(location.pathname, { state: { page: page + 1 } });
   };
 
   useEffect(() => {

@@ -1,6 +1,10 @@
 import React from 'react'
+import { Modal } from 'react-bootstrap'
 
-function stateChange-modal() {
+function StateChangeModal() {
+
+    const showChangeStatusModal:boolean = false
+    const handleCloseChangeStatus = () => {}
     return (
         <Modal
             centered
@@ -36,4 +40,4 @@ function stateChange-modal() {
     )
 }
 
-export default stateChange - modal
+export default StateChangeModal

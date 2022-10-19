@@ -54,9 +54,27 @@ export const status = [
     color: "danger",
   },
   {
-    id:10,
-    StatusName:"live",
-    name:"Live",
-    color:"green"
+    id: 10,
+    StatusName: "live",
+    name: "Live",
+    color: "green"
+  },
+  {
+    id: 11,
+    StatusName: "active",
+    name: "Active",
+    color: "green"
+  },
+  {
+    id: 12,
+    StatusName: "inactive",
+    name: "Inactive",
+    color: "danger",
+  },
+  {
+    id: 13,
+    StatusName: "cancelled_by_user",
+    name: "Cancelled by User",
+    color:"danger"
   }
 ];

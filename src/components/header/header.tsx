@@ -67,13 +67,13 @@ const Header: React.FC = () => {
     {
       to: "/vendors/list",
       title: "Vendors",
-      routes: ["/vendors/list"],
+      routes: ["/vendors"],
       activeRoute: true,
     },
     {
-      to: "/driver/list",
+      to: "/drivers",
       title: "Drivers",
-      routes: ["/driver/list"],
+      routes: ["/drivers"],
       activeRoute: true,
     },
     {

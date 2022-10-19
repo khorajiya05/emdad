@@ -76,7 +76,7 @@ export const privateRoutes = [
     element: lazy(() => import("../pages/vehicle/view")),
   },
   {
-    path: "/driver/list",
+    path: "/drivers",
     element: lazy(() => import("../pages/driver/list")),
   },
   {
@@ -84,8 +84,16 @@ export const privateRoutes = [
     element: lazy(() => import("../pages/driver/form")),
   },
   {
-    path: "/driver/view",
-    element: lazy(() => import("../pages/driver/view")),
+    path: "/drivers/view/:driverId/basic-details",
+    element: lazy(() => import("../pages/driver/view/basic-details/basic-details")),
+  },
+  {
+    path: "/drivers/view/:driverId/upcoming-orders",
+    element: lazy(() => import("../pages/driver/view/upcoming-order/upcoming-order")),
+  },
+  {
+    path: "/drivers/view/:driverId/assign-timeslots",
+    element: lazy(() => import("../pages/driver/view/assign-timeslots/assign-timeslots")),
   },
   {
     path: "/driver/assign-timeslot",
@@ -160,43 +168,43 @@ export const privateRoutes = [
     element: lazy(() => import("../pages/app-settings/list")),
   },
   {
-    path: "/email-templates/list",
+    path: "/settings/email-templates",
     element: lazy(() => import("../pages/email-templates/list")),
   },
   {
-    path: "/email-templates/form",
+    path: "/settings/email-templates/:emailTemplateId/edit",
     element: lazy(() => import("../pages/email-templates/form")),
   },
   {
-    path: "/email-templates/view",
+    path: "/settings/email-templates/:emailTemplateId/view",
     element: lazy(() => import("../pages/email-templates/view")),
   },
   {
-    path: "/cms/list",
+    path: "/settings/cms/:name",
     element: lazy(() => import("../pages/cms/list")),
   },
   {
-    path: "/cms/form",
-    element: lazy(() => import("../pages/cms/form")),
+    path: "/settings/cms/view/:pageId",
+    element: lazy(() => import("../pages/cms/view")),
   },
   {
-    path: "/cms/view",
-    element: lazy(() => import("../pages/cms/view")),
+    path: "/settings/cms/form/:pageId",
+    element: lazy(() => import("../pages/cms/form")),
   },
   {
     path: "/cms/contact-us",
     element: lazy(() => import("../pages/cms/contact-us")),
   },
   {
-    path: "/driverhandbook",
+    path: "/settings/driverhandbook",
     element: lazy(() => import("../pages/driverhandbook/list")),
   },
   {
-    path: "/faq/list",
+    path: "/settings/faq",
     element: lazy(() => import("../pages/faq/list")),
   },
   {
-    path: "/faq/form",
+    path: "/settings/faq/:FAQId",
     element: lazy(() => import("../pages/faq/form")),
   },
   {

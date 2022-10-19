@@ -52,22 +52,22 @@ const Sidebar: React.FC = () => {
       title: "App Settings"
     },
     {
-      to: "/email-templates/list",
+      to: "/settings/email-templates",
       icon: "icons dripicons-mail",
       title: "Email Templates"
     },
     {
-      to: "/cms/list",
+      to: "/settings/cms/customers",
       icon: "icons dripicons-document",
       title: "CMS Pages"
     },
     {
-      to: "/driverhandbook",
+      to: "/settings/driverhandbook",
       icon: "icons dripicons-calendar",
       title: "Driver Handbook"
     },
     {
-      to: "/faq/list",
+      to: "/settings/faq",
       icon: "icons dripicons-user-id",
       title: "FAQs"
     }

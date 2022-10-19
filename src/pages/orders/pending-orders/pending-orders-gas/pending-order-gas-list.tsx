@@ -7,13 +7,13 @@ import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppendedMyComponent } from '../../../../components/appendToBody/appendToBody';
 import { BarsLoader } from '../../../../components/loader/Loader';
-import AssignOrderModal from '../../../../components/orders/assignOrder-modal';
-import DeleteModal from '../../../../components/orders/delete-modal';
-import UnassignOrderModal from '../../../../components/orders/unassignOrder-modal';
+import AssignOrderModal from '../../../../components/modal/assignOrder-modal';
+import DeleteModal from '../../../../components/modal/delete-modal';
+import UnassignOrderModal from '../../../../components/modal/unassignOrder-modal';
 import OrderStatus from '../../../../components/orderStatus/OrderStatus';
-import { convertTo12 } from '../../../../helpers/timeConvert';
 import { cancelOrderActionThunk } from '../../../../store/orders/orders.actions.async';
 import TRootState from '../../../../store/root.types';
+import { convertTo12 } from '../../../../utils/helpers/timeConvert';
 
 interface Prop {
     setFilter: Function;
@@ -84,18 +84,14 @@ const PendingOrderFuelList: React.FC<Prop> = ({ setFilter, filter, setFilterBy }
                                 ) : orders && orders.length > 0 ? (
                                     orders.map((order) => (
                                         <tr key={order?.id}>
-                                            <td>{order?.id} </td>
-                                            <td>{moment(order?.scheduleDate).format("MM/DD/YYYY")}{" "}
-                                                {order?.startTime ? convertTo12(order?.startTime) : null} -{" "}
-                                                {order?.endTime ? convertTo12(order?.endTime) : null}</td>
+                                            <td><p className="mb-0">{order?.id} </p></td>
+                                            <td><p className="mb-0">{moment(order?.scheduleDate).format("MM/DD/YYYY")} {order?.startTime ? convertTo12(order?.startTime) : null} - {order?.endTime ? convertTo12(order?.endTime) : null}</p></td>
                                             <td><p className="mb-0">{`${order?.address}, ${order?.city}, ${order?.state}, ${order?.country}`}</p></td>
-                                            <td>{order?.qty}</td>
-                                            <td>{order?.price}</td>
-                                            <td>Abdul Kareem</td>
-                                            <td>{order?.driver?.fullName}</td>
-                                            <td className="text-center">
-                                                <OrderStatus status={order?.status} />
-                                            </td>
+                                            <td><p className="mb-0">{order?.qty}</p></td>
+                                            <td><p className="mb-0">{order?.price}</p></td>
+                                            <td><p className="mb-0">Abdul Kareem</p></td>
+                                            <td><p className="mb-0">{order?.driver?.fullName}</p></td>
+                                            <td className="text-center"><OrderStatus status={order?.status} /></td>
                                             <td className="table-field-actions">
                                                 <Dropdown className="btn-group">
                                                     <Dropdown.Toggle

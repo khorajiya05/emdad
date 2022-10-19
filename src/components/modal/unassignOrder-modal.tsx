@@ -2,6 +2,9 @@ import React from 'react'
 import { Modal } from 'react-bootstrap'
 
 function UnassignOrderModal() {
+
+    const handleUnAssignOrder = () => {}
+    const showUnAssignOrderModal:boolean = false;
     return (
         <Modal
             centered

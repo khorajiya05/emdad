@@ -1,17 +1,37 @@
-import React, { Component } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import Header from "../../components/header/header";
+import { BarsLoader } from "../../components/loader/Loader";
 import Sidebar from "../../components/sidebar/sidebar";
+import { getSingleCmsPagesActionThunk } from "../../store/cms/cms.action.async";
+import TRootState from "../../store/root.types";
 
 const CMSPagesView: React.FC = () => {
+
   const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+
+  const { type } = location.state as { type: string };
+  const { pageId } = useParams<{ pageId: string }>();
+
+  const { loading, singleCmsPage } = useSelector((state: TRootState) => state?.cmsPages);
+
   const handleRedirectToCMSPages = () => {
-    navigate("/cms/list");
+    navigate(`/settings/cms/${type || "customers"}`);
   };
 
   const handleRedirectToCMSPagesForm = () => {
-    navigate("/cms/form");
+    navigate("/settings/cms/form/" + pageId, { state: { type: type || "customers" } });
   };
+
+  useEffect(() => {
+    dispatch(getSingleCmsPagesActionThunk(pageId || ""));
+  }, [dispatch, pageId]);
+
 
   return (
     <React.Fragment>
@@ -23,7 +43,7 @@ const CMSPagesView: React.FC = () => {
             <header className="page-header">
               <div className="d-flex align-items-center">
                 <div className="mr-auto">
-                  <h1>View Terms & Conditions</h1>
+                  <h1>View {singleCmsPage?.nameEng}</h1>
                 </div>
                 <div className="m-l-10">
                   <button
@@ -45,43 +65,13 @@ const CMSPagesView: React.FC = () => {
             </header>
             <section className="page-content container-fluid">
               <div className="card">
+
                 <div className="card-body font-weight-normal cms-page">
-                  <p>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book. It has survived not only five centuries,
-                    but also the leap into electronic typesetting, remaining
-                    essentially unchanged. It was popularised in the 1960s with
-                    the release of Letraset sheets containing Lorem Ipsum
-                    passages, and more recently with desktop publishing software
-                    like Aldus PageMaker including versions of Lorem Ipsum.
-                  </p>
-                  <p>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book. It has survived not only five centuries,
-                    but also the leap into electronic typesetting, remaining
-                    essentially unchanged. It was popularised in the 1960s with
-                    the release of Letraset sheets containing Lorem Ipsum
-                    passages, and more recently with desktop publishing software
-                    like Aldus PageMaker including versions of Lorem Ipsum.
-                  </p>
-                  <p>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book. It has survived not only five centuries,
-                    but also the leap into electronic typesetting, remaining
-                    essentially unchanged. It was popularised in the 1960s with
-                    the release of Letraset sheets containing Lorem Ipsum
-                    passages, and more recently with desktop publishing software
-                    like Aldus PageMaker including versions of Lorem Ipsum.
-                  </p>
+                  {loading ? (
+                    <BarsLoader />
+                  ) : (
+                    <p dangerouslySetInnerHTML={{ __html: singleCmsPage?.contentEng }}></p>
+                  )}
                 </div>
               </div>
             </section>

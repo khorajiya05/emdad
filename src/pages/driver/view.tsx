@@ -10,13 +10,7 @@ import { Accordion } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 const ViewOrder: React.FC = () => {
-  // constructor() {
-  //     super();
-  //     state = {
-  //         tabValue: 1,
-  //         show: false,
-  //     };
-  // }
+
   const [show, setShow] = useState<boolean>(false);
   const [tabValue, setTabValue] = useState<number | object>(1);
   const navigate = useNavigate();

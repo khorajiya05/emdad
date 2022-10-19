@@ -1,9 +1,13 @@
-import React from 'react'
+import { useSelector } from 'react-redux'
 import Pagination from '../../../../components/pagination/pagination'
+import TRootState from '../../../../store/root.types'
 import OrdersHistory from '../orders-history'
 import OrderHistoryFuelList from './order-history-fuel-llist'
 
 const OrderHistoryFuel = () => {
+
+  const orderCount = useSelector((state: TRootState) => state.orders?.orderFuelData?.count)
+  
   return (
     <OrdersHistory>
       {(sort: string, setSort: React.Dispatch<React.SetStateAction<string>>, setSortBy: React.Dispatch<React.SetStateAction<string>>, page: number, setPage: React.Dispatch<React.SetStateAction<number>>, fetchOrdersByFilter: Function) => (

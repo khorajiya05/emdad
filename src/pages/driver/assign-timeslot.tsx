@@ -9,13 +9,7 @@ import { Accordion } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 const AssignTimeslot: React.FC = () => {
-  // constructor() {
-  //     super();
-  //     state = {
-  //         tabValue: 1,
-  //         show: false,
-  //     };
-  // }
+
   const [tabValue, setTabValue] = useState<number>(1);
   const [show, setShow] = useState<boolean>(false);
   const navigate = useNavigate();

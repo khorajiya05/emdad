@@ -8,7 +8,6 @@ const startDate = moment().subtract(30, 'days').startOf('day');
 const endDate = moment().endOf('day');
 
 export class DatePicker extends Component {
-
     constructor(props) {
         super(props);
         this.state = {

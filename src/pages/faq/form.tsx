@@ -1,16 +1,42 @@
-import React, { Component } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Header from "../../components/header/header";
 import Sidebar from "../../components/sidebar/sidebar";
 import CKEditor from "../../components/CKeditor/CKEditor";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import TRootState from "../../store/root.types";
+import { useDispatch } from "react-redux";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { getFAQsByIdActionThunk } from "../../store/faqs/FAQs.actions.async";
 const FaqForm: React.FC = () => {
-  const [pageData, setPageData] = useState("");
+
+  const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
   const navigate = useNavigate();
+  const param = useParams();
+
+  const FAQId = param?.id;
+  const { loading, singleFAQsData } = useSelector((state: TRootState) => state?.faqs)
+
+  const [question, setQuestion] = useState<string>("");
+  const [answer, setAnswer] = useState<string>("");
+
   const handleRedirectToEmailTemplate = () => {
-    navigate("/faq/list");
+    navigate("/settings/faq");
   };
+
+  useEffect(() => {
+    if (FAQId && FAQId !== "new") {
+      dispatch(getFAQsByIdActionThunk(FAQId))
+    }
+  }, [FAQId, dispatch])
+
+  useEffect(() => {
+    setQuestion(singleFAQsData?.question);
+    setAnswer(singleFAQsData?.answer)
+  }, [singleFAQsData])
 
   return (
     <React.Fragment>
@@ -24,11 +50,6 @@ const FaqForm: React.FC = () => {
                 <div className="mr-auto">
                   <h1>Add FAQ</h1>
                 </div>
-                {/* <div className="m-l-10">
-                                        <button className="btn btn-secondary" onClick={() => this.handleRedirectToEmailTemplate()}>
-                                            <i className="fa fa-angle-left">&nbsp;</i> Back
-                                        </button>
-                                    </div> */}
               </div>
             </header>
             <section className="page-content container-fluid">
@@ -45,6 +66,8 @@ const FaqForm: React.FC = () => {
                             type="text"
                             className="form-control"
                             placeholder=""
+                            value={question}
+                            onChange={(e) => setQuestion(e.target?.value)}
                           />
                         </div>
                       </div>
@@ -53,7 +76,7 @@ const FaqForm: React.FC = () => {
                           Answer
                         </label>
                         <div className="col-md-7">
-                          <CKEditor setPageData={setPageData} />
+                          <CKEditor setPageData={setAnswer} data={answer} />
                         </div>
                       </div>
                     </div>

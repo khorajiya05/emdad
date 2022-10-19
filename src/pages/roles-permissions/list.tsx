@@ -23,14 +23,15 @@ const RolesPermissionsList: React.FC = () => {
     const [sort, setSort] = useState("ASC");
 
     const count = useSelector((state: TRootState) => state.rolesAndPermission?.rolesData?.count);
+    const { perPageItems } = useSelector((state: TRootState) => state?.pagination)
 
     const fetchRoles = (page: number, search?: string) => {
-        dispatch(getRolesActionThunk(page, 10, search))
+        dispatch(getRolesActionThunk(page, perPageItems, search))
     };
 
     const reset = () => {
         setSearch(() => "");
-        dispatch(getRolesActionThunk(page, 10, ""));
+        dispatch(getRolesActionThunk(page, perPageItems, ""));
     }
 
     const handleRedirectToRolespermissions = () => {

@@ -83,6 +83,7 @@ export const getOrderByIdActionThunk = (
       .getOrderByIdAPI(id)
       .then((response) => {
         dispatch(getOrderByIdAction(response.data?.data));
+        dispatch(ordersLoadedAction());
       })
       .catch((error) => {
         dispatch(ordersLoadedAction());
@@ -112,7 +113,7 @@ export const cancelOrderActionThunk = (
     requestFromServer
       .cancelOrderAPI(id)
       .then((response) => {
-        dispatch(cancelOrderAction({orderType, id}));
+        dispatch(cancelOrderAction({ orderType, id }));
         successToast("Order Cancelled successfully.");
       })
       .catch((error) => {

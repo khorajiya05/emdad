@@ -25,10 +25,10 @@ const ordersReducer = (state = INITIAL_STATE, action: TOrdersActionType): TOrder
       return { ...state, loading: false, orderById: action.payload };
 
     case OrdersActionTypeEnum.GET_ORDERS_FUEL:
-      return { ...state, loading: false, orderFuelData: action.payload };
+      return { ...state, loading: false, orderById: {} as TOrderByIdPayload, orderFuelData: action.payload };
 
     case OrdersActionTypeEnum.GET_ORDERS_GAS:
-      return { ...state, loading: false, orderGasData: action.payload };
+      return { ...state, loading: false, orderById: {} as TOrderByIdPayload, orderGasData: action.payload };
 
     case OrdersActionTypeEnum.CANCEL_ORDER:
       if (action.payload?.orderType === 1) {

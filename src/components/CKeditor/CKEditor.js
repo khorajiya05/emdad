@@ -7,15 +7,15 @@ const CKEditorComponent = (props) => {
       <CKEditor
         editor={ClassicEditor}
         data={props?.data || ""}
-        onReady={(editor) => {}}
+        onReady={(editor) => { }}
         onChange={(event, editor) => {
           let data = editor.getData();
           props?.setDescriptionError &&
-            props?.setDescriptionError(data ? false : true);
+          props?.setDescriptionError(data ? false : true);
           props?.setPageData(data);
         }}
-        onBlur={(event, editor) => {}}
-        onFocus={(event, editor) => {}}
+        onBlur={(event, editor) => { }}
+        onFocus={(event, editor) => { }}
       />
     </div>
   );

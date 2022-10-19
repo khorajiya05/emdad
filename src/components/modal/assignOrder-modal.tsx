@@ -1,6 +1,11 @@
 import React from 'react'
+import { Modal } from 'react-bootstrap'
 
 function AssignOrderModal() {
+
+    const showAssignOrderModal:boolean = false;
+    const handleAssignOrder = () =>{}
+    const User = "https://picsum.photos/200/300";
     return (
         <Modal
             centered

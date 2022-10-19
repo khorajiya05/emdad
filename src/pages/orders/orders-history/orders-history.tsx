@@ -8,17 +8,23 @@ import moment from "moment";
 
 import { DatePicker, Header } from "../../../components";
 import Sidebar from "../../../components/sidebar/sidebar";
+import { useDispatch, useSelector } from "react-redux";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { getOrdersActionThunk } from "../../../store/orders/orders.actions.async";
+import TRootState from "../../../store/root.types";
 
 interface Prop {
     children: Function;
 }
 
-
-
 const SelectStatus = [
     { value: "All", label: "All" },
-    { value: "Completed", label: "Completed" },
-    { value: "Cancel    ", label: "Cancel" },
+    { value: "delivered", label: "Delivered" },
+    { value: "cancelled", label: "Cancelled" },
+    { value: "cancelled_by_admin", label: "Cancelled by Admin" },
+    { value: "cancelled_by_driver", label: "Cancelled by Driver" },
+    { value: "cancelled_by_user", label: "Cancelled by User" }
 ];
 
 const SelectOrdertype = [
@@ -30,40 +36,59 @@ const SelectOrdertype = [
 const OrdersHistory: React.FC<Prop> = ({ children }) => {
 
     const location = useLocation()
+    const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+
+    const { state } = location;
+    const perPage = useSelector((state: TRootState) => state?.pagination?.perPageItems)
+    const orderType = location.pathname === "/orders/orders-history/fuel" ? 1 : 2;
+
 
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-    const [showChangeStatusModal, setShowChangeStatusModal] = useState<boolean>(false);
+    const [showUnAssignOrderModal, setShowUnAssignOrderModal] = useState<boolean>(false);
+    const [showAssignOrderModal, setShowAssignOrderModal] = useState<boolean>(false);
 
+    const [page, setPage] = useState<number>(Number(state?.page) || 1)
     const [orderStatus, setOrderStatus] = useState("All");
     const [searchOrder, setSearchOrder] = useState<string>("");
     const [startDate, setStartDate] = useState<moment.Moment | null | undefined>();
     const [endDate, setEndDate] = useState<moment.Moment | null | undefined>();
-    const ordersOf = location.pathname === "/orders/orders-history/fuel" ? "fuel" : "gas"
+    const [sort, setSort] = useState("ASC");
+    const [sortBy, setSortBy] = useState<string | null>("orderNumber");
 
-    const handleCloseDelete = () => {
-        setShowDeleteModal(false);
-    };
+    const fetchOrdersByFilter = () => {
+
+        dispatch(getOrdersActionThunk(
+            searchOrder === "" ? null : searchOrder,
+            page,
+            perPage,
+            startDate,
+            endDate,
+            sort,
+            sortBy,
+            orderStatus === "All" ? ["cancelled_by_user", "cancelled_by_driver", "cancelled_by_admin", "delivered"] : [orderStatus],
+            orderType
+        ))
+    }
 
     const handleShowDelete = () => {
         setShowDeleteModal(true);
     };
 
-    const handleShowChangeStatus = () => {
-        // this.setState({ showChangeStatusModal: true});
-        setShowChangeStatusModal(true);
+    const handleAssignOrder = () => {
+        setShowAssignOrderModal(false);
     };
 
-    const handleCloseChangeStatus = () => {
-        setShowChangeStatusModal(true);
+    const handleShowAssignOrder = () => {
+        setShowAssignOrderModal(true);
     };
 
-    //   handleRedirectToAddVendor = () => {
-    //     this.props.history.push("/vendors/add");
-    //   };
+    const handleUnAssignOrder = () => {
+        setShowUnAssignOrderModal(false);
+    };
 
-    const fetchOrdersByFilter = () => {
-        alert(JSON.stringify({ startDate, endDate, orderStatus, searchOrder, ordersOf }));
-    }
+    const handleShowUnAssignOrder = () => {
+        setShowUnAssignOrderModal(true);
+    };
 
     return (
         <React.Fragment>
@@ -168,9 +193,17 @@ const OrdersHistory: React.FC<Prop> = ({ children }) => {
                                             setEndDate(null || undefined);
                                             setOrderStatus("All");
 
-                                            setTimeout(() => {
-                                                fetchOrdersByFilter();
-                                            }, 300);
+                                            dispatch(getOrdersActionThunk(
+                                                null,
+                                                page,
+                                                perPage,
+                                                null,
+                                                null,
+                                                "ASC",
+                                                "orderNumber",
+                                                ["cancelled_by_user", "cancelled_by_driver", "cancelled_by_admin", "delivered"],
+                                                orderType
+                                            ))
 
                                         }
                                         }
@@ -197,77 +230,19 @@ const OrdersHistory: React.FC<Prop> = ({ children }) => {
                                                 <NavLink
                                                     to="/orders/orders-history/gas"
                                                     className={(navData) => navData.isActive ? "nav-link show active" : "nav-link"}
-
                                                 >
                                                     Gas
                                                 </NavLink>
                                             </li>
                                         </ul>
                                     </div>
-
-                                    {children(fetchOrdersByFilter)}
+                                    {children(sort, setSort, setSortBy, page, setPage, fetchOrdersByFilter)}
                                 </>
                             </div>
                         </section>
                     </div>
                 </div>
             </div>
-            <Modal
-                centered
-                show={showChangeStatusModal}
-                onHide={() => handleCloseChangeStatus()}
-            >
-                <Modal.Header className="justify-content-center border-0">
-                    <h3 className="modal-title">Change Status</h3>
-                </Modal.Header>
-                <Modal.Body className="text-center">
-                    <span>
-                        <i className="far fa-check-circle fa-3x text-success"></i>
-                    </span>
-                    <p className="font-size-18 m-0 mt-2">
-                        Are you sure want to change status?
-                    </p>
-                </Modal.Body>
-                <Modal.Footer className="justify-content-center border-0">
-                    <button
-                        className="btn btn-dark min-w-100"
-                        onClick={() => handleCloseChangeStatus()}
-                    >
-                        No
-                    </button>
-                    <button
-                        className="btn btn-danger min-w-100"
-                        onClick={() => handleCloseChangeStatus()}
-                    >
-                        Yes
-                    </button>
-                </Modal.Footer>
-            </Modal>
-            <Modal centered show={showDeleteModal} onHide={() => handleCloseDelete()}>
-                <Modal.Header className="justify-content-center border-0">
-                    <h3 className="modal-title">Delete</h3>
-                </Modal.Header>
-                <Modal.Body className="text-center">
-                    <span>
-                        <i className="far fa-times-circle fa-3x text-danger"></i>
-                    </span>
-                    <p className="font-size-18 m-0 mt-2">Are you sure want to delete?</p>
-                </Modal.Body>
-                <Modal.Footer className="justify-content-center border-0">
-                    <button
-                        className="btn btn-dark min-w-100"
-                        onClick={() => handleCloseDelete()}
-                    >
-                        No
-                    </button>
-                    <button
-                        className="btn btn-danger min-w-100"
-                        onClick={() => handleCloseDelete()}
-                    >
-                        Yes
-                    </button>
-                </Modal.Footer>
-            </Modal>
         </React.Fragment>
     );
 };

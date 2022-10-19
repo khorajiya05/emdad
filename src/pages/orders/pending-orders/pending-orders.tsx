@@ -1,16 +1,16 @@
 import React from "react";
-
-import Header from "../../../components/header/header";
-import Sidebar from "../../../components/sidebar/sidebar";
-import { useState } from "react";
-import Dropdown from "react-bootstrap/Dropdown";
-import Select from "react-select";
-import { DatePicker } from "../../../components";
 import { NavLink, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
-import { cancelOrderActionThunk, getOrdersActionThunk } from "../../../store/orders/orders.actions.async";
+import { useState } from "react";
+import Dropdown from "react-bootstrap/Dropdown";
+import Select from "react-select";
+
+import Header from "../../../components/header/header";
+import Sidebar from "../../../components/sidebar/sidebar";
+import { DatePicker } from "../../../components";
+import { getOrdersActionThunk } from "../../../store/orders/orders.actions.async";
 import TRootState from "../../../store/root.types";
 
 interface Prop {
@@ -32,10 +32,6 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
     const perPage = useSelector((state: TRootState) => state?.pagination?.perPageItems)
     const orderType = location.pathname === "/orders/pending-orders/fuel" ? 1 : 2;
 
-    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-    const [showUnAssignOrderModal, setShowUnAssignOrderModal] = useState<boolean>(false);
-    const [showAssignOrderModal, setShowAssignOrderModal] = useState<boolean>(false);
-
     const [page, setPage] = useState<number>(Number(state?.page) || 1)
     const [orderStatus, setOrderStatus] = useState("All");
     const [searchOrder, setSearchOrder] = useState<string>("");
@@ -43,8 +39,6 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
     const [endDate, setEndDate] = useState<moment.Moment | null | undefined>();
     const [sort, setSort] = useState("DESC");
     const [sortBy, setSortBy] = useState<string | null>(null);
-
-
 
     const fetchOrdersByFilter = () => {
 
@@ -60,26 +54,6 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
             orderType
         ))
     }
-
-    const handleShowDelete = () => {
-        setShowDeleteModal(true);
-    };
-
-    const handleAssignOrder = () => {
-        setShowAssignOrderModal(false);
-    };
-
-    const handleShowAssignOrder = () => {
-        setShowAssignOrderModal(true);
-    };
-
-    const handleUnAssignOrder = () => {
-        setShowUnAssignOrderModal(false);
-    };
-
-    const handleShowUnAssignOrder = () => {
-        setShowUnAssignOrderModal(true);
-    };
 
     return (
         <React.Fragment>
@@ -193,13 +167,11 @@ const PendingOrders: React.FC<Prop> = ({ children }) => {
                                                 ["pending", "live"],
                                                 orderType
                                             ))
-                                        }
-                                        }
+                                        }}
                                     >
                                         Reset
                                     </button>
                                 </div>
-
                             </div>
                         </header>
                         <section className="page-content container-fluid">

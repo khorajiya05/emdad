@@ -11,10 +11,10 @@ import Header from "../../components/header/header";
 import { BarsLoader } from "../../components/loader/Loader";
 import OrderStatus from "../../components/orderStatus/OrderStatus";
 import Sidebar from "../../components/sidebar/sidebar";
-import { convertTo12 } from "../../helpers/timeConvert";
 import { getOrderByIdActionThunk } from "../../store/orders/orders.actions.async";
 import TRootState from "../../store/root.types";
 import { fixPrice } from "../../utils/helpers/priceFixed";
+import { convertTo12 } from "../../utils/helpers/timeConvert";
 
 const ViewOrder: React.FC = () => {
 
@@ -45,8 +45,8 @@ const ViewOrder: React.FC = () => {
                 <div className="d-flex align-items-center">
                   <div className="mr-auto">
                     <h1>
-                      {orderById?.id}
-                      <OrderStatus status={orderById?.status} />
+                      #{Number(orderById?.id).toLocaleString('en-US', { minimumIntegerDigits: 5, useGrouping: false })}
+                      <OrderStatus status={orderById?.status} className="view-badge font-size-12" />
                     </h1>
                   </div>
                   <div className="m-l-10">

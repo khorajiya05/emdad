@@ -10,6 +10,11 @@ import rolesAndPermissionReducer from "./roleAndPermission/rolesAndPermissions.r
 import paginationReducer from "./pagination/pagination.reducer";
 import notificationsReducer from "./notifications/notifications.reducer";
 import orderReducer from "./orders/orders.reducer"
+import driversReducer from "./drivers/drivers.reducer";
+import cmsReducer from "./cms/cms.reducer";
+import driverHandBookReducer from "./driverHandBook/driverHandBook.reducer";
+import emailTemplateReducer from "./emailTemplate/emailTemplate.reducer";
+import FAQsReducer from "./faqs/FAQs.reducer";
 
 
 const reducers: Reducer<CombinedState<any>, any> = combineReducers({
@@ -20,5 +25,11 @@ const reducers: Reducer<CombinedState<any>, any> = combineReducers({
   pagination: paginationReducer,
   notifications: notificationsReducer,
   orders: orderReducer,
+  drivers: driversReducer,
+  cmsPages: cmsReducer,
+  driverHandBook: driverHandBookReducer,
+  emailTemplate: emailTemplateReducer,
+  faqs: FAQsReducer,
+
 });
 export default reducers;
