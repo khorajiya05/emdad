@@ -23,6 +23,8 @@ const EmailTemplatesForm: React.FC = () => {
 
   const [subject, setSubject] = useState<string>("");
   const [template, setTemplate] = useState<string>("");
+  console.log("Template:", template);
+
 
   const handleRedirectToEmailTemplate = () => {
     navigate("/settings/email-templates", { state: { page: state?.page } });
@@ -39,8 +41,11 @@ const EmailTemplatesForm: React.FC = () => {
   }, [dispatch, emailTemplateId])
 
   useEffect(() => {
-    setSubject(singleEmailTemplate?.subject)
-    setTemplate(singleEmailTemplate?.template)
+    if(singleEmailTemplate){
+      setSubject(singleEmailTemplate?.subject)
+      setTemplate(singleEmailTemplate?.template)
+
+    }
   }, [singleEmailTemplate])
 
   return (
@@ -91,7 +96,7 @@ const EmailTemplatesForm: React.FC = () => {
                               Email Content <span className="text-danger">*</span>
                             </label>
                             <div className="col-md-7">
-                              <CKEditor setTemplate={setTemplate} data={template} />
+                              <CKEditor setPageData={setTemplate} data={template} />
                             </div>
                           </div>
                         </div>

@@ -1,12 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 
 import Header from "../../components/header/header";
 import Sidebar from "../../components/sidebar/sidebar";
-import { Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
-import Bahrs from "../../assets/img/bahrs.png";
-import Suburban from "../../assets/img/suburban.png";
+import { Modal } from "react-bootstrap";
 import User from "../../assets/img/user.jpg";
-import { Accordion } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 const ViewOrder: React.FC = () => {
@@ -16,11 +13,9 @@ const ViewOrder: React.FC = () => {
   const navigate = useNavigate();
 
   const handleClose = () => {
-    // setState({ show: false });
     setShow(false);
   };
   const handleShow = () => {
-    // setState({ show: true });
     setShow(true);
   };
   const handleRedirectToOrder = () => {
@@ -112,12 +107,7 @@ const ViewOrder: React.FC = () => {
                                     Abdul Kareem
                                   </h2>
                                   <ul className="list-unstyled text-left row mb-0">
-                                    {/* <li className="mb-3 col-md-6">
-                                      <label className="text-muted mb-1">
-                                        Mobile Number
-                                      </label>
-                                      <br /> +249 98765 43210
-                                    </li> */}
+                                  
                                     <li className="mb-3 col-md-6">
                                       <label className="text-muted mb-1">
                                         Assign Timeslot
@@ -172,17 +162,7 @@ const ViewOrder: React.FC = () => {
                                 <th className="table-field-status">
                                   {" "}
                                   Status
-                                  {/* <br /> Promocode (5%) 
-                                                                    <OverlayTrigger
-                                                                        placement="top"
-                                                                        overlay={
-                                                                            <Tooltip id={`tooltip01`}>
-                                                                                {`Price comes from Sub Total * PB Discount Promocode%`}
-                                                                            </Tooltip>
-                                                                        }
-                                                                    >
-                                                                        <i className="fa fa-info-circle top-1 m-l-5"></i>
-                                                                    </OverlayTrigger> */}
+                                 
                                 </th>
                               </tr>
                             </thead>
@@ -191,11 +171,7 @@ const ViewOrder: React.FC = () => {
                                 <td>#00001 </td>
                                 <td>10:00 am to 10:30 am</td>
                                 <td>1</td>
-                                {/* <td className="min-w-175">
-                                                                    <div className="d-flex align-items-center">
-                                                                        <img className="w-40 h-40 rounded-circle o-cover mr-3" src={Bahrs} alt="Product Logo" /> Bahr's Fuel
-                                                                    </div>
-                                                                </td> */}
+                           
 
                                 <td className="table-field-status">
                                   <span className="badge badge-pill badge-success">
@@ -207,12 +183,7 @@ const ViewOrder: React.FC = () => {
                                 <td>#00001 </td>
                                 <td>10:00 am to 10:30 am</td>
                                 <td>1</td>
-                                {/* <td className="min-w-175">
-                                                                    <div className="d-flex align-items-center">
-                                                                        <img className="w-40 h-40 rounded-circle o-cover mr-3" src={Bahrs} alt="Product Logo" /> Bahr's Fuel
-                                                                    </div>
-                                                                </td> */}
-
+                               
                                 <td className="table-field-status">
                                   <span className="badge badge-pill badge-success">
                                     Accept
@@ -220,43 +191,7 @@ const ViewOrder: React.FC = () => {
                                 </td>
                               </tr>
                             </tbody>
-                            {/* <tfoot>
-                                                            <tr>
-                                                                <td colspan="3"> </td>
-                                                                <td className="font-weight-500">Total</td>
-                                                                <td className="font-weight-500 text-right">$46.50</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="3"> </td>
-                                                                <td>(-) Promocode Discount</td>
-                                                                <td className="text-right">$1.00</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="3"> </td>
-                                                                <td>(+) Delivery Fee</td>
-                                                                <td className="text-right">$1.00</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="3"> </td>
-                                                                <td>(+) Service Fee</td>
-                                                                <td className="text-right">$1.00</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="3"> </td>
-                                                                <td>(+) Service Charge</td>
-                                                                <td className="text-right">$1.00</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="3"> </td>
-                                                                <td>(+) Back to House</td>
-                                                                <td className="text-right">$2.75</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="3"> </td>
-                                                                <td className="font-weight-500 font-size-16">Grand Total</td>
-                                                                <td className="font-weight-500 text-success text-right font-size-16">$51.25</td>
-                                                            </tr>
-                                                        </tfoot> */}
+                           
                           </table>
                         </div>
                       </div>
@@ -279,58 +214,7 @@ const ViewOrder: React.FC = () => {
                               </ul>
                             </div>
                           </div>
-                          {/* <div className="card-body">
-                            <div className="card-header" id="headingFaqOne">
-                              <button
-                                className="btn btn-link collapsed"
-                                type="button"
-                                data-toggle="collapse"
-                                data-target="#collapseFaqOne"
-                                aria-expanded="false"
-                                aria-controls="collapseFaqOne"
-                              >
-                                M25
-                              </button>
-                            </div>
-                            <Accordion>
-                              <Accordion.Item eventKey="0">
-                                <Accordion.Header>
-                                  Accordion Item #1
-                                </Accordion.Header>
-                                <Accordion.Body>
-                                  Lorem ipsum dolor sit amet, consectetur
-                                  adipiscing elit, sed do eiusmod tempor
-                                  incididunt ut labore et dolore magna aliqua.
-                                  Ut enim ad minim veniam, quis nostrud
-                                  exercitation ullamco laboris nisi ut aliquip
-                                  ex ea commodo consequat. Duis aute irure dolor
-                                  in reprehenderit in voluptate velit esse
-                                  cillum dolore eu fugiat nulla pariatur.
-                                  Excepteur sint occaecat cupidatat non
-                                  proident, sunt in culpa qui officia deserunt
-                                  mollit anim id est laborum.
-                                </Accordion.Body>
-                              </Accordion.Item>
-                              <Accordion.Item eventKey="1">
-                                <Accordion.Header>
-                                  Accordion Item #2
-                                </Accordion.Header>
-                                <Accordion.Body>
-                                  Lorem ipsum dolor sit amet, consectetur
-                                  adipiscing elit, sed do eiusmod tempor
-                                  incididunt ut labore et dolore magna aliqua.
-                                  Ut enim ad minim veniam, quis nostrud
-                                  exercitation ullamco laboris nisi ut aliquip
-                                  ex ea commodo consequat. Duis aute irure dolor
-                                  in reprehenderit in voluptate velit esse
-                                  cillum dolore eu fugiat nulla pariatur.
-                                  Excepteur sint occaecat cupidatat non
-                                  proident, sunt in culpa qui officia deserunt
-                                  mollit anim id est laborum.
-                                </Accordion.Body>
-                              </Accordion.Item>
-                            </Accordion>
-                          </div> */}
+                         
                         </div>
                       </div>
                     ) : null}

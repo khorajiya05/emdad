@@ -10,6 +10,8 @@ import { TCmsPagesState } from "./cms/cms.types";
 import { TDriverHandBookState } from "./driverHandBook/driverHandBook.types";
 import { TEmailTemplateState } from "./emailTemplate/emailTemplate.types";
 import { TFAQsState } from "./faqs/FAQs.types";
+import { TUsersState } from "./users/users.types";
+
 
 
 
@@ -26,6 +28,8 @@ type TRootState = {
   driverHandBook: TDriverHandBookState;
   emailTemplate: TEmailTemplateState;
   faqs: TFAQsState;
+  users: TUsersState;
+
 
 };
 

@@ -26,7 +26,7 @@ const NotificationReceivedList: React.FC<Props> = ({ getAction }) => {
 
   const { notifications } = useSelector((state: TRootState) => state?.notifications?.notifications);
   const loading = useSelector((state: TRootState) => state?.notifications?.loading);
-  const userId = "";
+
 
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
   const [showViewModal, setShowViewModal] = useState<boolean>(false)
@@ -126,8 +126,14 @@ const NotificationReceivedList: React.FC<Props> = ({ getAction }) => {
                           <div className="control__indicator" style={{ top: "-10px" }}></div>
                         </label>
                       </td>
-                      <td className={notification?.readedBy ? "text-muted" : "font-weight-500 text-black"}>{notification?.descriptionEng}</td>
-                      <td className={notification?.readedBy ? "text-muted" : "font-weight-500 text-black"}>{moment(notification?.createdAt).format("MM/DD/YYY hh:mm A")}</td>
+
+                      {/*  
+                      ///////////////////////////////////////////////////////////////////////////////////////////
+                        // remains change the css of read notification and unread notifications
+                      */}
+                      
+                      <td className={notification?.readedBy?.length ? "text-muted" : "font-weight-500 text-black"}>{notification?.descriptionEng}</td>
+                      <td className={notification?.readedBy?.length ? "text-muted" : "font-weight-500 text-black"}>{moment(notification?.createdAt).format("MM/DD/YYY hh:mm A")}</td>
                       <td>
                         <i
                           className="fa fa-info-circle top-1 m-l-5 m-r-5"

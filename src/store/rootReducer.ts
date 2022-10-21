@@ -15,6 +15,7 @@ import cmsReducer from "./cms/cms.reducer";
 import driverHandBookReducer from "./driverHandBook/driverHandBook.reducer";
 import emailTemplateReducer from "./emailTemplate/emailTemplate.reducer";
 import FAQsReducer from "./faqs/FAQs.reducer";
+import usersReducer from "./users/users.reducer";
 
 
 const reducers: Reducer<CombinedState<any>, any> = combineReducers({
@@ -30,6 +31,8 @@ const reducers: Reducer<CombinedState<any>, any> = combineReducers({
   driverHandBook: driverHandBookReducer,
   emailTemplate: emailTemplateReducer,
   faqs: FAQsReducer,
+  users: usersReducer,
+  
 
 });
 export default reducers;

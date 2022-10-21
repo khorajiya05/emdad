@@ -80,7 +80,7 @@ export const privateRoutes = [
     element: lazy(() => import("../pages/driver/list")),
   },
   {
-    path: "/driver/form",
+    path: "/drivers/:driverId",
     element: lazy(() => import("../pages/driver/form")),
   },
   {

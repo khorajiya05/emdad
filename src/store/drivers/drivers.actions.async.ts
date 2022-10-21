@@ -1,14 +1,6 @@
 import { ThunkDispatch, ThunkAction } from "redux-thunk";
 import { AnyAction } from "redux";
-import {
-  driversLoadingAction,
-  driversLoadedAction,
-  getAllDriversAction,
-
-  deleteDriverAction,
-  getDriverByIdAction,
-  getDriverTimeSlotsAction,
-} from "./drivers.action";
+import { driversLoadingAction, driversLoadedAction, getAllDriversAction, getDriverByIdAction, getDriverTimeSlotsAction } from "./drivers.action";
 import { errorToast, successToast } from "../../components/toast/toast";
 import * as requestFromServer from "../../services/drivers/driversService";
 
@@ -66,16 +58,14 @@ export const getAllDriversActionThunk = (
  * @param getAction 
  * @returns 
  */
-export const deleteDriverActionThunk = (
-  driverId: string | number,
-): ThunkAction<void, {}, {}, AnyAction> => {
+export const deleteDriverActionThunk = (driverId: string | number, getAction?: Function): ThunkAction<void, {}, {}, AnyAction> => {
   return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(driversLoadingAction());
     requestFromServer
       .deleteDriver(driverId)
       .then((res) => {
         dispatch(driversLoadedAction());
-        dispatch(deleteDriverAction(driverId));
+        getAction && getAction();
         successToast("Driver deleted successfully");
       })
       .catch((err) => {
@@ -85,6 +75,11 @@ export const deleteDriverActionThunk = (
   };
 };
 
+/**
+ * get deriver by id action thunk
+ * @param driverId 
+ * @returns 
+ */
 export const getDriverByIdActionThunk = (driverId: string | number | null): ThunkAction<void, {}, {}, AnyAction> => {
   return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(driversLoadingAction());
@@ -100,6 +95,29 @@ export const getDriverByIdActionThunk = (driverId: string | number | null): Thun
       });
   };
 };
+
+/**
+ * update driver status acton thynk
+ * @param driverId 
+ * @param status 
+ * @returns 
+ */
+export const updateStatusOfDriverActionThunk = (driverId: string | number, status: boolean, fetchData?: Function): ThunkAction<void, {}, {}, AnyAction> => {
+  return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+    dispatch(driversLoadingAction());
+    requestFromServer.updateDriverStatus(driverId, status)
+      .then((res) => {
+        fetchData && fetchData();
+        dispatch(driversLoadedAction());
+        successToast(("driver status updated successfully"));
+      })
+      .catch((err) => {
+        dispatch(driversLoadedAction());
+        errorToast(err?.response?.data?.message || "Something went wrong");
+      });
+
+  }
+}
 
 /**
  * get timeslots of drivers by id action thunk
@@ -119,4 +137,41 @@ export const getDriverTimeSlotsActionThunk = (driverId: string | number | null):
         errorToast(err?.response?.data?.message || "Something went wrong");
       });
   }
+}
+
+/**
+ * update driver action thunk
+ */
+
+export const updateDriverActionthunk = (userType: string, driverId: string | number | undefined, fullName: string, mobileNumber: string | number, email: string, password: string, getAction?: Function) => {
+  return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+    dispatch(driversLoadingAction());
+    requestFromServer.updateDriverAPI(userType, driverId, fullName, mobileNumber, email, password)
+      .then((res) => {
+        dispatch(driversLoadedAction());
+        getAction && getAction();
+        successToast(("driver updated successfully"));
+      })
+      .catch((err) => {
+        dispatch(driversLoadedAction());
+        errorToast(err?.response?.data?.message || "Something went wrong");
+      });
+  }
+}
+
+export const addNewDriverActionThunk = (fullName: string, email: string, countryCode: string | number, mobileNumber: string | number, password: string, userType: string, getAction?: Function, address?: string, vehicle?: string | number, location?: string, image?: string) => {
+  return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+    dispatch(driversLoadingAction());
+    requestFromServer.addNewDriverAPI(fullName, email, countryCode, mobileNumber, password, userType, address, vehicle, location, image)
+      .then((res) => {
+        dispatch(driversLoadedAction());
+        getAction && getAction();
+        successToast(("driver added successfully"));
+      })
+      .catch((err) => {
+        dispatch(driversLoadedAction());
+        errorToast(err?.response?.data?.message || "Something went wrong");
+      });
+  }
+
 }

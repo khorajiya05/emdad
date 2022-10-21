@@ -38,31 +38,12 @@ const getFAQsByIdAction = (payload: TFAQsDetail) => action(FAQsActionTypeEnum.GE
  * @param payload 
  * @returns 
  */
-const deleteFAQsAction = (payload: string) => action(FAQsActionTypeEnum.DELETE_FAQ, payload)
+const deleteFAQsAction = (payload: string | number | null) => action(FAQsActionTypeEnum.DELETE_FAQ, payload)
 
-
-/**
- * update FAQ by id aciton creator
- * @param payload 
- * @returns 
- */
-const updateFAQsAction = (payload: TFAQsDetail) => action(FAQsActionTypeEnum.UPDATE_FAQ, payload);
-
-/**
- * add new FAQ action creator
- * @param payload 
- * @returns 
- */
-const addFAQsAction = (payload: TFAQsDetail) => action(FAQsActionTypeEnum.ADD_NEW_FAQ, payload);
-
-const doEmptySingleFAQData = () => action(FAQsActionTypeEnum.DO_EMPTY_SINGLE_FAQ)
 export {
     FAQsLoadedAction,
     FAQsLoadingAction,
     getFAQsByIdAction,
     getAllFAQsAction,
     deleteFAQsAction,
-    updateFAQsAction,
-    addFAQsAction,
-    doEmptySingleFAQData
 }

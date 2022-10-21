@@ -10,14 +10,19 @@ import { BarsLoader } from "../loader/Loader";
 import { AppendedMyComponent } from "../appendToBody/appendToBody";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
+import OrderStatus from "../orderStatus/OrderStatus";
+import { Link, useLocation } from "react-router-dom";
 
 interface Prop {
-  setFilter: Function;
-  filter: string;
+    setFilter: Function;
+    filter: string;
 }
 const RolesAndPermssions: React.FC<Prop> = ({ filter, setFilter }) => {
 
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+    const location = useLocation();
+
+    const { state } = location;
 
     const [sweetAlert, setSweetAlert] = useState(false);
     const [showChangeStatusAlert, setShowChangeStatusAlert] = useState(false);
@@ -74,11 +79,7 @@ const RolesAndPermssions: React.FC<Prop> = ({ filter, setFilter }) => {
                                                 setId(roles.id.toString());
                                             }}
                                         >
-                                            {roles?.isActive ? (
-                                                <i className="icon dripicons-checkmark text-success font-size-20"></i>
-                                            ) : (
-                                                <i className="icon dripicons-cross text-danger font-size-20"></i>
-                                            )}
+                                            <OrderStatus status={roles?.isActive === true ? "active" : "inactive"} />
                                         </a>
                                     </td>
                                     <td className="table-field-actions">
@@ -92,7 +93,9 @@ const RolesAndPermssions: React.FC<Prop> = ({ filter, setFilter }) => {
                                             <AppendedMyComponent>
                                                 <Dropdown.Menu>
                                                     <Dropdown.Item
-                                                        href={"/settings/roles-permissions/" + roles.id}
+                                                        as={Link}
+                                                        to={"/settings/roles-permissions/" + roles.id}
+                                                        state={{ page: state?.page }}
                                                         onClick={() => {
                                                             setId(roles.id.toString());
                                                         }}

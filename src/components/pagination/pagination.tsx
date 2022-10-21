@@ -47,6 +47,7 @@ const Pagination: React.FC<Props> = ({
 
   useEffect(() => {
     dispatchAction && dispatchAction(page || 1);
+    navigate(location.pathname, { state: { page: page } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, filter, ordersRange]);
 

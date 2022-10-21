@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import Sidebar from "../../components/sidebar/sidebar";
@@ -32,9 +32,11 @@ const RolesPermissionsForm = () => {
 
   const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
   const navigate = useNavigate();
-
+  const location = useLocation();
 
   const { id = "1" } = useParams<{ id: string }>();
+  const { state } = location;
+
   const [roleName, setRoleName] = useState("");
   const [permissionError, setPermissionError] = useState(false);
   const [isActive, setIsActive] = useState(1);
@@ -43,7 +45,7 @@ const RolesPermissionsForm = () => {
 
 
   const handleRedirectToRole = () => {
-    navigate("/settings/roles-permissions");
+    navigate("/settings/roles-permissions", { state: { page: state?.page } });
   };
 
 

@@ -39,13 +39,13 @@ const DriverList: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>("")
 
   const handleRedirectToAddVendor = () => {
-    navigate("/driver/form");
+    navigate("/drivers/new", { state: { page: page } });
   };
 
-  const fetchDrivers = (pages?: number) => {
+  const fetchDrivers = () => {
     dispatch(getAllDriversActionThunk(
       searchDriver || null,
-      pages || page,
+      page,
       itemsPerPage,
       startDate,
       endDate,
@@ -181,7 +181,7 @@ const DriverList: React.FC = () => {
               <div className="card">
                 <div className="card-body p-0">
                   <Pagination
-                    ItemsComponent={DriversList}
+                    ItemsComponent={() => (<DriversList setFilter={setSort} filter={sort} setFilterBy={setSortBy} fetchData={fetchDrivers} page={page} />)}
                     dispatchAction={fetchDrivers}
                     pageCount={count}
                     filter={sort}

@@ -1,12 +1,8 @@
 import moment from "moment";
 import { API } from "../../middleware/middleware";
 
-
-
-
-
 /**
- * get vendors drivers api call
+ * get drivers api call
  * @param search
  * @param page
  * @param perPage
@@ -39,29 +35,10 @@ export const getDriversAPI = (
 
 /**
  * update driver status api call
- * @param isActive
- * @param id
  * @returns
  */
-export const updateDriverStatus = (
-  isActive: boolean,
-  id: string | number
-): Promise<any> => {
-  return API.put("/users/" + id, { isActive });
-};
-
-/**
- * update driver approval api call
- * @param id
- * @param status
- * @returns
- */
-export const updateDriverApproval = (id: string | number, status: number) => {
-  return API.patch("/users/status-change/", {
-    status,
-    userId: id,
-    userType: "driver",
-  });
+export const updateDriverStatus = (driverId: string | number, status: boolean): Promise<any> => {
+  return API.put("/driver/driver/status/" + driverId, { status });
 };
 
 /**
@@ -83,124 +60,27 @@ export const getDriverTimeslotsAPI = (driverId: string | number | null): Promise
 }
 
 /**
- * get driver fuel delivery orders list
- * @param search
- * @param page
- * @param perPage
- * @returns
+ * update driver api
+ * @param driverId 
+ * @param fullName 
+ * @param mobileNumber 
+ * @param email 
+ * @param password 
+ * @returns 
  */
-export const getDriverOrdersFuelAPI = (
-  driverId: string,
-  search: string | null,
-  page: number,
-  perPage: number,
-  orderType: number,
-  startDate: moment.Moment | string,
-  endDate: moment.Moment | string,
-  customerName: string | number,
-  ordersStatus: string | number,
-  sort: string,
-  sortBy: string,
-  categoryId?: string
-): Promise<any> => {
-  return API.get("/drivers/" + driverId + "/orders", {
-    params: {
-      orderType,
-      search,
-      page,
-      perPage,
-      startAt: startDate || undefined,
-      endAt: endDate || undefined,
-      sort,
-      sortBy,
-      customerId: customerName || undefined,
-      status: ordersStatus === "All" ? undefined : ordersStatus,
-      categoryId: categoryId || undefined,
-    },
-  });
-};
-
-/**
- * get driver propane tank orders list
- * @param search
- * @param page
- * @param perPage
- * @returns
- */
-export const getDriverOrdersTankAPI = (
-  search: string | null,
-  page: number,
-  perPage: number
-): Promise<any> => {
-  return API.get("/mocky", {
-    params: { type: "ordersTank", search, page, perPage },
-  });
-};
-
-/**
- *  get driver completed orders list
- * @param search
- * @param page
- * @param perPage
- * @returns
- */
-export const getDriverCompletedOrdersAPI = (
-  search: string | null,
-  page: number,
-  perPage: number,
-  sort: string,
-  sortBy: string | null,
-  vendorId: string | number | null,
-  driverId: string | number,
-  status: string[]
-): Promise<any> => {
-  return API.get("/orders", {
-    params: { search, page, perPage, sort, sortBy, vendorId, driverId, status },
-  });
-};
-
-
-/**
- * get all freelance drivers
- * @returns
- */
-export const getAllFreelanceDriversAPI = (
-  isFreelancer: boolean,
-  isFilters: boolean
-) => {
-  return API.get("drivers/all/options", {
-    params: { isFreelancer, isFilters },
-  });
-};
+export const updateDriverAPI = (userType: string, driverId: string | number | undefined, fullName: string, mobileNumber: string | number, email: string, password: string): Promise<any> => {
+  return API.put("/driver/" + driverId, { userType, fullName, mobileNumber, email, password })
+}
 
 /**
  * Delete driver API call
  * @param driverId
  * @returns
  */
-export const deleteDriver = (driverId: string | number) => {
+export const deleteDriver = (driverId: string | number): Promise<any> => {
   return API.delete("/driver/" + driverId);
 };
 
-/**
- * get freelance drivers payment status list api call
- * @param page
- * @param perPage
- * @param search
- * @param paymentStatus
- * @returns
- */
-export const getFreelanceDriversPaymentAPI = (
-  search: string | number | null,
-  page: number,
-  perPage: number,
-  paymentStatus: string | number | null
-): Promise<any> => {
-  return API.get("/drivers/freelance/payment", {
-    params: { search, page, perPage, paymentStatus },
-  });
-};
-
-export const getDriverLocationAPI = (driverId: string): Promise<any> => {
-  return API.get("/drivers/location/" + driverId);
-};
+export const addNewDriverAPI = (fullName: string, email: string, countryCode: string | number, mobileNumber: string | number, password: string, userType: string, address?: string, vehicle?: string | number, location?: string, image?: string): Promise<any> => {
+  return API.post("/driver", { fullName, email, countryCode, mobileNumber, password, userType, address, vehicle, location, image })
+}

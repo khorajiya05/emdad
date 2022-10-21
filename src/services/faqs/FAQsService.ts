@@ -22,7 +22,7 @@ export const getFAQsById = (FAQsId: string | number): Promise<any> => {
  * delete FAQs by id api call
  * @param
  */
-export const deleteFAQsById = (FAQsId: string): Promise<any> => {
+export const deleteFAQsById = (FAQsId: string | number | null): Promise<any> => {
     return API.delete("/FAQs/" + FAQsId)
 }
 
@@ -33,8 +33,8 @@ export const deleteFAQsById = (FAQsId: string): Promise<any> => {
  * @returns 
  */
 
-export const updateFAQsById = (values: TFAQsDetail): Promise<any> => {
-    return API.put("/FAQs/" + values?.id, { answer: values?.answer, question: values?.question });
+export const updateFAQsById = (values: Partial<TFAQsDetail>): Promise<any> => {
+    return API.put("/faqs/" + values?.id, { answer: values?.answer, question: values?.question });
 }
 
 /**
@@ -43,6 +43,6 @@ export const updateFAQsById = (values: TFAQsDetail): Promise<any> => {
  * @returns 
  */
 
-export const addNewFAQs = (value: TFAQsDetail): Promise<any> => {
+export const addNewFAQs = (value: Partial<TFAQsDetail>): Promise<any> => {
     return API.post("/FAQs/", value);
 }

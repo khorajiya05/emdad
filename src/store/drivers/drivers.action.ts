@@ -15,9 +15,9 @@ const driversLoadingAction = () => action(DriversActionTypeEnum.DRIVERS_LOADING)
 const driversLoadedAction = () => action(DriversActionTypeEnum.DRIVERS_LOADED);
 
 /**
- * get vendor drivers action creator
- * @param vendorDriversList
- * @returns
+ * get all drivers action creator
+ * @param DriversList 
+ * @returns 
  */
 const getAllDriversAction = (DriversList: TGetDriversPayload) => action(DriversActionTypeEnum.GET_ALL_DRIVERS, DriversList);
 
@@ -32,13 +32,6 @@ const getDriverByIdAction = (payload: {
 }) => action(DriversActionTypeEnum.GET_DRIVER_BY_ID, payload);
 
 /**
- * delete driver action creator
- * @param payload 
- * @returns 
- */
-const deleteDriverAction = (payload: string | number) => action(DriversActionTypeEnum.DELETE_DRIVER, payload);
-
-/**
  * get timeslots of driver action creator
  * @param payload 
  * @returns 
@@ -51,5 +44,4 @@ export {
   getAllDriversAction,
   getDriverByIdAction,
   getDriverTimeSlotsAction,
-  deleteDriverAction,
 };

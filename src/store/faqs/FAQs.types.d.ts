@@ -13,7 +13,7 @@ type TFAQsDetail = {
 
 type TFAQsState = {
     loading: boolean;
-    FAQsData: { FAQs: TFAQsDetail[], count: number };
+    FAQsData: { FAQs: TFAQsDetail[] };
     singleFAQsData: TFAQsDetail
 }
 

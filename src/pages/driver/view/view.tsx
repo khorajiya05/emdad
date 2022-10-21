@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect } from "react";
 import { useState } from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import Sidebar from "../../../components/sidebar/sidebar";
 import Header from "../../../components/header/header"
@@ -18,8 +18,10 @@ const ViewOrder: React.FC<Props> = ({ children }) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
+  const location = useLocation();
 
   const { driverId } = useParams();
+  const { state } = location;
   const { driver, timeSlots } = useSelector((state: TRootState) => state?.drivers?.singleDriverData)
 
   const [show, setShow] = useState<boolean>(false);
@@ -29,7 +31,7 @@ const ViewOrder: React.FC<Props> = ({ children }) => {
   };
 
   const handleRedirectToDriver = () => {
-    navigate("/drivers");
+    navigate("/drivers", { state: { page: state?.page } });
   };
 
   useEffect(() => {
@@ -71,6 +73,7 @@ const ViewOrder: React.FC<Props> = ({ children }) => {
                     <li className="nav-item" role="presentation">
                       <NavLink
                         to={`/drivers/view/${driverId}/basic-details`}
+                        state={{ page: state?.page }}
                         className={(navData) => navData.isActive ? "nav-link show active" : "nav-link"}
                       >
                         Basic Details
@@ -79,6 +82,7 @@ const ViewOrder: React.FC<Props> = ({ children }) => {
                     <li className="nav-item" role="presentation">
                       <NavLink
                         to={`/drivers/view/${driverId}/upcoming-orders`}
+                        state={{ page: state?.page }}
                         className={(navData) => navData.isActive ? "nav-link show active" : "nav-link"}
                       >
                         Upcoming Order
@@ -87,6 +91,7 @@ const ViewOrder: React.FC<Props> = ({ children }) => {
                     <li className="nav-item" role="presentation">
                       <NavLink
                         to={`/drivers/view/${driverId}/assign-timeslots`}
+                        state={{ page: state?.page }}
                         className={(navData) => navData.isActive ? "nav-link show active" : "nav-link"}
                       >
                         Assign Timeslots

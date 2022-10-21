@@ -9,16 +9,17 @@ import { AppendedMyComponent } from '../appendToBody/appendToBody';
 import StateChangeModal from '../modal/stateChange-modal';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
-import { deleteDriverActionThunk } from '../../store/drivers/drivers.actions.async';
+import { deleteDriverActionThunk, updateStatusOfDriverActionThunk } from '../../store/drivers/drivers.actions.async';
 import DeleteModal from '../modal/delete-modal';
 import { Link } from 'react-router-dom';
-
 interface Props {
     setFilter: React.Dispatch<SetStateAction<string>>;
     filter: string;
     setFilterBy: React.Dispatch<SetStateAction<string>>;
+    fetchData?: Function;
+    page?: number;
 }
-const DriversList: React.FC<Props> = ({ setFilter, filter, setFilterBy }) => {
+const DriversList: React.FC<Props> = ({ setFilter, filter, setFilterBy, fetchData, page }) => {
 
     const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
 
@@ -26,10 +27,21 @@ const DriversList: React.FC<Props> = ({ setFilter, filter, setFilterBy }) => {
 
     const [id, setId] = useState<number | string>("");
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+    const [showStatusModal, setShowStatusModal] = useState<boolean>(false);
+    const [statusWithId, setStatusWithId] = useState<{ driverId: string | number, status: boolean } | null>(null)
 
     const handleDelete = () => {
         setShowDeleteModal(false);
-        dispatch(deleteDriverActionThunk(id));
+        dispatch(deleteDriverActionThunk(id, fetchData));
+    }
+
+    const closeStatusModal = (isShow: boolean) => {
+        setStatusWithId(null)
+        setShowStatusModal(isShow);
+    }
+    const handleStatusChange = () => {
+        setShowStatusModal(false);
+        statusWithId && dispatch(updateStatusOfDriverActionThunk(statusWithId?.driverId, statusWithId?.status, fetchData))
     }
     return (
         <>
@@ -80,7 +92,14 @@ const DriversList: React.FC<Props> = ({ setFilter, filter, setFilterBy }) => {
                                         </span>
                                     </td>
                                     <td className="table-field-status">
-                                        <OrderStatus status={driver?.driver?.isActive === true ? "active" : "inactive"} />
+                                        <span className="sorting"
+                                            onClick={() => {
+                                                setShowStatusModal(true);
+                                                setStatusWithId({ driverId: driver?.driver?.id, status: !driver?.driver?.isActive })
+                                            }}
+                                        >
+                                            <OrderStatus status={driver?.driver?.isActive === true ? "active" : "inactive"} />
+                                        </span>
                                     </td>
 
                                     <td className="table-field-actions">
@@ -94,23 +113,17 @@ const DriversList: React.FC<Props> = ({ setFilter, filter, setFilterBy }) => {
                                             <AppendedMyComponent>
                                                 <Dropdown.Menu>
                                                     <Dropdown.Item href="/driver/assign-timeslot">
-                                                        <i className="fa fa-plus fa-fw text-accent-custom"></i>
-                                                        Assign Slot
+                                                        <i className="fa fa-plus fa-fw text-accent-custom"></i>Assign Slot
                                                     </Dropdown.Item>
-                                                    <Dropdown.Item as={Link} to={`/drivers/view/${driver?.driver?.id}/basic-details`}>
-                                                        <i className="fa fa-info-circle fa-fw text-accent-custom"></i>
-                                                        View
+                                                    <Dropdown.Item as={Link} to={`/drivers/view/${driver?.driver?.id}/basic-details`} state={{ page: page }}>
+                                                        <i className="fa fa-info-circle fa-fw text-accent-custom"></i>View
                                                     </Dropdown.Item>
-                                                    <Dropdown.Item
-                                                        href="/driver/form"
-                                                    >
-                                                        <i className="fa fa-edit fa-fw text-accent-custom"></i>
-                                                        Edit
+                                                    <Dropdown.Item as={Link} to={`/drivers/${driver?.driver?.id}`} state={{ page: page }}>
+                                                        <i className="fa fa-edit fa-fw text-accent-custom"></i>Edit
                                                     </Dropdown.Item>
                                                     <Dropdown.Item
-                                                        href="#"
                                                         onClick={() => {
-                                                            setId(driver?.id);
+                                                            setId(driver?.driver?.id);
                                                             setShowDeleteModal(true);
                                                         }}
                                                     >
@@ -127,7 +140,7 @@ const DriversList: React.FC<Props> = ({ setFilter, filter, setFilterBy }) => {
                     </tbody>
                 </table>
             </div>
-            <StateChangeModal />
+            <StateChangeModal show={showStatusModal} setShow={closeStatusModal} handleStatusChange={handleStatusChange} />
             <DeleteModal show={showDeleteModal} setShow={setShowDeleteModal} handleDelete={handleDelete} />
         </>
     )

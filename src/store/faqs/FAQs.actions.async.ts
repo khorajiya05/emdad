@@ -1,7 +1,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { FAQsLoadedAction, FAQsLoadingAction, getAllFAQsAction, deleteFAQsAction, getFAQsByIdAction, updateFAQsAction, addFAQsAction } from './FAQs.action';
+import { FAQsLoadedAction, FAQsLoadingAction, getAllFAQsAction, deleteFAQsAction, getFAQsByIdAction } from './FAQs.action';
 import * as requestFromServer from '../../services/faqs/FAQsService'
 import { errorToast, successToast } from '../../components/toast/toast';
 import { TFAQsDetail } from './FAQs.types';
@@ -36,12 +36,13 @@ export const getAllFAQsActionThunk = (language: string, userType: string): Thunk
  * @param id
  * @returns
  */
-export const deleteFAQsActionThunk = (id: string): ThunkAction<void, {}, {}, AnyAction> => {
+export const deleteFAQsActionThunk = (id: string | number | null): ThunkAction<void, {}, {}, AnyAction> => {
     return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
         dispatch(FAQsLoadingAction());
         requestFromServer
             .deleteFAQsById(id)
             .then((res) => {
+                dispatch(FAQsLoadedAction());
                 dispatch(deleteFAQsAction(id));
                 successToast("FAQ deleted successfully");
             })
@@ -63,7 +64,7 @@ export const getFAQsByIdActionThunk = (id: string | number): ThunkAction<void, {
         requestFromServer.getFAQsById(id)
             .then((res) => {
                 dispatch(FAQsLoadedAction());
-                dispatch(getFAQsByIdAction(res.data));
+                dispatch(getFAQsByIdAction(res.data?.data?.faqs));
             })
             .catch((err) => {
                 dispatch(FAQsLoadedAction());
@@ -73,13 +74,13 @@ export const getFAQsByIdActionThunk = (id: string | number): ThunkAction<void, {
 }
 
 
-export const updateFAQsActionThunk = (values: TFAQsDetail): ThunkAction<void, {}, {}, AnyAction> => {
+export const updateFAQsActionThunk = (values: Partial<TFAQsDetail>, getAction?: Function): ThunkAction<void, {}, {}, AnyAction> => {
     return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
         dispatch(FAQsLoadingAction());
         requestFromServer.updateFAQsById(values)
             .then((res) => {
                 dispatch(FAQsLoadedAction());
-                dispatch(updateFAQsAction(res.data));
+                getAction && getAction();
                 successToast("FAQ updated successfully");
             })
             .catch((err) => {
@@ -89,13 +90,13 @@ export const updateFAQsActionThunk = (values: TFAQsDetail): ThunkAction<void, {}
     }
 }
 
-export const addFAQsActionThunk = (values: TFAQsDetail): ThunkAction<void, {}, {}, AnyAction> => {
+export const addFAQsActionThunk = (values: Partial<TFAQsDetail>, getAction?: Function): ThunkAction<void, {}, {}, AnyAction> => {
     return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
         dispatch(FAQsLoadingAction());
         requestFromServer.addNewFAQs(values)
             .then((res) => {
                 dispatch(FAQsLoadedAction());
-                dispatch(addFAQsAction(res.data))
+                getAction && getAction();
                 successToast("FQA added successfully");
             })
             .catch((error) => {

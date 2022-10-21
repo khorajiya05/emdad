@@ -35,7 +35,7 @@ const RolesPermissionsList: React.FC = () => {
     }
 
     const handleRedirectToRolespermissions = () => {
-        navigate("/settings/roles-permissions/new");
+        navigate("/settings/roles-permissions/new", { state: { page: page } });
     };
 
     return (
