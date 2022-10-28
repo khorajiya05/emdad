@@ -11,6 +11,9 @@ import { TDriverHandBookState } from "./driverHandBook/driverHandBook.types";
 import { TEmailTemplateState } from "./emailTemplate/emailTemplate.types";
 import { TFAQsState } from "./faqs/FAQs.types";
 import { TUsersState } from "./users/users.types";
+import { TAppSettingsState } from "./appSettings/appSettings.types";
+import { TTimeSlotState } from "./timesSlot/timeSlot.types";
+
 
 
 
@@ -29,6 +32,10 @@ type TRootState = {
   emailTemplate: TEmailTemplateState;
   faqs: TFAQsState;
   users: TUsersState;
+  appSetting: TAppSettingsState;
+  timeSlot: TTimeSlotState;
+
+
 
 
 };

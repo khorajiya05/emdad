@@ -16,6 +16,9 @@ import driverHandBookReducer from "./driverHandBook/driverHandBook.reducer";
 import emailTemplateReducer from "./emailTemplate/emailTemplate.reducer";
 import FAQsReducer from "./faqs/FAQs.reducer";
 import usersReducer from "./users/users.reducer";
+import appSettingsReducer from "./appSettings/appSettings.reducer";
+import timeSlotReducer from "./timesSlot/timeSlot.reducer";
+
 
 
 const reducers: Reducer<CombinedState<any>, any> = combineReducers({
@@ -32,6 +35,9 @@ const reducers: Reducer<CombinedState<any>, any> = combineReducers({
   emailTemplate: emailTemplateReducer,
   faqs: FAQsReducer,
   users: usersReducer,
+  appSetting:appSettingsReducer,
+  timeSlot: timeSlotReducer,
+
   
 
 });

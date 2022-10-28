@@ -164,7 +164,7 @@ export const privateRoutes = [
     element: lazy(() => import("../pages/notification/form")),
   },
   {
-    path: "/app-settings",
+    path: "settings/app-settings/:type",
     element: lazy(() => import("../pages/app-settings/list")),
   },
   {

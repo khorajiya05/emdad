@@ -1,11 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import Header from "../../components/header/header";
 import Sidebar from "../../components/sidebar/sidebar";
-import { Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
-import Bahrs from "../../assets/img/bahrs.png";
-import Suburban from "../../assets/img/suburban.png";
-import User from "../../assets/img/user.jpg";
-import { Accordion } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 const AssignTimeslot: React.FC = () => {
@@ -14,12 +10,9 @@ const AssignTimeslot: React.FC = () => {
   const [show, setShow] = useState<boolean>(false);
   const navigate = useNavigate();
   const handleClose = () => {
-    // setState({ show: false });
     setShow(false);
   };
-  const handleShow = () => {
-    setShow(true);
-  };
+
   const handleRedirectToOrder = () => {
     navigate("/driver/list");
   };
@@ -38,11 +31,6 @@ const AssignTimeslot: React.FC = () => {
                 <div className="mr-auto">
                   <h1>Assign Timeslots : Abdul Kareem</h1>
                 </div>
-                {/* <div className="m-l-10">
-                                        <button className="btn btn-secondary" onClick={() => handleRedirectToOrder()}>
-                                            <i className="fa fa-angle-left">&nbsp;</i> Back
-                                        </button>
-                                    </div> */}
               </div>
             </header>
             <section className="page-content container-fluid">
@@ -1245,6 +1233,7 @@ const AssignTimeslot: React.FC = () => {
         </Modal.Header>
         <Modal.Body>
           <iframe
+            title=" "
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.8219652911444!2d72.49649711496726!3d22.993573384967775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e84576f8f3c2d%3A0x43df72e8efb0b1ac!2sPeerbits!5e0!3m2!1sen!2sin!4v1635418479463!5m2!1sen!2sin"
             width="100%"
             height="400"

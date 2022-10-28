@@ -65,7 +65,7 @@ const FaqList: React.FC = () => {
                       <div className="card" key={faq?.id}>
                         <div className="card-header" id={`headingFaq${String(faq?.id)}`}>
                           <button
-                            className="btn btn-link "
+                            className="btn btn-link collapsed"
                             type="button"
                             data-toggle="collapse"
                             data-target={`#collapseFaq${String(faq?.id)}`}

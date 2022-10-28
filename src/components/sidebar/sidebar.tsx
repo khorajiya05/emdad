@@ -47,7 +47,7 @@ const Sidebar: React.FC = () => {
       title: "Notifications"
     },
     {
-      to: "/app-settings",
+      to: "/settings/app-settings/general",
       icon: "icons dripicons-gear",
       title: "App Settings"
     },
