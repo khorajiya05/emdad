@@ -81,6 +81,29 @@ export const deleteDriver = (driverId: string | number): Promise<any> => {
   return API.delete("/driver/" + driverId);
 };
 
+/**
+ * get timeslot by day api call
+ * @param day 
+ * @returns 
+ */
+export const getTimeslotByDayAPI = (day: number): Promise<any> => {
+  return API.get("/timeSlots", { params: { day } });
+}
+
+/**
+ * add new driver api call
+ * @param fullName 
+ * @param email 
+ * @param countryCode 
+ * @param mobileNumber 
+ * @param password 
+ * @param userType 
+ * @param address 
+ * @param vehicle 
+ * @param location 
+ * @param image 
+ * @returns 
+ */
 export const addNewDriverAPI = (fullName: string, email: string, countryCode: string | number, mobileNumber: string | number, password: string, userType: string, address?: string, vehicle?: string | number, location?: string, image?: string): Promise<any> => {
   return API.post("/driver", { fullName, email, countryCode, mobileNumber, password, userType, address, vehicle, location, image })
 }

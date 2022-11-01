@@ -5,7 +5,8 @@ const INITIAL_STATE: TDriversState = {
   loading: false,
   AllDriversList: { drivers: [], count: 0 },
   driverId: "",
-  singleDriverData: { driver: {} as TDriverDetailsPayload, timeSlots: {} as TDriverTimeSlotsPayload }
+  singleDriverData: { driver: {} as TDriverDetailsPayload, timeSlots: {} as TDriverTimeSlotsPayload },
+  timeslotsByDay: []
 };
 
 const driversReducer = (state = INITIAL_STATE, action: TDriversActionType): TDriversState => {
@@ -27,6 +28,9 @@ const driversReducer = (state = INITIAL_STATE, action: TDriversActionType): TDri
 
     case DriversActionTypeEnum.GET_DRIVER_TIMESLOTS:
       return { ...state, loading: false, singleDriverData: { ...state?.singleDriverData, timeSlots: action?.payload } }
+
+    case DriversActionTypeEnum.GET_TIMESLOTS_BY_DAY:
+      return { ...state, loading: false, timeslotsByDay: action.payload };
 
     default:
       return state;

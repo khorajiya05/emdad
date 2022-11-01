@@ -1,19 +1,26 @@
-import axios from "axios";
+import moment from "moment";
+import { API } from "../../middleware/middleware";
 import { TUserDetails } from "../../store/users/users.types";
-
-
-
-export const API = axios.create({
-    baseURL: "http://localhost:3000",
-});
-
 
 /**
  * get all users api call
  * @returns
  */
-export const getAllUsers = (): Promise<any> => {
-    return API.get("/usersData");
+export const getAllUsers = (
+    search: string | null,
+    page: number,
+    perPage: number,
+    sort: string,
+    sortBy?: string | null
+): Promise<any> => {
+    return API.get("/reports/customers", {
+        params: {
+            search,
+            page,
+            perPage,
+            sort
+        },
+    });
 };
 
 /**
@@ -28,8 +35,8 @@ export const getUserById = (id: string): Promise<any> => {
  * delete driver by id api call
  * @param
  */
-export const deleteUserById = (id: string): Promise<any> => {
-    return API.delete("/usersData/" + id)
+export const deleteUserById = (id: string | number): Promise<any> => {
+    return API.delete("/users/" + id)
 }
 
 /**
@@ -39,7 +46,7 @@ export const deleteUserById = (id: string): Promise<any> => {
  * @returns 
  */
 
-export const updateUserById = (id: string, value:any): Promise<any> => {
+export const updateUserById = (id: string, value: any): Promise<any> => {
     return API.put("/usersData/" + id, value);
 }
 
@@ -49,7 +56,7 @@ export const updateUserById = (id: string, value:any): Promise<any> => {
  * @returns 
  */
 
-export const addNewUser = (value:TUserDetails):Promise<any>=>{
-    return API.post("/usersData/",value);
+export const addNewUser = (value: TUserDetails): Promise<any> => {
+    return API.post("/usersData/", value);
 }
 

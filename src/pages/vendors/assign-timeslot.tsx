@@ -1,31 +1,19 @@
-import React, { Component } from "react";
+import React from "react";
 import Header from "../../components/header/header";
 import Sidebar from "../../components/sidebar/sidebar";
-import { Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
-import Bahrs from "../../assets/img/bahrs.png";
-import Suburban from "../../assets/img/suburban.png";
-import User from "../../assets/img/user.jpg";
-import { Accordion } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 const AssignTimeslot: React.FC = () => {
-  // constructor() {
-  //     super();
-  //     state = {
-  //         tabValue: 1,
-  //         show: false,
-  //     };
-  // }
+
   const [tabValue, setTabValue] = useState<number>(1);
   const [show, setShow] = useState<boolean>(false);
   const navigate = useNavigate();
+  
   const handleClose = () => {
-    // setState({ show: false });
     setShow(false);
   };
-  const handleShow = () => {
-    setShow(true);
-  };
+
   const handleRedirectToOrder = () => {
     navigate("/driver/list");
   };
@@ -44,11 +32,6 @@ const AssignTimeslot: React.FC = () => {
                 <div className="mr-auto">
                   <h1>Assign Timeslots : Norbert Mankowski</h1>
                 </div>
-                {/* <div className="m-l-10">
-                                        <button className="btn btn-secondary" onClick={() => handleRedirectToOrder()}>
-                                            <i className="fa fa-angle-left">&nbsp;</i> Back
-                                        </button>
-                                    </div> */}
               </div>
             </header>
             <section className="page-content container-fluid">

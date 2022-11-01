@@ -6,17 +6,24 @@ import { Modal } from "react-bootstrap";
 import { useState } from "react";
 import Pagination from "../../components/pagination/pagination";
 import UsersLists from "../../components/user/users-list";
+import { useDispatch, useSelector } from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction } from "redux";
+import { getAllUsersActionThunk } from "../../store/users/users.actions.async";
+import TRootState from "../../store/root.types";
 
 const UserList: React.FC = () => {
 
+  const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
   const navigate = useNavigate();
   const location = useLocation();
 
   const { state } = location;
+  const { perPageItems } = useSelector((state: TRootState) => state.pagination)
 
   const [page, setPage] = useState<number>(Number(state?.page) || 1)
   const [sort, setSort] = useState<string>("ASC");
-  const [sortBy, setSortBy] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("fullName");
   const [searchUser, setSearchUser] = useState<string | null>("")
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
@@ -28,8 +35,13 @@ const UserList: React.FC = () => {
   };
 
   const fetchUsers = () => {
-    console.log("feched..");
-
+    dispatch(getAllUsersActionThunk(
+      searchUser || null,
+      page,
+      perPageItems,
+      sort,
+      sortBy
+    ))
   }
 
   return (
@@ -53,16 +65,37 @@ const UserList: React.FC = () => {
                       className="form-control"
                       placeholder="Search"
                       title="Search"
+                      value={searchUser || ""}
+                      onChange={(e) => setSearchUser(e.target.value)}
                     />
                     <div className="input-group-append">
                       <button
                         type="button"
                         className="input-group-text pointer"
+                        onClick={() => fetchUsers()}
                       >
                         <span className="fa fa-search"></span>
                       </button>
                     </div>
                   </div>
+                </div>
+                <div className="m-l-10">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      setSearchUser("");
+                      dispatch(getAllUsersActionThunk(
+                        null,
+                        page,
+                        perPageItems,
+                        sort,
+                        sortBy
+                      ))
+                    }}
+                  >
+                    Reset
+                  </button>
                 </div>
                 <div className="m-l-10">
                   <button
@@ -79,7 +112,7 @@ const UserList: React.FC = () => {
               <div className="card">
                 <div className="card-body p-0">
                   <Pagination
-                    ItemsComponent={() => <UsersLists page={page} filter={sort} setFilter={setSortBy} setFilterBy={setSortBy} />}
+                    ItemsComponent={UsersLists}
                     pageCount={0}
                     dispatchAction={fetchUsers}
                     page={page}

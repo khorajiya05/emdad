@@ -21,8 +21,7 @@ const usersLoadedAction = () => action(UsersActionTypeEnum.USERS_LOADED);
 * get users action creator
 * @returns
 */
-const getAllUsersAction = (payload: TUserDetailsPayload) =>
-    action(UsersActionTypeEnum.GET_ALL_USERS, payload);
+const getAllUsersAction = (payload: { customers: TUserDetailsPayload, count: number }) => action(UsersActionTypeEnum.GET_ALL_USERS, payload);
 
 /**
  * get user by id action creator

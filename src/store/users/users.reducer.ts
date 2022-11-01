@@ -1,9 +1,6 @@
 import UsersActionTypeEnum from "./users.enum"
 import { TUsersState, TUsersActionType } from "./users.types"
 
-
-
-
 const INITIAL_STATE: TUsersState = {
     loading: false,
     usersData: { users: [], count: 0 },
@@ -19,7 +16,7 @@ const usersReducer = (state = INITIAL_STATE, action: TUsersActionType) => {
             return { ...state, loading: false }
 
         case UsersActionTypeEnum.GET_ALL_USERS:
-            return { ...state, loading: false, usersData: { users: action.payload } }
+            return { ...state, loading: false, usersData: { users: action.payload?.customers, count: action?.payload?.count } }
 
         case UsersActionTypeEnum.GET_USER_BY_ID:
             return { ...state, loading: false, singleUsersData: action.payload }
@@ -27,7 +24,7 @@ const usersReducer = (state = INITIAL_STATE, action: TUsersActionType) => {
         case UsersActionTypeEnum.DELETE_USER:
             {
                 const userData = [...state?.usersData?.users]
-                const userIndex = userData.findIndex((user) => user.id === action?.payload?.userId)
+                const userIndex = userData.findIndex((user) => user.user_id === action?.payload?.userId)
                 if (userIndex > -1) {
                     userData.splice(userIndex, 1)
                 }

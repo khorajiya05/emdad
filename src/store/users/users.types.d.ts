@@ -1,14 +1,19 @@
+import { ActionType } from 'typesafe-actions';
+import * as actions from "./users.action";
 
 type TUsersActionType = ActionType<typeof actions>;
 
 type TUserDetails = {
-    id: string;
-    name: string;
-    phone: string;
-    email: string;
-    status: string;
-    totalOrders: number;
-    password: string;
+    TotalAmountPaid: null | number;
+    TotalOrders: number;
+    user_country_code: string;
+    user_created_at: string;
+    user_email: null | string
+    user_full_name: string;
+    user_id: string
+    user_is_active: boolean;
+    user_mobile_number: number;
+    user_user_type: string;
 }
 
 type TUserDetailsPayload = TUserDetails[]

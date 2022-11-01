@@ -1,6 +1,6 @@
 import { action } from "typesafe-actions";
 import DriversActionTypeEnum from "./drivers.enum";
-import { TDriverDetailsPayload, TDriverTimeSlotsPayload, TGetDriversPayload } from "./drivers.types";
+import { TDriverDetailsPayload, TDriverTimeSlotsPayload, TGetDriversPayload, TGetTimeslotsByDayType } from "./drivers.types";
 
 /**
  * drivers loading action creator
@@ -38,10 +38,13 @@ const getDriverByIdAction = (payload: {
  */
 const getDriverTimeSlotsAction = (payload: TDriverTimeSlotsPayload) => action(DriversActionTypeEnum.GET_DRIVER_TIMESLOTS, payload)
 
+const getTimeslotByDayAction = (payload: TGetTimeslotsByDayType) => action(DriversActionTypeEnum.GET_TIMESLOTS_BY_DAY, payload)
+
 export {
   driversLoadingAction,
   driversLoadedAction,
   getAllDriversAction,
   getDriverByIdAction,
   getDriverTimeSlotsAction,
+  getTimeslotByDayAction,
 };

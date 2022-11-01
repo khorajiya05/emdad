@@ -220,15 +220,11 @@ const AppSettingOrders = () => {
                                                     <span className="text-danger">Value is too long</span>
                                                 ) : null)}
                                         </div>
-
                                     </div>
                                     <div className="form-group row">
                                         <label className="control-label text-md-right col-md-3">{appSettingOrders[4]?.label}<span className="text-danger">*</span></label>
                                         <div className="col-md-5">
                                             <div className="input-group">
-                                                <div className="input-group-append">
-                                                    <span className="input-group-text">SDG</span>
-                                                </div>
                                                 <input
                                                     type="number"
                                                     className="form-control"
@@ -238,7 +234,9 @@ const AppSettingOrders = () => {
                                                     }}
                                                     step={0.1}
                                                 />
-
+                                                <div className="input-group-append">
+                                                    <span className="input-group-text">kg</span>
+                                                </div>
                                             </div>
                                             {(value5 === "" ? <span className="text-danger">This field is required</span> : null) ||
                                                 (value5 < 0 ? (
@@ -266,7 +264,7 @@ const AppSettingOrders = () => {
                                                     step={0.1}
                                                 />
                                                 <div className="input-group-append">
-                                                    <span className="input-group-text">%</span>
+                                                    <span className="input-group-text">kg</span>
                                                 </div>
                                             </div>
                                             {(value6 === "" ? <span className="text-danger">This field is required</span> : null) ||
@@ -280,34 +278,6 @@ const AppSettingOrders = () => {
                                                 ) : null)}
                                         </div>
 
-                                    </div>
-                                    <div className="form-group row">
-                                        <label className="control-label text-md-right col-md-3">{appSettingOrders[6]?.label}<span className="text-danger">*</span></label>
-                                        <div className="col-md-5">
-                                            <div className="input-group">
-                                                <input
-                                                    type="number"
-                                                    className="form-control"
-                                                    value={value7}
-                                                    onChange={(e) => {
-                                                        setValue7(e.target.value);
-                                                    }}
-                                                    step={0.1}
-                                                />
-                                                <div className="input-group-append">
-                                                    <span className="input-group-text">kg</span>
-                                                </div>
-                                            </div>
-                                            {(value7 === "" ? <span className="text-danger">This field is required</span> : null) ||
-                                                (value7 < 0 ? (
-                                                    <span className="text-danger">
-                                                        Please enter positive value <br />
-                                                    </span>
-                                                ) : null) ||
-                                                (value7?.toString()?.length > 10 ? (
-                                                    <span className="text-danger">Value is too long</span>
-                                                ) : null)}
-                                        </div>
                                     </div>
                                     <div className="form-group row">
                                         <label className="control-label text-md-right col-md-3"></label>

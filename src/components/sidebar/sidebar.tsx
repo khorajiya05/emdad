@@ -44,12 +44,14 @@ const Sidebar: React.FC = () => {
     {
       to: "/settings/notifications/received",
       icon: "icons dripicons-bell",
-      title: "Notifications"
+      title: "Notifications",
+      eKey: "/settings/notifications"
     },
     {
-      to: "/settings/app-settings/general",
+      to: "/settings/app-settings/orders",
       icon: "icons dripicons-gear",
-      title: "App Settings"
+      title: "App Settings",
+      eKey: "/settings/app-settings"
     },
     {
       to: "/settings/email-templates",
@@ -59,7 +61,8 @@ const Sidebar: React.FC = () => {
     {
       to: "/settings/cms/customers",
       icon: "icons dripicons-document",
-      title: "CMS Pages"
+      title: "CMS Pages",
+      eKey: "/settings/cms"
     },
     {
       to: "/settings/driverhandbook",
@@ -80,7 +83,7 @@ const Sidebar: React.FC = () => {
             <ul className="nav metismenu">
               {
                 navItems?.map((item) => (
-                  <Nav.Link as="li" eventKey={item?.to} key={item?.to} >
+                  <Nav.Link as="li" eventKey={item?.eKey ? (location?.pathname.search(item?.eKey) === 0 ? location?.pathname : item?.to) : item?.to} key={item?.to} >
                     <Link to={item?.to}>
                       <i className={item?.icon}></i>
                       <span>{item?.title}</span>

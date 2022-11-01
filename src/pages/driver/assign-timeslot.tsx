@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../components/header/header";
 import Sidebar from "../../components/sidebar/sidebar";
 import { Modal } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { getTimeslotByDayActionThunk } from "../../store/drivers/drivers.actions.async";
+
 const AssignTimeslot: React.FC = () => {
+
+  const dispatch = useDispatch<ThunkDispatch<{}, {}, AnyAction>>();
 
   const [tabValue, setTabValue] = useState<number>(1);
   const [show, setShow] = useState<boolean>(false);
@@ -16,6 +23,10 @@ const AssignTimeslot: React.FC = () => {
   const handleRedirectToOrder = () => {
     navigate("/driver/list");
   };
+
+  useEffect(() => {
+    dispatch(getTimeslotByDayActionThunk(tabValue))
+  }, [tabValue, dispatch])
 
   return (
     <React.Fragment>

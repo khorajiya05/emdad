@@ -18,15 +18,19 @@ import { TUserDetails } from "./users.types";
  * get users thunk
  * @returns
  */
-
-export const getAllUsersActionThunk = (): ThunkAction<void, {}, {}, AnyAction> => {
+export const getAllUsersActionThunk = (
+    search: string | null,
+    page: number,
+    perPage: number,
+    sort: string,
+    sortBy?: string | null
+): ThunkAction<void, {}, {}, AnyAction> => {
     return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
-
         dispatch(usersLoadingAction());
-        requestFromServer.getAllUsers()
+        requestFromServer.getAllUsers(search, page, perPage, sort, sortBy)
             .then(res => {
                 dispatch(usersLoadedAction());
-                dispatch(getAllUsersAction(res.data));
+                dispatch(getAllUsersAction({ customers: res.data?.customers, count: res.data?.count }));
             })
             .catch((error) => {
                 dispatch(usersLoadedAction());
@@ -67,13 +71,13 @@ export const getUserByIdActionThunk = (userId: string) => {
  * @param
  */
 
-export const deleteUserActionThunk = (userId: string) => {
+export const deleteUserActionThunk = (userId: string | number, fetchData?:Function) => {
     return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
         dispatch(usersLoadingAction());
         requestFromServer.deleteUserById(userId)
             .then((res) => {
                 dispatch(usersLoadedAction());
-                dispatch(deleteUserAction({ userId }));
+                fetchData && fetchData();
                 successToast("User deleted successfully");
             })
             .catch((err) => {

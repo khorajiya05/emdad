@@ -67,8 +67,8 @@ const DriversList: React.FC<Props> = ({ setFilter, filter, setFilterBy, fetchDat
                     <tbody>
                         {loading ? (
                             <tr><td colSpan={8} style={{ textAlign: "center" }}><BarsLoader /></td></tr>
-                        ) : (
-                            drivers?.map((driver, index) => (
+                        ) : drivers?.length > 0 ?
+                            (drivers?.map((driver, index) => (
                                 <tr key={index}>
                                     <td>
                                         <div className="media">
@@ -101,7 +101,6 @@ const DriversList: React.FC<Props> = ({ setFilter, filter, setFilterBy, fetchDat
                                             <OrderStatus status={driver?.driver?.isActive === true ? "active" : "inactive"} />
                                         </span>
                                     </td>
-
                                     <td className="table-field-actions">
                                         <Dropdown className="btn-group">
                                             <Dropdown.Toggle
@@ -136,7 +135,7 @@ const DriversList: React.FC<Props> = ({ setFilter, filter, setFilterBy, fetchDat
                                     </td>
                                 </tr>
                             ))
-                        )}
+                            ) : <tr><td colSpan={6} style={{ textAlign: "center" }}>No drivers available</td></tr>}
                     </tbody>
                 </table>
             </div>

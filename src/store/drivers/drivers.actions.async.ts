@@ -1,6 +1,6 @@
 import { ThunkDispatch, ThunkAction } from "redux-thunk";
 import { AnyAction } from "redux";
-import { driversLoadingAction, driversLoadedAction, getAllDriversAction, getDriverByIdAction, getDriverTimeSlotsAction } from "./drivers.action";
+import { driversLoadingAction, driversLoadedAction, getAllDriversAction, getDriverByIdAction, getDriverTimeSlotsAction, getTimeslotByDayAction } from "./drivers.action";
 import { errorToast, successToast } from "../../components/toast/toast";
 import * as requestFromServer from "../../services/drivers/driversService";
 
@@ -159,6 +159,21 @@ export const updateDriverActionthunk = (userType: string, driverId: string | num
   }
 }
 
+/**
+ * add new Driver action thunk
+ * @param fullName 
+ * @param email 
+ * @param countryCode 
+ * @param mobileNumber 
+ * @param password 
+ * @param userType 
+ * @param getAction 
+ * @param address 
+ * @param vehicle 
+ * @param location 
+ * @param image 
+ * @returns 
+ */
 export const addNewDriverActionThunk = (fullName: string, email: string, countryCode: string | number, mobileNumber: string | number, password: string, userType: string, getAction?: Function, address?: string, vehicle?: string | number, location?: string, image?: string) => {
   return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(driversLoadingAction());
@@ -173,5 +188,19 @@ export const addNewDriverActionThunk = (fullName: string, email: string, country
         errorToast(err?.response?.data?.message || "Something went wrong");
       });
   }
+}
 
+export const getTimeslotByDayActionThunk = (day: number) => {
+  return (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+    dispatch(driversLoadingAction());
+    requestFromServer.getTimeslotByDayAPI(day)
+      .then((res) => {
+        dispatch(getTimeslotByDayAction(res.data?.data?.time));
+        dispatch(driversLoadedAction());
+      })
+      .catch((error) => {
+        dispatch(driversLoadedAction());
+        errorToast(error?.response?.data?.message || "something went wrong");
+      })
+  }
 }

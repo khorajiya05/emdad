@@ -1027,7 +1027,7 @@ const Form: React.FC = () => {
   const driverEditeSchema = yup.object().shape({
     fullName: yup.string().required("Name is required"),
     email: yup.string().required("Email is required").email("Enter valid email"),
-    countryCode: yup.string().required("Country code is required"),
+    countryCode: yup.string(),
     password: yup.string().required("Password is required"),
     mobileNumber: yup.string().required("Mobile number is reqired").matches(/^\d{10}$/, "Mobile number is not valid"),
     location: yup.string().required("location is required"),
@@ -1038,7 +1038,7 @@ const Form: React.FC = () => {
     validationSchema: driverEditeSchema,
     initialValues: {
       fullName: driver?.driver?.fullName ? String(driver?.driver?.fullName) : "",
-      countryCode: "",
+      countryCode: "+249",
       mobileNumber: (driver && driver?.driver?.mobileNumber) || "",
       email: driver?.driver?.email ? String(driver?.driver?.email) : "",
       location: (driver && driver?.location?.latLong) || "",
@@ -1161,16 +1161,7 @@ const Form: React.FC = () => {
                                     </label>
                                     <div className="input-group">
                                       <div className="input-group-prepend">
-                                        <div className="">
-                                          <Select
-                                            className="custom-select-dropdown"
-                                            name="countryCode"
-                                            id="countryCode"
-                                            value={SelectCountryCode?.find(elem => formik?.values?.countryCode === elem?.label)}
-                                            onChange={(e) => e && (formik.values.countryCode = e?.label)}
-                                            options={SelectCountryCode}
-                                          />
-                                        </div>
+                                        <div className="input-group-text">{formik?.values?.countryCode || "+249"}</div>
                                       </div>
                                       <input
                                         type="text"

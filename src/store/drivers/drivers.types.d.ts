@@ -4,6 +4,14 @@ import * as actions from "./drivers.action";
 
 type TDriversActionType = ActionType<typeof actions>;
 
+type TGetTimeslotsByDayType = {
+  id: number | string,
+  startTimes: string,
+  endTimes: string,
+  day: number,
+  isActive: boolean
+}[];
+
 type TDriverDetailsPayload = {
   id: number | string,
   isOnline: boolean,
@@ -140,6 +148,7 @@ type TDriversState = {
   AllDriversList: TGetDriversPayload;
   driverId: string;
   singleDriverData: { driver: TDriverDetailsPayload; timeSlots: TDriverTimeSlotsPayload };
+  timeslotsByDay: TGetTimeslotsByDayType;
 };
 
 export {
@@ -147,5 +156,6 @@ export {
   TGetDriversPayload,
   TDriversState,
   TDriverDetailsPayload,
-  TDriverTimeSlotsPayload
+  TDriverTimeSlotsPayload,
+  TGetTimeslotsByDayType,
 };
